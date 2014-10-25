@@ -2,7 +2,7 @@
  "uuid": "hibernate-status@dromi",
  "name": "Hibernate Status Button",
  "description": "Adds a Hibernate button in Status menu. Using Alt modifier, you can also select Hybrid Sleep instead.",
- "version": 2,
+ "version": 3,
  "shell-version": ["3.10",
                    "3.12",
                    "3.14"]
