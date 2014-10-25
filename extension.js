@@ -158,7 +158,7 @@ const Extension = new Lang.Class({
         this._hybridSleepActionId = this._hybridSleepAction.connect('clicked', Lang.bind(this, this._onHybridSleepClicked));
 
         this._altHibernateSwitcher = new StatusSystem.AltSwitcher(this._hibernateAction, this._hybridSleepAction);
-	this.systemMenu._actionsItem.actor.insert_child_below(this._altHibernateSwitcher.actor, this.systemMenu._altSwitcher.actor);
+	this.systemMenu._actionsItem.actor.insert_child_at_index(this._altHibernateSwitcher.actor, 4);
 
         this._menuOpenStateChangedId = this.systemMenu.menu.connect('open-state-changed', Lang.bind(this,
             function(menu, open) {
