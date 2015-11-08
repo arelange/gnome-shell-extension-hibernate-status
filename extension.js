@@ -206,6 +206,7 @@ const Extension = new Lang.Class({
 });
 
 function init(metadata) {
-    return (extension = new Extension());
+    var extension = new Extension();
+    return (extension);
 }
 
