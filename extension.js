@@ -8,8 +8,11 @@ const Main = imports.ui.main;
 const StatusSystem = imports.ui.status.system;
 const PopupMenu = imports.ui.popupMenu;
 const Me = imports.misc.extensionUtils.getCurrentExtension();
-const ConfirmDialog = Me.imports.confirmDialog;
 const ExtensionSystem = imports.ui.extensionSystem;
+const ConfirmDialog = Me.imports.confirmDialog;
+const Prefs = new Me.imports.prefs.Prefs();
+
+const HIBERNATE_CHECK_TIMEOUT = 20000;
 
 const Extension = new Lang.Class({
     Name: 'HibernateStatus.Extension',
@@ -46,6 +49,11 @@ const Extension = new Lang.Class({
     },
 
     _loginManagerHibernate: function () {
+        if (Prefs.getHibernateWorksCheckEnabled()) {
+            this._hibernateStarted = new Date();
+            GLib.timeout_add(GLib.PRIORITY_DEFAULT, HIBERNATE_CHECK_TIMEOUT, 
+                    Lang.bind(this, this._checkDidHibernate));
+        }
         if (this._loginManager._proxy) {
             // systemd path
             this._loginManager._proxy.call("Hibernate",
@@ -133,17 +141,40 @@ const Extension = new Lang.Class({
         this.systemMenu.menu.itemActivated();
         this._loginManagerHybridSleep();
     },
+    
+    _disableExtension: function() {
+        let enabledExtensions = global.settings.get_strv(ExtensionSystem.ENABLED_EXTENSIONS_KEY);
+        enabledExtensions.splice(enabledExtensions.indexOf(Me.uuid),1);
+        global.settings.set_strv(ExtensionSystem.ENABLED_EXTENSIONS_KEY, enabledExtensions);
+    },
+    
+    _cancelDisableExtension: function(notAgain) {
+        if (notAgain)
+            Prefs.setHibernateWorksCheckEnabled(false);
+    },
 
     _checkRequirements: function() {
         if (!LoginManager.haveSystemd()) {
             this._dialog = new ConfirmDialog.ConfirmDialog(ConfirmDialog.SystemdMissingDialogContent);
-            this._dialog.connect('DisableExtension', function() {
-                let enabledExtensions = global.settings.get_strv(ExtensionSystem.ENABLED_EXTENSIONS_KEY);
-                enabledExtensions.splice(enabledExtensions.indexOf(Me.uuid),1);
-                global.settings.set_strv(ExtensionSystem.ENABLED_EXTENSIONS_KEY, enabledExtensions);
-                });
+            this._dialog.connect('DisableExtension', this._disableExtension);
             this._dialog.open();
-	}
+        }
+    },
+    
+    _checkDidHibernate: function() {
+        /* This function is called HIBERNATE_CHECK_TIMEOUT ms after 
+         * hibernate started. If it is successful, at that point the GS 
+         * process is already frozen; so when this function is actually 
+         * called, way more than HIBERNATE_CHECK_TIMEOUT ms are passed*/
+        if (new Date() - this._hibernateStarted > HIBERNATE_CHECK_TIMEOUT + 5000) {
+            // hibernate succeeded
+            return;
+        }
+        // hibernate failed
+        this._dialog = new ConfirmDialog.ConfirmDialog(ConfirmDialog.HibernateFailedDialogContent);
+        this._dialog.connect('DisableExtension', this._disableExtension);
+        this._dialog.connect('CancelHibernate', this._cancelDisableExtension);
+        this._dialog.open();
     },
 
     enable: function() {
