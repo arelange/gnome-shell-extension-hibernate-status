@@ -13,7 +13,7 @@ const Clutter = imports.gi.Clutter;
 
 const HibernateDialogContent = {
     subject: C_("title", "Hibernate"),
-    description: "Do you really want to hibernate the system ?",
+    description: "Do you really want to hibernate the system?",
     confirmButtons: [{ signal: 'CancelHibernate',
                        label:  C_("button", "Cancel"),
                          key:    Clutter.Escape },
