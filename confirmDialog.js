@@ -11,7 +11,7 @@ const ModalDialog = imports.ui.modalDialog;
 const St = imports.gi.St;
 const Clutter = imports.gi.Clutter;
 
-const HibernateDialogContent = {
+var HibernateDialogContent = {
     subject: C_("title", "Hibernate"),
     description: "Do you really want to hibernate the system?",
     confirmButtons: [{ signal: 'CancelHibernate',
@@ -24,7 +24,7 @@ const HibernateDialogContent = {
     iconStyleClass: 'end-session-dialog-shutdown-icon',
 };
 
-const SystemdMissingDialogContent = {
+var SystemdMissingDialogContent = {
     subject: C_("title", "Hybernate button: Systemd Missing"),
     description: "Systemd seems to be missing and is required.",
     confirmButtons: [{ signal: 'CancelDisableExtension',
@@ -49,7 +49,7 @@ function _setLabelText(label, text) {
     }
 }
 
-const ConfirmDialog = new Lang.Class({
+var ConfirmDialog = new Lang.Class({
     Name: 'HibernateDialog',
     Extends: ModalDialog.ModalDialog,
 
