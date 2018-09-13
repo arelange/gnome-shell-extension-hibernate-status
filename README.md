@@ -10,4 +10,4 @@ https://askubuntu.com/questions/1034185/ubuntu-18-04-cant-resume-after-hibernate
 
 or
 
-https://help.ubuntu.com/17.10/ubuntu-help/power-hibernate.html
+https://help.ubuntu.com/16.04/ubuntu-help/power-hibernate.html
