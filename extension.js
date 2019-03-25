@@ -164,7 +164,6 @@ const Extension = new Lang.Class({
             function(menu, open) {
                 if (!open)
                     return;
-                this._hibernateAction.visible = true;
                 this._updateHaveHibernate();
                 this._updateHaveHybridSleep();
             }));
