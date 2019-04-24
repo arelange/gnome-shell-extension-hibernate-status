@@ -81,12 +81,9 @@ function _setLabelText(label, text) {
     }
 }
 
-var ConfirmDialog = new Lang.Class({
-    Name: 'HibernateDialog',
-    Extends: ModalDialog.ModalDialog,
-
-    _init: function (dialog) {
-        this.parent({
+class ConfirmDialog extends ModalDialog.ModalDialog {
+    constructor(dialog) {
+        super({
             styleClass: 'end-session-dialog',
             destroyOnClose: true
         });
@@ -166,21 +163,16 @@ var ConfirmDialog = new Lang.Class({
 
         this.setButtons(buttons);
 
-    },
+    }
 
-    _confirm: function (signal) {
+    _confirm(signal) {
         var checked;
         if (this._checkBox)
             checked = this._checkBox.actor.get_checked()
         this.emit(signal, checked);
-    },
+    }
 
-    cancel: function () {
-        this.close();
-    },
-
-    Close: function (parameters, invocation) {
+    cancel() {
         this.close();
     }
-});
-
+}

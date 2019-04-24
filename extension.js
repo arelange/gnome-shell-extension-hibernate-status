@@ -14,13 +14,8 @@ const Prefs = new Me.imports.prefs.Prefs();
 
 const HIBERNATE_CHECK_TIMEOUT = 20000;
 
-const Extension = new Lang.Class({
-    Name: 'HibernateStatus.Extension',
-
-    _init: function () {
-    },
-
-    _loginManagerCanHibernate: function (asyncCallback) {
+class Extension {
+    _loginManagerCanHibernate(asyncCallback) {
         if (this._loginManager._proxy) {
             // systemd path
             this._loginManager._proxy.call("CanHibernate",
@@ -46,9 +41,9 @@ const Extension = new Lang.Class({
                 return false;
             }));
         }
-    },
+    }
 
-    _loginManagerHibernate: function () {
+    _loginManagerHibernate() {
         if (Prefs.getHibernateWorksCheckEnabled()) {
             this._hibernateStarted = new Date();
             GLib.timeout_add(GLib.PRIORITY_DEFAULT, HIBERNATE_CHECK_TIMEOUT,
@@ -65,9 +60,9 @@ const Extension = new Lang.Class({
             this._loginManager.emit('prepare-for-sleep', true);
             this._loginManager.emit('prepare-for-sleep', false);
         }
-    },
+    }
 
-    _loginManagerCanHybridSleep: function (asyncCallback) {
+    _loginManagerCanHybridSleep(asyncCallback) {
         if (this._loginManager._proxy) {
             // systemd path
             this._loginManager._proxy.call("CanHybridSleep",
@@ -93,9 +88,9 @@ const Extension = new Lang.Class({
                 return false;
             }));
         }
-    },
+    }
 
-    _loginManagerHybridSleep: function () {
+    _loginManagerHybridSleep() {
         if (this._loginManager._proxy) {
             // systemd path
             this._loginManager._proxy.call("HybridSleep",
@@ -107,61 +102,61 @@ const Extension = new Lang.Class({
             this._loginManager.emit('prepare-for-sleep', true);
             this._loginManager.emit('prepare-for-sleep', false);
         }
-    },
-    _updateHaveHibernate: function () {
+    }
+    _updateHaveHibernate() {
         this._loginManagerCanHibernate(Lang.bind(this, function (result) {
             this._haveHibernate = result;
             this._updateHibernate();
         }));
-    },
+    }
 
-    _updateHibernate: function () {
+    _updateHibernate() {
         this._hibernateAction.visible = this._haveHibernate && !Main.sessionMode.isLocked;
-    },
+    }
 
-    _updateHaveHybridSleep: function () {
+    _updateHaveHybridSleep() {
         this._loginManagerCanHybridSleep(Lang.bind(this, function (result) {
             this._haveHybridSleep = result;
             this._updateHybridSleep();
         }));
-    },
+    }
 
-    _updateHybridSleep: function () {
+    _updateHybridSleep() {
         this._hybridSleepAction.visible = this._haveHybridSleep && !Main.sessionMode.isLocked;
-    },
+    }
 
-    _onHibernateClicked: function () {
+    _onHibernateClicked() {
         this.systemMenu.menu.itemActivated();
         this._dialog = new ConfirmDialog.ConfirmDialog(ConfirmDialog.HibernateDialogContent);
         this._dialog.connect('ConfirmedHibernate', Lang.bind(this, this._loginManagerHibernate));
         this._dialog.open();
-    },
+    }
 
-    _onHybridSleepClicked: function () {
+    _onHybridSleepClicked() {
         this.systemMenu.menu.itemActivated();
         this._loginManagerHybridSleep();
-    },
+    }
 
-    _disableExtension: function () {
+    _disableExtension() {
         let enabledExtensions = global.settings.get_strv(ExtensionSystem.ENABLED_EXTENSIONS_KEY);
         enabledExtensions.splice(enabledExtensions.indexOf(Me.uuid), 1);
         global.settings.set_strv(ExtensionSystem.ENABLED_EXTENSIONS_KEY, enabledExtensions);
-    },
+    }
 
-    _cancelDisableExtension: function (notAgain) {
+    _cancelDisableExtension(notAgain) {
         if (notAgain)
             Prefs.setHibernateWorksCheckEnabled(false);
-    },
+    }
 
-    _checkRequirements: function () {
+    _checkRequirements() {
         if (!LoginManager.haveSystemd()) {
             this._dialog = new ConfirmDialog.ConfirmDialog(ConfirmDialog.SystemdMissingDialogContent);
             this._dialog.connect('DisableExtension', this._disableExtension);
             this._dialog.open();
         }
-    },
+    }
 
-    _checkDidHibernate: function () {
+    _checkDidHibernate() {
         /* This function is called HIBERNATE_CHECK_TIMEOUT ms after
          * hibernate started. If it is successful, at that point the GS
          * process is already frozen; so when this function is actually
@@ -175,9 +170,9 @@ const Extension = new Lang.Class({
         this._dialog.connect('DisableExtension', this._disableExtension);
         this._dialog.connect('CancelHibernate', this._cancelDisableExtension);
         this._dialog.open();
-    },
+    }
 
-    enable: function () {
+    enable() {
         this._checkRequirements();
         this._loginManager = LoginManager.getLoginManager();
         this.systemMenu = Main.panel.statusArea['aggregateMenu']._system;
@@ -199,9 +194,9 @@ const Extension = new Lang.Class({
                 this._updateHaveHibernate();
                 this._updateHaveHybridSleep();
             }));
-    },
+    }
 
-    disable: function () {
+    disable() {
         if (this._menuOpenStateChangedId) {
             this.systemMenu.menu.disconnect(this._menuOpenStateChangedId);
             this._menuOpenStateChangedId = 0;
@@ -234,10 +229,17 @@ const Extension = new Lang.Class({
             this._hibernateAction = 0;
         }
     }
-});
-
-function init(metadata) {
-    var extension = new Extension();
-    return (extension);
 }
 
+let extension;
+function init() {
+    extension = new Extension();
+}
+
+function enable() {
+    extension.enable();
+}
+
+function disable() {
+    extension.disable();
+}
