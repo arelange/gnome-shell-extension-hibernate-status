@@ -8,6 +8,7 @@ const Main = imports.ui.main;
 const StatusSystem = imports.ui.status.system;
 const PopupMenu = imports.ui.popupMenu;
 const ModalDialog = imports.ui.modalDialog;
+const CheckBox = imports.ui.checkBox.CheckBox;
 const St = imports.gi.St;
 const Clutter = imports.gi.Clutter;
 
@@ -16,7 +17,7 @@ var HibernateDialogContent = {
     description: "Do you really want to hibernate the system?",
     confirmButtons: [{ signal: 'CancelHibernate',
                        label:  C_("button", "Cancel"),
-                         key:    Clutter.Escape },
+                       key:    Clutter.Escape },
                      { signal: 'ConfirmedHibernate',
                        label:  C_("button", "Hibernate"),
                        default: true}],
@@ -29,8 +30,27 @@ var SystemdMissingDialogContent = {
     description: "Systemd seems to be missing and is required.",
     confirmButtons: [{ signal: 'CancelDisableExtension',
                        label:  C_("button", "Cancel"),
-                         key:    Clutter.Escape },
-                       { signal: 'DisableExtension',
+                       key:    Clutter.Escape },
+                     { signal: 'DisableExtension',
+                       label:  C_("button", "Disable Extension"),
+                       default: true }],
+    iconName: 'document-save-symbolic',
+    iconStyleClass: 'end-session-dialog-shutdown-icon',
+};
+
+
+const HibernateFailedDialogContent = {
+    subject: C_("title", "Hybernate button: Hibernate failed"),
+    description: "Looks like hibernation failed.\n" + 
+        "On some linux distributions hibernation is disabled\n" + 
+        "because not all hardware supports it well;\n" + 
+        "please check your distribution documentation\n" + 
+        "on how to enable it.",
+    checkBox: "You are wrong, don't check this anymore!",
+    confirmButtons: [{ signal: 'CancelDisableExtension',
+                       label:  C_("button", "Cancel"),
+                       key:    Clutter.Escape },
+                     { signal: 'DisableExtension',
                        label:  C_("button", "Disable Extension"),
                        default: true }],
     iconName: 'document-save-symbolic',
@@ -95,6 +115,11 @@ var ConfirmDialog = new Lang.Class({
                                                 icon_size: _DIALOG_ICON_SIZE,
                                                 style_class: dialog.iconStyleClass });
         }
+        
+        if (dialog.checkBox) {
+            this._checkBox = new CheckBox(dialog.checkBox);
+            mainContentLayout.add(this._checkBox.actor);
+        }
 
         let buttons = [];
         for (let i = 0; i < dialog.confirmButtons.length; i++) {
@@ -118,7 +143,10 @@ var ConfirmDialog = new Lang.Class({
     },
 
     _confirm: function(signal) {
-        this.emit(signal);
+        var checked;
+        if (this._checkBox)
+            checked = this._checkBox.actor.get_checked()
+        this.emit(signal, checked);
     },
 
     cancel: function() {
