@@ -2,20 +2,15 @@ const Gio = imports.gi.Gio;
 const Lang = imports.lang;
 const Me = imports.misc.extensionUtils.getCurrentExtension();
 
-const Prefs = new Lang.Class({
-	KEY_HIBERNATE_WORKS_CHECK: "hibernate-works-check",
-	Name: 'Prefs',
-	_schemaName: "org.gnome.shell.extensions.hibernate-status-button",
-    /**
-     * The GSettings-object to read/write from/to.
-     * @private
-     */
-    _setting: {},
+class Prefs {
     /**
      * Creates a new Settings-object to access the settings of this extension.
      * @private
      */
-    _init: function(){
+    constructor() {
+        this.KEY_HIBERNATE_WORKS_CHECK = "hibernate-works-check";
+        this._schemaName = "org.gnome.shell.extensions.hibernate-status-button";
+
         let schemaDir = Me.dir.get_child('schemas').get_path();
 
         let schemaSource = Gio.SettingsSchemaSource.new_from_directory(
@@ -26,7 +21,7 @@ const Prefs = new Lang.Class({
         this._setting = new Gio.Settings({
             settings_schema: schema
         });
-    },
+    }
     /**
      * <p>Binds the given 'callback'-function to the "changed"-signal on the given
      *  key.</p>
@@ -38,38 +33,38 @@ const Prefs = new Lang.Class({
      * @param key the key to watch for changes.
      * @param callback the callback-function to call.
      */
-    bindKey: function(key, callback){
+    bindKey(key, callback) {
         // Validate:
-        if (key === undefined || key === null || typeof key !== "string"){
-            throw TypeError("The 'key' should be a string. Got: '"+key+"'");
+        if (key === undefined || key === null || typeof key !== "string") {
+            throw TypeError("The 'key' should be a string. Got: '" + key + "'");
         }
-        if (callback === undefined || callback === null || typeof callback !== "function"){
-            throw TypeError("'callback' needs to be a function. Got: "+callback);
+        if (callback === undefined || callback === null || typeof callback !== "function") {
+            throw TypeError("'callback' needs to be a function. Got: " + callback);
         }
         // Bind:
-        this._setting.connect("changed::"+key, function(source, key){
-            callback( source.get_value(key) );
+        this._setting.connect("changed::" + key, function (source, key) {
+            callback(source.get_value(key));
         });
-    },
+    }
     /**
-     * Get if check for working hibernation is enabled. The user might 
+     * Get if check for working hibernation is enabled. The user might
      * choose to disable it if we happen to be wrong.
-     * 
+     *
      * @returns bool true if we need to check if hibernation works.
      */
-    getHibernateWorksCheckEnabled: function(){
+    getHibernateWorksCheckEnabled() {
         return this._setting.get_boolean(this.KEY_HIBERNATE_WORKS_CHECK);
-    },
+    }
     /**
-     * Set if check for working hibernation is enabled. The user might 
+     * Set if check for working hibernation is enabled. The user might
      * choose to disable it if we happen to be wrong.
-     * 
+     *
      * @returns bool true if we need to check if hibernation works.
      */
-    setHibernateWorksCheckEnabled: function(enabled) {
+    setHibernateWorksCheckEnabled(enabled) {
         let key = this.KEY_HIBERNATE_WORKS_CHECK;
-        if (this._setting.is_writable(key)){
-            if (this._setting.set_boolean(key, enabled)){
+        if (this._setting.is_writable(key)) {
+            if (this._setting.set_boolean(key, enabled)) {
                 Gio.Settings.sync();
             } else {
                 throw this._errorSet(key);
@@ -77,11 +72,16 @@ const Prefs = new Lang.Class({
         } else {
             throw this._errorWritable(key);
         }
-	},
-    _errorWritable: function(key){
-        return "The key '"+key+"' is not writable.";
-    },
-    _errorSet: function(key){
-        return "Couldn't set the key '"+key+"'";
     }
-});
+    _errorWritable(key) {
+        return "The key '" + key + "' is not writable.";
+    }
+    _errorSet(key) {
+        return "Couldn't set the key '" + key + "'";
+    }
+}
+
+// These "preferences" aren't user accessible so define
+// init() and buildPrefsWidget() to empty functions
+function init() { }
+function buildPrefsWidget() { }
