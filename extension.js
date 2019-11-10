@@ -168,7 +168,7 @@ class Extension {
         // hibernate failed
         this._dialog = new ConfirmDialog.ConfirmDialog(ConfirmDialog.HibernateFailedDialogContent);
         this._dialog.connect('DisableExtension', this._disableExtension);
-        this._dialog.connect('CancelHibernate', this._cancelDisableExtension);
+        this._dialog.connect('Cancel', this._cancelDisableExtension);
         this._dialog.open();
     }
 
@@ -184,7 +184,8 @@ class Extension {
         this._hybridSleepActionId = this._hybridSleepAction.connect('clicked', Lang.bind(this, this._onHybridSleepClicked));
 
         this._altHibernateSwitcher = new StatusSystem.AltSwitcher(this._hibernateAction, this._hybridSleepAction);
-        this.systemMenu._actionsItem.actor.insert_child_at_index(this._altHibernateSwitcher.actor, 4);
+        let buttonGroup = this.systemMenu.buttonGroup || this.systemMenu._actionsItem;
+        buttonGroup.actor.insert_child_at_index(this._altHibernateSwitcher.actor, 4);
 
         this._menuOpenStateChangedId = this.systemMenu.menu.connect('open-state-changed', Lang.bind(this,
             function (menu, open) {
@@ -212,7 +213,8 @@ class Extension {
             this._hibernateActionId = 0;
         }
 
-        this.systemMenu._actionsItem.actor.remove_child(this._altHibernateSwitcher.actor);
+        let buttonGroup = this.systemMenu.buttonGroup || this.systemMenu._actionsItem;
+        buttonGroup.actor.remove_child(this._altHibernateSwitcher.actor);
 
         if (this._altHibernateSwitcher) {
             this._altHibernateSwitcher.actor.destroy();
