@@ -125,16 +125,11 @@ class Extension {
         this._hybridSleepAction.visible = this._haveHybridSleep && !Main.sessionMode.isLocked;
     }
 
-    // _onHibernateClicked() {
-    //     this.systemMenu.menu.itemActivated();
-    //     this._dialog = new ConfirmDialog.ConfirmDialog(ConfirmDialog.HibernateDialogContent);
-    //     this._dialog.connect('ConfirmedHibernate', Lang.bind(this, this._loginManagerHibernate));
-    //     this._dialog.open();
-    // }
-
     _onHibernateClicked() {
         this.systemMenu.menu.itemActivated();
-        this._loginManagerHibernate();
+        this._dialog = new ConfirmDialog.ConfirmDialog(ConfirmDialog.HibernateDialogContent);
+        this._dialog.connect('ConfirmedHibernate', Lang.bind(this, this._loginManagerHibernate));
+        this._dialog.open();
     }
 
     _onHybridSleepClicked() {
@@ -173,7 +168,7 @@ class Extension {
         // hibernate failed
         this._dialog = new ConfirmDialog.ConfirmDialog(ConfirmDialog.HibernateFailedDialogContent);
         this._dialog.connect('DisableExtension', this._disableExtension);
-        this._dialog.connect('CancelHibernate', this._cancelDisableExtension);
+        this._dialog.connect('Cancel', this._cancelDisableExtension);
         this._dialog.open();
     }
 

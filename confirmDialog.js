@@ -1,5 +1,6 @@
 const Gio = imports.gi.Gio;
 const GLib = imports.gi.GLib;
+const GObject = imports.gi.GObject;
 const Lang = imports.lang;
 const Mainloop = imports.mainloop;
 
@@ -16,7 +17,7 @@ var HibernateDialogContent = {
     subject: C_("title", "Hibernate"),
     description: "Do you really want to hibernate the system?",
     confirmButtons: [{
-        signal: 'CancelHibernate',
+        signal: 'Cancel',
         label: C_("button", "Cancel"),
         key: Clutter.Escape
     },
@@ -33,7 +34,7 @@ var SystemdMissingDialogContent = {
     subject: C_("title", "Hybernate button: Systemd Missing"),
     description: "Systemd seems to be missing and is required.",
     confirmButtons: [{
-        signal: 'CancelDisableExtension',
+        signal: 'Cancel',
         label: C_("button", "Cancel"),
         key: Clutter.Escape
     },
@@ -47,7 +48,7 @@ var SystemdMissingDialogContent = {
 };
 
 
-const HibernateFailedDialogContent = {
+var HibernateFailedDialogContent = {
     subject: C_("title", "Hybernate button: Hibernate failed"),
     description: "Looks like hibernation failed.\n" +
         "On some linux distributions hibernation is disabled\n" +
@@ -56,7 +57,7 @@ const HibernateFailedDialogContent = {
         "on how to enable it.",
     checkBox: "You are wrong, don't check this anymore!",
     confirmButtons: [{
-        signal: 'CancelDisableExtension',
+        signal: 'Cancel',
         label: C_("button", "Cancel"),
         key: Clutter.Escape
     },
@@ -81,9 +82,22 @@ function _setLabelText(label, text) {
     }
 }
 
+var ConfirmDialog = GObject.registerClass({
+    Properties: {
+        'state': GObject.ParamSpec.int('state', 'Dialog state', 'state',
+                                       GObject.ParamFlags.READABLE,
+                                       Math.min(...Object.values(ModalDialog.State)),
+                                       Math.max(...Object.values(ModalDialog.State)),
+                                       ModalDialog.State.CLOSED)
+    },
+    Signals: { 'opened': {}, 'closed': {},
+               'ConfirmedHibernate': { param_types: [ GObject.TYPE_BOOLEAN ] },
+               'DisableExtension': { param_types: [ GObject.TYPE_BOOLEAN ] },
+               'Cancel': { param_types: [ GObject.TYPE_BOOLEAN ] } }
+},
 class ConfirmDialog extends ModalDialog.ModalDialog {
-    constructor(dialog) {
-        super({
+    _init(dialog) {
+        super._init({
             styleClass: 'end-session-dialog',
             destroyOnClose: true
         });
@@ -175,4 +189,4 @@ class ConfirmDialog extends ModalDialog.ModalDialog {
     cancel() {
         this.close();
     }
-}
+});
