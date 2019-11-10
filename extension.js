@@ -125,11 +125,16 @@ class Extension {
         this._hybridSleepAction.visible = this._haveHybridSleep && !Main.sessionMode.isLocked;
     }
 
+    // _onHibernateClicked() {
+    //     this.systemMenu.menu.itemActivated();
+    //     this._dialog = new ConfirmDialog.ConfirmDialog(ConfirmDialog.HibernateDialogContent);
+    //     this._dialog.connect('ConfirmedHibernate', Lang.bind(this, this._loginManagerHibernate));
+    //     this._dialog.open();
+    // }
+
     _onHibernateClicked() {
         this.systemMenu.menu.itemActivated();
-        this._dialog = new ConfirmDialog.ConfirmDialog(ConfirmDialog.HibernateDialogContent);
-        this._dialog.connect('ConfirmedHibernate', Lang.bind(this, this._loginManagerHibernate));
-        this._dialog.open();
+        this._loginManagerHibernate();
     }
 
     _onHybridSleepClicked() {
@@ -184,7 +189,7 @@ class Extension {
         this._hybridSleepActionId = this._hybridSleepAction.connect('clicked', Lang.bind(this, this._onHybridSleepClicked));
 
         this._altHibernateSwitcher = new StatusSystem.AltSwitcher(this._hibernateAction, this._hybridSleepAction);
-        this.systemMenu._actionsItem.actor.insert_child_at_index(this._altHibernateSwitcher.actor, 4);
+        this.systemMenu.buttonGroup.actor.insert_child_at_index(this._altHibernateSwitcher.actor, 4);
 
         this._menuOpenStateChangedId = this.systemMenu.menu.connect('open-state-changed', Lang.bind(this,
             function (menu, open) {
@@ -212,7 +217,7 @@ class Extension {
             this._hibernateActionId = 0;
         }
 
-        this.systemMenu._actionsItem.actor.remove_child(this._altHibernateSwitcher.actor);
+        this.systemMenu.buttonGroup.actor.remove_child(this._altHibernateSwitcher.actor);
 
         if (this._altHibernateSwitcher) {
             this._altHibernateSwitcher.actor.destroy();
