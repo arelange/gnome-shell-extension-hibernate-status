@@ -90,8 +90,7 @@ var ConfirmDialog = GObject.registerClass({
                                        Math.max(...Object.values(ModalDialog.State)),
                                        ModalDialog.State.CLOSED)
     },
-    Signals: { 'opened': {}, 'closed': {},
-               'ConfirmedHibernate': { param_types: [ GObject.TYPE_BOOLEAN ] },
+    Signals: { 'ConfirmedHibernate': { param_types: [ GObject.TYPE_BOOLEAN ] },
                'DisableExtension': { param_types: [ GObject.TYPE_BOOLEAN ] },
                'Cancel': { param_types: [ GObject.TYPE_BOOLEAN ] } }
 },

@@ -2,7 +2,7 @@ const Gio = imports.gi.Gio;
 const Lang = imports.lang;
 const Me = imports.misc.extensionUtils.getCurrentExtension();
 
-class Prefs {
+var Prefs = class Prefs {
     /**
      * Creates a new Settings-object to access the settings of this extension.
      * @private
