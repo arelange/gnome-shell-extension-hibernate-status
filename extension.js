@@ -189,7 +189,8 @@ class Extension {
         this._hybridSleepActionId = this._hybridSleepAction.connect('clicked', Lang.bind(this, this._onHybridSleepClicked));
 
         this._altHibernateSwitcher = new StatusSystem.AltSwitcher(this._hibernateAction, this._hybridSleepAction);
-        this.systemMenu.buttonGroup.actor.insert_child_at_index(this._altHibernateSwitcher.actor, 4);
+        let buttonGroup = this.systemMenu.buttonGroup || this.systemMenu._actionsItem;
+        buttonGroup.actor.insert_child_at_index(this._altHibernateSwitcher.actor, 4);
 
         this._menuOpenStateChangedId = this.systemMenu.menu.connect('open-state-changed', Lang.bind(this,
             function (menu, open) {
@@ -217,7 +218,8 @@ class Extension {
             this._hibernateActionId = 0;
         }
 
-        this.systemMenu.buttonGroup.actor.remove_child(this._altHibernateSwitcher.actor);
+        let buttonGroup = this.systemMenu.buttonGroup || this.systemMenu._actionsItem;
+        buttonGroup.actor.remove_child(this._altHibernateSwitcher.actor);
 
         if (this._altHibernateSwitcher) {
             this._altHibernateSwitcher.actor.destroy();
