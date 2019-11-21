@@ -13,17 +13,23 @@ const CheckBox = imports.ui.checkBox.CheckBox;
 const St = imports.gi.St;
 const Clutter = imports.gi.Clutter;
 
+// Use __ () and N__() for the extension gettext domain, and reuse
+// the shell domain with the default _() and N_()
+const Gettext = imports.gettext.domain('hibernate-status-button');
+const __ = Gettext.gettext;
+const N__ = function(e) { return e };
+
 var HibernateDialogContent = {
-    subject: C_("title", "Hibernate"),
-    description: "Do you really want to hibernate the system?",
+    subject: C_("title", __("Hibernate")),
+    description: __("Do you really want to hibernate the system?"),
     confirmButtons: [{
         signal: 'Cancel',
-        label: C_("button", "Cancel"),
+        label: C_("button", __("Cancel")),
         key: Clutter.Escape
     },
     {
         signal: 'ConfirmedHibernate',
-        label: C_("button", "Hibernate"),
+        label: C_("button", __("Hibernate")),
         default: true
     }],
     iconName: 'document-save-symbolic',
@@ -31,16 +37,16 @@ var HibernateDialogContent = {
 };
 
 var SystemdMissingDialogContent = {
-    subject: C_("title", "Hybernate button: Systemd Missing"),
-    description: "Systemd seems to be missing and is required.",
+    subject: C_("title", __("Hibernate button: Systemd Missing")),
+    description: __("Systemd seems to be missing and is required."),
     confirmButtons: [{
         signal: 'Cancel',
-        label: C_("button", "Cancel"),
+        label: C_("button", __("Cancel")),
         key: Clutter.Escape
     },
     {
         signal: 'DisableExtension',
-        label: C_("button", "Disable Extension"),
+        label: C_("button", __("Disable Extension")),
         default: true
     }],
     iconName: 'document-save-symbolic',
@@ -49,21 +55,21 @@ var SystemdMissingDialogContent = {
 
 
 var HibernateFailedDialogContent = {
-    subject: C_("title", "Hybernate button: Hibernate failed"),
-    description: "Looks like hibernation failed.\n" +
+    subject: C_("title", __("Hibernate button: Hibernate failed")),
+    description: __("Looks like hibernation failed.\n" +
         "On some linux distributions hibernation is disabled\n" +
         "because not all hardware supports it well;\n" +
         "please check your distribution documentation\n" +
-        "on how to enable it.",
-    checkBox: "You are wrong, don't check this anymore!",
+        "on how to enable it."),
+    checkBox: __("You are wrong, don't check this anymore!"),
     confirmButtons: [{
         signal: 'Cancel',
-        label: C_("button", "Cancel"),
+        label: C_("button", __("Cancel")),
         key: Clutter.Escape
     },
     {
         signal: 'DisableExtension',
-        label: C_("button", "Disable Extension"),
+        label: C_("button", __("Disable Extension")),
         default: true
     }],
     iconName: 'document-save-symbolic',

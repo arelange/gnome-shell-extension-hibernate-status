@@ -3,6 +3,7 @@ const GLib = imports.gi.GLib;
 const Lang = imports.lang;
 const Mainloop = imports.mainloop;
 
+const ExtensionUtils = imports.misc.extensionUtils;
 const LoginManager = imports.misc.loginManager;
 const Main = imports.ui.main;
 const StatusSystem = imports.ui.status.system;
@@ -235,6 +236,7 @@ class Extension {
 
 let extension;
 function init() {
+    ExtensionUtils.initTranslations('hibernate-status-button');
     extension = new Extension();
 }
 

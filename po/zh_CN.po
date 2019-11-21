@@ -1,0 +1,59 @@
+# Simplified Chinese translation of hibernate-status-button
+# Copyright (C) 2019 zhmars
+# This file is distributed under the same license as the hibernate-status-button package.
+# zhmars <1403122061@qq.com>, 2019.
+#
+msgid ""
+msgstr ""
+"Project-Id-Version: Hibernate Status Button\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2019-11-22 00:08+0800\n"
+"PO-Revision-Date: 2019-11-21 20:00+0800\n"
+"Last-Translator: zhmars <1403122061@qq.com>\n"
+"Language-Team: Chinese (Simplified) <>\n"
+"Language: zh_CN\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+
+#: confirmDialog.js:23 confirmDialog.js:32
+msgid "Hibernate"
+msgstr "休眠"
+
+#: confirmDialog.js:24
+msgid "Do you really want to hibernate the system?"
+msgstr "确定要休眠系统吗？"
+
+#: confirmDialog.js:27 confirmDialog.js:44 confirmDialog.js:67
+msgid "Cancel"
+msgstr "取消"
+
+#: confirmDialog.js:40
+msgid "Hibernate button: Systemd Missing"
+msgstr "无法找到 Systemd"
+
+#: confirmDialog.js:41
+msgid "Systemd seems to be missing and is required."
+msgstr "本功能依赖 Systemd，但目前无法找到。"
+
+#: confirmDialog.js:49 confirmDialog.js:72
+msgid "Disable Extension"
+msgstr "禁用扩展"
+
+#: confirmDialog.js:58
+msgid "Hibernate button: Hibernate failed"
+msgstr "休眠失败"
+
+#: confirmDialog.js:59
+msgid ""
+"Looks like hibernation failed.\n"
+"On some linux distributions hibernation is disabled\n"
+"because not all hardware supports it well;\n"
+"please check your distribution documentation\n"
+"on how to enable it."
+msgstr "休眠好像失败了。由于不是所有硬件都对该功能支持良好，"
+"某些发行版默认禁用了休眠，关于如何启用请查阅你所用的发行版文档"
+
+#: confirmDialog.js:64
+msgid "You are wrong, don't check this anymore!"
+msgstr "忽略本项检查"
