@@ -6,7 +6,7 @@ Originally developed by [@arelange](https://github.com/arelange); now maintained
 
 ## FAQ
 
-###Hibernation does not work
+### Hibernation does not work
 
 Try launching from your terminal
 
@@ -20,7 +20,7 @@ or
 
 https://help.ubuntu.com/16.04/ubuntu-help/power-hibernate.html
 
-###Hibernation button does not show up, but systemctl hibernate works
+### Hibernation button does not show up, but systemctl hibernate works
 
 If you are running Ubuntu, try putting
 
