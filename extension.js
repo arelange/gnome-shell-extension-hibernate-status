@@ -177,13 +177,15 @@ class Extension {
         this._loginManager = LoginManager.getLoginManager();
         this.systemMenu = Main.panel.statusArea['aggregateMenu']._system;
 
-        this._hibernateAction = new PopupMenu.PopupImageMenuItem(_('Hibernate'), 'document-save-symbolic');
+        this._hibernateAction = new PopupMenu.PopupMenuItem(_('Hibernate'));
         this._hibernateActionId = this._hibernateAction.connect('activate', Lang.bind(this, this._onHibernateClicked));
-        this.systemMenu.menu.addMenuItem(this._hibernateAction);
 
-        this._hybridSleepAction = new PopupMenu.PopupImageMenuItem(_('HybridSleep'), 'document-save-as-symbolic');
+        this._hybridSleepAction = new PopupMenu.PopupMenuItem(_('Hybrid Sleep'));
         this._hybridSleepActionId = this._hibernateAction.connect('activate', Lang.bind(this, this._onHybridSleepClicked));
-        this.systemMenu.menu.addMenuItem(this._hybridSleepAction);
+
+        this.systemMenu._sessionSubMenu.menu.addMenuItem(new PopupMenu.PopupSeparatorMenuItem());
+        this.systemMenu._sessionSubMenu.menu.addMenuItem(this._hibernateAction);
+        this.systemMenu._sessionSubMenu.menu.addMenuItem(this._hybridSleepAction);
 
         this._menuOpenStateChangedId = this.systemMenu.menu.connect('open-state-changed', Lang.bind(this,
             function (menu, open) {
