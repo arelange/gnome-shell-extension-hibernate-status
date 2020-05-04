@@ -181,7 +181,7 @@ class Extension {
         this._hibernateActionId = this._hibernateAction.connect('activate', Lang.bind(this, this._onHibernateClicked));
 
         this._hybridSleepAction = new PopupMenu.PopupMenuItem(_('Hybrid Sleep'));
-        this._hybridSleepActionId = this._hibernateAction.connect('activate', Lang.bind(this, this._onHybridSleepClicked));
+        this._hybridSleepActionId = this._hybridSleepAction.connect('activate', Lang.bind(this, this._onHybridSleepClicked));
 
         this.systemMenu._sessionSubMenu.menu.addMenuItem(new PopupMenu.PopupSeparatorMenuItem());
         this.systemMenu._sessionSubMenu.menu.addMenuItem(this._hibernateAction);
