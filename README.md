@@ -3,7 +3,9 @@
 Gnome Shell extension that adds a hibernate/hybrid suspend button in Status menu.
 
 Originally developed by [@arelange](https://github.com/arelange); now maintained by [@p91paul](https://github.com/p91paul).
-Adopted to 3.36 gnome
+
+Supports GNOME 3.36.
+
 ## FAQ
 
 ### Hibernation does not work
