@@ -177,15 +177,15 @@ class Extension {
         this._loginManager = LoginManager.getLoginManager();
         this.systemMenu = Main.panel.statusArea['aggregateMenu']._system;
 
-        this._hibernateAction = this.systemMenu._createActionButton('document-save-symbolic', _("Hibernate"));
-        this._hibernateActionId = this._hibernateAction.connect('clicked', Lang.bind(this, this._onHibernateClicked));
+        this._hibernateAction = new PopupMenu.PopupMenuItem(_('Hibernate'));
+        this._hibernateActionId = this._hibernateAction.connect('activate', Lang.bind(this, this._onHibernateClicked));
 
-        this._hybridSleepAction = this.systemMenu._createActionButton('document-save-as-symbolic', _("HybridSleep"));
-        this._hybridSleepActionId = this._hybridSleepAction.connect('clicked', Lang.bind(this, this._onHybridSleepClicked));
+        this._hybridSleepAction = new PopupMenu.PopupMenuItem(_('Hybrid Sleep'));
+        this._hybridSleepActionId = this._hybridSleepAction.connect('activate', Lang.bind(this, this._onHybridSleepClicked));
 
-        this._altHibernateSwitcher = new StatusSystem.AltSwitcher(this._hibernateAction, this._hybridSleepAction);
-        let buttonGroup = this.systemMenu.buttonGroup || this.systemMenu._actionsItem;
-        buttonGroup.actor.insert_child_at_index(this._altHibernateSwitcher.actor, 4);
+        this.systemMenu._sessionSubMenu.menu.addMenuItem(new PopupMenu.PopupSeparatorMenuItem());
+        this.systemMenu._sessionSubMenu.menu.addMenuItem(this._hibernateAction);
+        this.systemMenu._sessionSubMenu.menu.addMenuItem(this._hybridSleepAction);
 
         this._menuOpenStateChangedId = this.systemMenu.menu.connect('open-state-changed', Lang.bind(this,
             function (menu, open) {
