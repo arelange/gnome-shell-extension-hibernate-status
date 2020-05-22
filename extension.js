@@ -111,7 +111,7 @@ class Extension {
     }
 
     _updateHibernate() {
-        this._hibernateAction.visible = this._haveHibernate && !Main.sessionMode.isLocked;
+        this._hibernateMenuItem.visible = this._haveHibernate && !Main.sessionMode.isLocked;
     }
 
     _updateHaveHybridSleep() {
@@ -122,7 +122,7 @@ class Extension {
     }
 
     _updateHybridSleep() {
-        this._hybridSleepAction.visible = this._haveHybridSleep && !Main.sessionMode.isLocked;
+        this._hybridSleepMenuItem.visible = this._haveHybridSleep && !Main.sessionMode.isLocked;
     }
 
     _onHibernateClicked() {
@@ -177,21 +177,21 @@ class Extension {
         this._loginManager = LoginManager.getLoginManager();
         this.systemMenu = Main.panel.statusArea['aggregateMenu']._system;
 
-        this._hibernateAction = new PopupMenu.PopupMenuItem(_('Hibernate'));
-        this._hibernateActionId = this._hibernateAction.connect('activate', Lang.bind(this, this._onHibernateClicked));
+        this._hibernateMenuItem = new PopupMenu.PopupMenuItem(_('Hibernate'));
+        this._hibernateMenuItemId = this._hibernateMenuItem.connect('activate', Lang.bind(this, this._onHibernateClicked));
 
-        this._hybridSleepAction = new PopupMenu.PopupMenuItem(_('Hybrid Sleep'));
-        this._hybridSleepActionId = this._hybridSleepAction.connect('activate', Lang.bind(this, this._onHybridSleepClicked));
+        this._hybridSleepMenuItem = new PopupMenu.PopupMenuItem(_('Hybrid Sleep'));
+        this._hybridSleepMenuItemId = this._hybridSleepMenuItem.connect('activate', Lang.bind(this, this._onHybridSleepClicked));
 
         this.systemMenu._sessionSubMenu.menu.addMenuItem(new PopupMenu.PopupSeparatorMenuItem());
-        this.systemMenu._sessionSubMenu.menu.addMenuItem(this._hibernateAction);
-        this.systemMenu._sessionSubMenu.menu.addMenuItem(this._hybridSleepAction);
+        this.systemMenu._sessionSubMenu.menu.addMenuItem(this._hibernateMenuItem);
+        this.systemMenu._sessionSubMenu.menu.addMenuItem(this._hybridSleepMenuItem);
 
         this._menuOpenStateChangedId = this.systemMenu.menu.connect('open-state-changed', Lang.bind(this,
             function (menu, open) {
                 if (!open)
                     return;
-                this._hibernateAction.visible = true;
+                this._hibernateMenuItem.visible = true;
                 this._updateHaveHibernate();
                 this._updateHaveHybridSleep();
             }));
@@ -203,14 +203,14 @@ class Extension {
             this._menuOpenStateChangedId = 0;
         }
 
-        if (this._hybridSleepActionId) {
-            this._hybridSleepAction.disconnect(this._hybridSleepActionId);
-            this._hybridSleepActionId = 0;
+        if (this._hybridSleepMenuItemId) {
+            this._hybridSleepMenuItem.disconnect(this._hybridSleepMenuItemId);
+            this._hybridSleepMenuItemId = 0;
         }
 
-        if (this._hibernateActionId) {
-            this._hibernateAction.disconnect(this._hibernateActionId);
-            this._hibernateActionId = 0;
+        if (this._hibernateMenuItemId) {
+            this._hibernateMenuItem.disconnect(this._hibernateMenuItemId);
+            this._hibernateMenuItemId = 0;
         }
 
         let buttonGroup = this.systemMenu.buttonGroup || this.systemMenu._actionsItem;
@@ -221,14 +221,14 @@ class Extension {
             this._altHibernateSwitcher = 0;
         }
 
-        if (this._hybridSleepAction) {
-            this._hybridSleepAction.destroy();
-            this._hybridSleepAction = 0;
+        if (this._hybridSleepMenuItem) {
+            this._hybridSleepMenuItem.destroy();
+            this._hybridSleepMenuItem = 0;
         }
 
-        if (this._hibernateAction) {
-            this._hibernateAction.destroy();
-            this._hibernateAction = 0;
+        if (this._hibernateMenuItem) {
+            this._hibernateMenuItem.destroy();
+            this._hibernateMenuItem = 0;
         }
     }
 }
