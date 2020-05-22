@@ -177,13 +177,15 @@ class Extension {
         this._loginManager = LoginManager.getLoginManager();
         this.systemMenu = Main.panel.statusArea['aggregateMenu']._system;
 
+        this._separatorMenuItem = new PopupMenu.PopupSeparatorMenuItem();
+
         this._hibernateMenuItem = new PopupMenu.PopupMenuItem(_('Hibernate'));
         this._hibernateMenuItemId = this._hibernateMenuItem.connect('activate', Lang.bind(this, this._onHibernateClicked));
 
         this._hybridSleepMenuItem = new PopupMenu.PopupMenuItem(_('Hybrid Sleep'));
         this._hybridSleepMenuItemId = this._hybridSleepMenuItem.connect('activate', Lang.bind(this, this._onHybridSleepClicked));
 
-        this.systemMenu._sessionSubMenu.menu.addMenuItem(new PopupMenu.PopupSeparatorMenuItem());
+        this.systemMenu._sessionSubMenu.menu.addMenuItem(this._separatorMenuItem);
         this.systemMenu._sessionSubMenu.menu.addMenuItem(this._hibernateMenuItem);
         this.systemMenu._sessionSubMenu.menu.addMenuItem(this._hybridSleepMenuItem);
 
@@ -213,14 +215,6 @@ class Extension {
             this._hibernateMenuItemId = 0;
         }
 
-        let buttonGroup = this.systemMenu.buttonGroup || this.systemMenu._actionsItem;
-        buttonGroup.actor.remove_child(this._altHibernateSwitcher.actor);
-
-        if (this._altHibernateSwitcher) {
-            this._altHibernateSwitcher.actor.destroy();
-            this._altHibernateSwitcher = 0;
-        }
-
         if (this._hybridSleepMenuItem) {
             this._hybridSleepMenuItem.destroy();
             this._hybridSleepMenuItem = 0;
@@ -229,6 +223,11 @@ class Extension {
         if (this._hibernateMenuItem) {
             this._hibernateMenuItem.destroy();
             this._hibernateMenuItem = 0;
+        }
+
+        if (this._separatorMenuItem) {
+            this._separatorMenuItem.destroy();
+            this._separatorMenuItem = 0;
         }
     }
 }
