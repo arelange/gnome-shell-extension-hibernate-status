@@ -177,17 +177,16 @@ class Extension {
         this._loginManager = LoginManager.getLoginManager();
         this.systemMenu = Main.panel.statusArea['aggregateMenu']._system;
 
-        this._separatorMenuItem = new PopupMenu.PopupSeparatorMenuItem();
-
         this._hibernateMenuItem = new PopupMenu.PopupMenuItem(_('Hibernate'));
         this._hibernateMenuItemId = this._hibernateMenuItem.connect('activate', Lang.bind(this, this._onHibernateClicked));
 
         this._hybridSleepMenuItem = new PopupMenu.PopupMenuItem(_('Hybrid Sleep'));
         this._hybridSleepMenuItemId = this._hybridSleepMenuItem.connect('activate', Lang.bind(this, this._onHybridSleepClicked));
 
-        this.systemMenu._sessionSubMenu.menu.addMenuItem(this._separatorMenuItem);
-        this.systemMenu._sessionSubMenu.menu.addMenuItem(this._hibernateMenuItem);
-        this.systemMenu._sessionSubMenu.menu.addMenuItem(this._hybridSleepMenuItem);
+        let afterSuspendPosition = this.systemMenu._sessionSubMenu.menu.numMenuItems - 1;
+
+        this.systemMenu._sessionSubMenu.menu.addMenuItem(this._hybridSleepMenuItem, afterSuspendPosition);
+        this.systemMenu._sessionSubMenu.menu.addMenuItem(this._hibernateMenuItem, afterSuspendPosition);
 
         this._menuOpenStateChangedId = this.systemMenu.menu.connect('open-state-changed', Lang.bind(this,
             function (menu, open) {
@@ -223,11 +222,6 @@ class Extension {
         if (this._hibernateMenuItem) {
             this._hibernateMenuItem.destroy();
             this._hibernateMenuItem = 0;
-        }
-
-        if (this._separatorMenuItem) {
-            this._separatorMenuItem.destroy();
-            this._separatorMenuItem = 0;
         }
     }
 }
