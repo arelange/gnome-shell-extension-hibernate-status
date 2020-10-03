@@ -192,7 +192,6 @@ class Extension {
             function (menu, open) {
                 if (!open)
                     return;
-                this._hibernateMenuItem.visible = true;
                 this._updateHaveHibernate();
                 this._updateHaveHybridSleep();
             }));
