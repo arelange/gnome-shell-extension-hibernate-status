@@ -1,5 +1,6 @@
 const Gio = imports.gi.Gio;
 const GLib = imports.gi.GLib;
+const GObject = imports.gi.GObject;
 const Lang = imports.lang;
 const Mainloop = imports.mainloop;
 
@@ -8,18 +9,23 @@ const Main = imports.ui.main;
 const StatusSystem = imports.ui.status.system;
 const PopupMenu = imports.ui.popupMenu;
 const ModalDialog = imports.ui.modalDialog;
+const CheckBox = imports.ui.checkBox.CheckBox;
 const St = imports.gi.St;
 const Clutter = imports.gi.Clutter;
 
 var HibernateDialogContent = {
     subject: C_("title", "Hibernate"),
     description: "Do you really want to hibernate the system?",
-    confirmButtons: [{ signal: 'CancelHibernate',
-                       label:  C_("button", "Cancel"),
-                         key:    Clutter.Escape },
-                     { signal: 'ConfirmedHibernate',
-                       label:  C_("button", "Hibernate"),
-                       default: true}],
+    confirmButtons: [{
+        signal: 'Cancel',
+        label: C_("button", "Cancel"),
+        key: Clutter.Escape
+    },
+    {
+        signal: 'ConfirmedHibernate',
+        label: C_("button", "Hibernate"),
+        default: true
+    }],
     iconName: 'document-save-symbolic',
     iconStyleClass: 'end-session-dialog-shutdown-icon',
 };
@@ -27,12 +33,39 @@ var HibernateDialogContent = {
 var SystemdMissingDialogContent = {
     subject: C_("title", "Hybernate button: Systemd Missing"),
     description: "Systemd seems to be missing and is required.",
-    confirmButtons: [{ signal: 'CancelDisableExtension',
-                       label:  C_("button", "Cancel"),
-                         key:    Clutter.Escape },
-                       { signal: 'DisableExtension',
-                       label:  C_("button", "Disable Extension"),
-                       default: true }],
+    confirmButtons: [{
+        signal: 'Cancel',
+        label: C_("button", "Cancel"),
+        key: Clutter.Escape
+    },
+    {
+        signal: 'DisableExtension',
+        label: C_("button", "Disable Extension"),
+        default: true
+    }],
+    iconName: 'document-save-symbolic',
+    iconStyleClass: 'end-session-dialog-shutdown-icon',
+};
+
+
+var HibernateFailedDialogContent = {
+    subject: C_("title", "Hybernate button: Hibernate failed"),
+    description: "Looks like hibernation failed.\n" +
+        "On some linux distributions hibernation is disabled\n" +
+        "because not all hardware supports it well;\n" +
+        "please check your distribution documentation\n" +
+        "on how to enable it.",
+    checkBox: "You are wrong, don't check this anymore!",
+    confirmButtons: [{
+        signal: 'Cancel',
+        label: C_("button", "Cancel"),
+        key: Clutter.Escape
+    },
+    {
+        signal: 'DisableExtension',
+        label: C_("button", "Disable Extension"),
+        default: true
+    }],
     iconName: 'document-save-symbolic',
     iconStyleClass: 'end-session-dialog-shutdown-icon',
 };
@@ -49,41 +82,60 @@ function _setLabelText(label, text) {
     }
 }
 
-var ConfirmDialog = new Lang.Class({
-    Name: 'HibernateDialog',
-    Extends: ModalDialog.ModalDialog,
-
-    _init: function(dialog) {
-        this.parent({ styleClass: 'end-session-dialog',
-                      destroyOnClose: true });
+var ConfirmDialog = GObject.registerClass({
+    Properties: {
+        'state': GObject.ParamSpec.int('state', 'Dialog state', 'state',
+                                       GObject.ParamFlags.READABLE,
+                                       Math.min(...Object.values(ModalDialog.State)),
+                                       Math.max(...Object.values(ModalDialog.State)),
+                                       ModalDialog.State.CLOSED)
+    },
+    Signals: { 'ConfirmedHibernate': { param_types: [ GObject.TYPE_BOOLEAN ] },
+               'DisableExtension': { param_types: [ GObject.TYPE_BOOLEAN ] },
+               'Cancel': { param_types: [ GObject.TYPE_BOOLEAN ] } }
+},
+class ConfirmDialog extends ModalDialog.ModalDialog {
+    _init(dialog) {
+        super._init({
+            styleClass: 'end-session-dialog',
+            destroyOnClose: true
+        });
 
         let mainContentLayout = new St.BoxLayout({ vertical: false });
         this.contentLayout.add(mainContentLayout,
-                                      { x_fill: true,
-                                        y_fill: false });
+            {
+                x_fill: true,
+                y_fill: false
+            });
 
         this._iconBin = new St.Bin();
         mainContentLayout.add(this._iconBin,
-                              { x_fill:  true,
-                                y_fill:  false,
-                                x_align: St.Align.END,
-                                y_align: St.Align.START });
+            {
+                x_fill: true,
+                y_fill: false,
+                x_align: St.Align.END,
+                y_align: St.Align.START
+            });
 
         let messageLayout = new St.BoxLayout({ vertical: true });
         mainContentLayout.add(messageLayout,
-                              { y_align: St.Align.START });
+            { y_align: St.Align.START });
 
         this._subjectLabel = new St.Label({ style_class: 'end-session-dialog-subject' });
 
         messageLayout.add(this._subjectLabel,
-                          { y_fill:  false,
-                            y_align: St.Align.START });
+            {
+                y_fill: false,
+                y_align: St.Align.START
+            });
 
         this._descriptionLabel = new St.Label({ style_class: 'end-session-dialog-description' });
 
         messageLayout.add(this._descriptionLabel,
-                          { y_fill:  true,
-                            y_align: St.Align.START });
+            {
+                y_fill: true,
+                y_align: St.Align.START
+            });
 
         // fill dialog
 
@@ -91,9 +143,16 @@ var ConfirmDialog = new Lang.Class({
         _setLabelText(this._subjectLabel, dialog.subject);
 
         if (dialog.iconName) {
-            this._iconBin.child = new St.Icon({ icon_name: dialog.iconName,
-                                                icon_size: _DIALOG_ICON_SIZE,
-                                                style_class: dialog.iconStyleClass });
+            this._iconBin.child = new St.Icon({
+                icon_name: dialog.iconName,
+                icon_size: _DIALOG_ICON_SIZE,
+                style_class: dialog.iconStyleClass
+            });
+        }
+
+        if (dialog.checkBox) {
+            this._checkBox = new CheckBox(dialog.checkBox);
+            mainContentLayout.add(this._checkBox.actor);
         }
 
         let buttons = [];
@@ -101,32 +160,32 @@ var ConfirmDialog = new Lang.Class({
             let signal = dialog.confirmButtons[i].signal;
             let label = dialog.confirmButtons[i].label;
             let keys = dialog.confirmButtons[i].key;
-            buttons.push({ action: Lang.bind(this, function() {
-                                       this.close();
-                                       let signalId = this.connect('closed',
-                                                                   Lang.bind(this, function() {
-                                                                       this.disconnect(signalId);
-                                                                       this._confirm(signal);
-                                                                   }));
-                                   }),
-                           label: label,
-                           key: keys });
+            buttons.push({
+                action: Lang.bind(this, function () {
+                    this.close();
+                    let signalId = this.connect('closed',
+                        Lang.bind(this, function () {
+                            this.disconnect(signalId);
+                            this._confirm(signal);
+                        }));
+                }),
+                label: label,
+                key: keys
+            });
         };
 
         this.setButtons(buttons);
 
-    },
+    }
 
-    _confirm: function(signal) {
-        this.emit(signal);
-    },
+    _confirm(signal) {
+        var checked;
+        if (this._checkBox)
+            checked = this._checkBox.actor.get_checked()
+        this.emit(signal, checked);
+    }
 
-    cancel: function() {
-        this.close();
-    },
-
-    Close: function(parameters, invocation) {
+    cancel() {
         this.close();
     }
 });
-
