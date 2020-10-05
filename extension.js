@@ -183,7 +183,7 @@ class Extension {
         this._hybridSleepMenuItem = new PopupMenu.PopupMenuItem(_('Hybrid Sleep'));
         this._hybridSleepMenuItemId = this._hybridSleepMenuItem.connect('activate', Lang.bind(this, this._onHybridSleepClicked));
 
-        let afterSuspendPosition = this.systemMenu._sessionSubMenu.menu.numMenuItems - 1;
+        let afterSuspendPosition = this.systemMenu._sessionSubMenu.menu.numMenuItems - 5;
 
         this.systemMenu._sessionSubMenu.menu.addMenuItem(this._hybridSleepMenuItem, afterSuspendPosition);
         this.systemMenu._sessionSubMenu.menu.addMenuItem(this._hibernateMenuItem, afterSuspendPosition);
