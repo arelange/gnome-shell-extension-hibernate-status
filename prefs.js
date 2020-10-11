@@ -1,4 +1,5 @@
 const Gio = imports.gi.Gio;
+const Gtk = imports.gi.Gtk;
 const Lang = imports.lang;
 const Me = imports.misc.extensionUtils.getCurrentExtension();
 
@@ -84,4 +85,12 @@ var Prefs = class Prefs {
 // These "preferences" aren't user accessible so define
 // init() and buildPrefsWidget() to empty functions
 function init() { }
-function buildPrefsWidget() { }
+function buildPrefsWidget() {
+    let frame = new Gtk.Box({orientation: Gtk.Orientation.VERTICAL,
+                             border_width: 10});
+    let setting_label = new Gtk.Label({label: "This extension has no settings available",
+                                       xalign: 0 });
+    frame.pack_start(setting_label, true, true, 0);
+    frame.show_all();
+    return frame;
+}
