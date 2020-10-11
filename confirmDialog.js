@@ -83,13 +83,6 @@ function _setLabelText(label, text) {
 }
 
 var ConfirmDialog = GObject.registerClass({
-    Properties: {
-        'state': GObject.ParamSpec.int('state', 'Dialog state', 'state',
-                                       GObject.ParamFlags.READABLE,
-                                       Math.min(...Object.values(ModalDialog.State)),
-                                       Math.max(...Object.values(ModalDialog.State)),
-                                       ModalDialog.State.CLOSED)
-    },
     Signals: { 'ConfirmedHibernate': { param_types: [ GObject.TYPE_BOOLEAN ] },
                'DisableExtension': { param_types: [ GObject.TYPE_BOOLEAN ] },
                'Cancel': { param_types: [ GObject.TYPE_BOOLEAN ] } }
@@ -101,41 +94,42 @@ class ConfirmDialog extends ModalDialog.ModalDialog {
             destroyOnClose: true
         });
 
-        let mainContentLayout = new St.BoxLayout({ vertical: false });
-        this.contentLayout.add(mainContentLayout,
-            {
-                x_fill: true,
-                y_fill: false
-            });
+        let mainContentLayout = new St.BoxLayout({
+            vertical: false,
+            x_expand: true ,
+            y_expand: false
+        });
+        this.contentLayout.add(mainContentLayout);
 
-        this._iconBin = new St.Bin();
-        mainContentLayout.add(this._iconBin,
-            {
-                x_fill: true,
-                y_fill: false,
-                x_align: St.Align.END,
-                y_align: St.Align.START
-            });
+        this._iconBin = new St.Bin({
+            x_expand: true,
+            y_expand: false,
+            x_align: St.Align.END,
+            y_align: St.Align.START
+        });
+        mainContentLayout.add(this._iconBin);
 
-        let messageLayout = new St.BoxLayout({ vertical: true });
-        mainContentLayout.add(messageLayout,
-            { y_align: St.Align.START });
+        let messageLayout = new St.BoxLayout({
+            vertical: true,
+            y_align: St.Align.START
+        });
+        mainContentLayout.add(messageLayout);
 
-        this._subjectLabel = new St.Label({ style_class: 'end-session-dialog-subject' });
+        this._subjectLabel = new St.Label({
+            style_class: 'end-session-dialog-subject',
+            y_expand: false,
+            y_align: St.Align.START
+        });
 
-        messageLayout.add(this._subjectLabel,
-            {
-                y_fill: false,
-                y_align: St.Align.START
-            });
+        messageLayout.add(this._subjectLabel);
 
-        this._descriptionLabel = new St.Label({ style_class: 'end-session-dialog-description' });
+        this._descriptionLabel = new St.Label({
+            style_class: 'end-session-dialog-description',
+            y_expand: true,
+            y_align: St.Align.START
+        });
 
-        messageLayout.add(this._descriptionLabel,
-            {
-                y_fill: true,
-                y_align: St.Align.START
-            });
+        messageLayout.add(this._descriptionLabel);
 
         // fill dialog
 
