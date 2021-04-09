@@ -87,10 +87,12 @@ var Prefs = class Prefs {
 function init() { }
 function buildPrefsWidget() {
     let frame = new Gtk.Box({orientation: Gtk.Orientation.VERTICAL,
-                             border_width: 10});
+                             'margin-top': 10,
+                             'margin-end': 10,
+                             'margin-bottom': 10,
+                             'margin-start': 10});
     let setting_label = new Gtk.Label({label: "This extension has no settings available",
                                        xalign: 0 });
-    frame.pack_start(setting_label, true, true, 0);
-    frame.show_all();
+    frame.append(setting_label);
     return frame;
 }
