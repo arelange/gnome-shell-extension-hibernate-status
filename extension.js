@@ -13,6 +13,14 @@ const ExtensionSystem = imports.ui.extensionSystem;
 const ConfirmDialog = Me.imports.confirmDialog;
 const Prefs = new Me.imports.prefs.Prefs();
 
+
+// Use __ () and N__() for the extension gettext domain, and reuse
+// the shell domain with the default _() and N_()
+const Gettext = imports.gettext.domain('hibernate-status-button');
+const __ = Gettext.gettext;
+const N__ = function(e) { return e };
+ExtensionUtils.initTranslations('hibernate-status-button');
+
 const HIBERNATE_CHECK_TIMEOUT = 20000;
 
 class Extension {
@@ -178,10 +186,10 @@ class Extension {
         this._loginManager = LoginManager.getLoginManager();
         this.systemMenu = Main.panel.statusArea['aggregateMenu']._system;
 
-        this._hibernateMenuItem = new PopupMenu.PopupMenuItem(_('Hibernate'));
+        this._hibernateMenuItem = new PopupMenu.PopupMenuItem(__('Hibernate'));
         this._hibernateMenuItemId = this._hibernateMenuItem.connect('activate', Lang.bind(this, this._onHibernateClicked));
 
-        this._hybridSleepMenuItem = new PopupMenu.PopupMenuItem(_('Hybrid Sleep'));
+        this._hybridSleepMenuItem = new PopupMenu.PopupMenuItem(__('Hybrid Sleep'));
         this._hybridSleepMenuItemId = this._hybridSleepMenuItem.connect('activate', Lang.bind(this, this._onHybridSleepClicked));
 
         let afterSuspendPosition = this.systemMenu._sessionSubMenu.menu.numMenuItems - 5;
@@ -228,7 +236,6 @@ class Extension {
 
 let extension;
 function init() {
-    ExtensionUtils.initTranslations('hibernate-status-button');
     extension = new Extension();
 }
 

@@ -12,12 +12,15 @@ const ModalDialog = imports.ui.modalDialog;
 const CheckBox = imports.ui.checkBox.CheckBox;
 const St = imports.gi.St;
 const Clutter = imports.gi.Clutter;
+const ExtensionUtils = imports.misc.extensionUtils;
 
 // Use __ () and N__() for the extension gettext domain, and reuse
 // the shell domain with the default _() and N_()
 const Gettext = imports.gettext.domain('hibernate-status-button');
 const __ = Gettext.gettext;
 const N__ = function(e) { return e };
+
+ExtensionUtils.initTranslations('hibernate-status-button');
 
 var HibernateDialogContent = {
     subject: C_("title", __("Hibernate")),

@@ -2,6 +2,12 @@ const Gio = imports.gi.Gio;
 const Gtk = imports.gi.Gtk;
 const Lang = imports.lang;
 const Me = imports.misc.extensionUtils.getCurrentExtension();
+// Use __() and N__() for the extension gettext domain, and reuse
+// the shell domain with the default _() and N_()
+const Gettext = imports.gettext.domain('hibernate-status-button');
+const __ = Gettext.gettext;
+const N__ = function(e) { return e };
+const ExtensionUtils = imports.misc.extensionUtils;
 
 var Prefs = class Prefs {
     /**
@@ -84,14 +90,16 @@ var Prefs = class Prefs {
 
 // These "preferences" aren't user accessible so define
 // init() and buildPrefsWidget() to empty functions
-function init() { }
+function init() {
+    ExtensionUtils.initTranslations('hibernate-status-button');
+}
 function buildPrefsWidget() {
     let frame = new Gtk.Box({orientation: Gtk.Orientation.VERTICAL,
                              'margin-top': 10,
                              'margin-end': 10,
                              'margin-bottom': 10,
                              'margin-start': 10});
-    let setting_label = new Gtk.Label({label: "This extension has no settings available",
+    let setting_label = new Gtk.Label({label: __("This extension has no settings available"),
                                        xalign: 0 });
     frame.append(setting_label);
     return frame;
