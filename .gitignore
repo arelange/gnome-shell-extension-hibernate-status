@@ -1,2 +1,6 @@
 **/*.compiled
 *.zip
+.~
+*~
+*.mo
+po/hibernate-status-button.pot
