@@ -1,4 +1,4 @@
-# Czecg translation of hibernate-status-button
+# Czech translation of hibernate-status-button
 # Copyright (C) 2021 Vojtěch Perník
 # This file is distributed under the same license as the hibernate-status-button package.
 # Vojtěch Perník <translations@pervoj.cz>, 2021.
