@@ -1,0 +1,66 @@
+# Czech translation of hibernate-status-button
+# Copyright (C) 2021 Vojtěch Perník
+# This file is distributed under the same license as the hibernate-status-button package.
+# Vojtěch Perník <translations@pervoj.cz>, 2021.
+#
+msgid ""
+msgstr ""
+"Project-Id-Version: Hibernate Status Button\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2021-04-11 18:31+0200\n"
+"PO-Revision-Date: 2021-05-06 16:15+0200\n"
+"Last-Translator: Vojtěch Perník <translations@pervoj.cz>\n"
+"Language-Team: Czech\n"
+"Language: cs\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+
+#: confirmDialog.js:23 confirmDialog.js:32
+msgid "Hibernate"
+msgstr "Uspat na disk"
+
+#: confirmDialog.js:24
+msgid "Do you really want to hibernate the system?"
+msgstr "Opravdu chcete systém uspat na disk?"
+
+#: confirmDialog.js:27 confirmDialog.js:44 confirmDialog.js:67
+msgid "Cancel"
+msgstr "Zrušit"
+
+#: confirmDialog.js:40
+msgid "Hibernate button: Systemd Missing"
+msgstr "Hibernate button: Systemd není nainstalován"
+
+#: confirmDialog.js:41
+msgid "Systemd seems to be missing and is required."
+msgstr "Zdá se, že Systemd není nainstalován, ale je vyžadován."
+
+#: confirmDialog.js:49 confirmDialog.js:72
+msgid "Disable Extension"
+msgstr "Zakázat rozšíření"
+
+#: confirmDialog.js:58
+msgid "Hibernate button: Hibernate failed"
+msgstr "Hibernate button: Uspání na disk se nezdařilo"
+
+#: confirmDialog.js:59
+msgid ""
+"Looks like hibernation failed.\n"
+"On some linux distributions hibernation is disabled\n"
+"because not all hardware supports it well;\n"
+"please check your distribution documentation\n"
+"on how to enable it."
+msgstr ""
+"Vypadá to, že se uspání na disk nezdařilo.\n"
+"U některých linuxových distribucí je uspání na disk\n"
+"zakázáno, protože ne všechny hardware ho podporují,\n"
+"podívejte se prosím do dokumentace své distribuce, jak ji povolit."
+
+#: confirmDialog.js:64
+msgid "You are wrong, don't check this anymore!"
+msgstr "Mýlíte se, už to nekontrolujte!"
+
+#: prefs.js:99
+msgid "This extension has no settings available"
+msgstr "Toto rozšíření nemá k dispozici žádná nastavení"
