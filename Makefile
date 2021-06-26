@@ -4,7 +4,9 @@ UUID = hibernate-status@dromi
 BASE_MODULES = extension.js metadata.json confirmDialog.js LICENSE README.md
 EXTRA_MODULES = prefs.js
 TOLOCALIZE =  confirmDialog.js prefs.js
-MSGSRC = $(wildcard locale/*/LC_MESSAGES/*.po)
+PO_FILES := $(wildcard ./locale/*/*/*.po)
+MO_FILES := $(PO_FILES:.po=.mo)
+
 ifeq ($(strip $(DESTDIR)),)
 	INSTALLTYPE = local
 	INSTALLBASE = $(HOME)/.local/share/gnome-shell/extensions
@@ -20,10 +22,10 @@ all: extension
 clean:
 	rm -f ./schemas/gschemas.compiled
 	rm -f ./**/*~
-	rm -f ./locale/**/*.mo
+	rm -f ./locale/*/*/*.mo
 	rm -f ./locale/hibernate-status-button.pot
 
-extension: ./schemas/gschemas.compiled $(MSGSRC:.po=.mo)
+extension: ./schemas/gschemas.compiled $(MO_FILES)
 
 ./schemas/gschemas.compiled: ./schemas/org.gnome.shell.extensions.hibernate-status-button.gschema.xml
 	glib-compile-schemas ./schemas/
@@ -31,7 +33,7 @@ extension: ./schemas/gschemas.compiled $(MSGSRC:.po=.mo)
 potfile: ./locale/hibernate-status-button.pot
 
 mergepo: potfile
-	for l in $(MSGSRC); do \
+	for l in $(PO_FILES); do \
 		msgmerge -U $$l ./locale/hibernate-status-button.pot; \
 	done;
 
@@ -39,7 +41,7 @@ mergepo: potfile
 	mkdir -p locale
 	xgettext -k --keyword=__ --keyword=N__ --add-comments='Translators:' -o locale/hibernate-status-button.pot --package-name "Hibernate Status Button" $(TOLOCALIZE)
 
-$(MSGSRC:.po=.mo): $(MSGSRC)
+%.mo: %.po
 	msgfmt -c $< -o $@
 
 install: install-local
