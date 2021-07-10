@@ -1,6 +1,5 @@
 const Gio = imports.gi.Gio;
 const GLib = imports.gi.GLib;
-const Lang = imports.lang;
 const Mainloop = imports.mainloop;
 
 const ExtensionUtils = imports.misc.extensionUtils;
@@ -45,10 +44,10 @@ class Extension {
                         asyncCallback(result[0] != 'no');
                 });
         } else {
-            Mainloop.idle_add(Lang.bind(this, function () {
+            Mainloop.idle_add(() => {
                 asyncCallback(false);
                 return false;
-            }));
+            });
         }
     }
 
@@ -56,7 +55,7 @@ class Extension {
         if (Prefs.getHibernateWorksCheckEnabled()) {
             this._hibernateStarted = new Date();
             GLib.timeout_add(GLib.PRIORITY_DEFAULT, HIBERNATE_CHECK_TIMEOUT,
-                Lang.bind(this, this._checkDidHibernate));
+                () => this._checkDidHibernate());
         }
         if (this._loginManager._proxy) {
             // systemd path
@@ -92,10 +91,10 @@ class Extension {
                         asyncCallback(result[0] != 'no');
                 });
         } else {
-            Mainloop.idle_add(Lang.bind(this, function () {
+            Mainloop.idle_add(() => {
                 asyncCallback(false);
                 return false;
-            }));
+            });
         }
     }
 
@@ -113,10 +112,11 @@ class Extension {
         }
     }
     _updateHaveHibernate() {
-        this._loginManagerCanHibernate(Lang.bind(this, function (result) {
+        this._loginManagerCanHibernate((result) => {
+            log(`have hibernate ${result}`);
             this._haveHibernate = result;
             this._updateHibernate();
-        }));
+        });
     }
 
     _updateHibernate() {
@@ -124,10 +124,10 @@ class Extension {
     }
 
     _updateHaveHybridSleep() {
-        this._loginManagerCanHybridSleep(Lang.bind(this, function (result) {
+        this._loginManagerCanHybridSleep((result) => {
             this._haveHybridSleep = result;
             this._updateHybridSleep();
-        }));
+        });
     }
 
     _updateHybridSleep() {
@@ -137,7 +137,7 @@ class Extension {
     _onHibernateClicked() {
         this.systemMenu.menu.itemActivated();
         this._dialog = new ConfirmDialog.ConfirmDialog(ConfirmDialog.HibernateDialogContent);
-        this._dialog.connect('ConfirmedHibernate', Lang.bind(this, this._loginManagerHibernate));
+        this._dialog.connect('ConfirmedHibernate', () => this._loginManagerHibernate());
         this._dialog.open();
     }
 
@@ -187,23 +187,23 @@ class Extension {
         this.systemMenu = Main.panel.statusArea['aggregateMenu']._system;
 
         this._hibernateMenuItem = new PopupMenu.PopupMenuItem(__('Hibernate'));
-        this._hibernateMenuItemId = this._hibernateMenuItem.connect('activate', Lang.bind(this, this._onHibernateClicked));
+        this._hibernateMenuItemId = this._hibernateMenuItem.connect('activate', () => this._onHibernateClicked());
 
         this._hybridSleepMenuItem = new PopupMenu.PopupMenuItem(__('Hybrid Sleep'));
-        this._hybridSleepMenuItemId = this._hybridSleepMenuItem.connect('activate', Lang.bind(this, this._onHybridSleepClicked));
+        this._hybridSleepMenuItemId = this._hybridSleepMenuItem.connect('activate', () => this._onHybridSleepClicked());
 
         let afterSuspendPosition = this.systemMenu._sessionSubMenu.menu.numMenuItems - 5;
 
         this.systemMenu._sessionSubMenu.menu.addMenuItem(this._hybridSleepMenuItem, afterSuspendPosition);
         this.systemMenu._sessionSubMenu.menu.addMenuItem(this._hibernateMenuItem, afterSuspendPosition);
 
-        this._menuOpenStateChangedId = this.systemMenu.menu.connect('open-state-changed', Lang.bind(this,
-            function (menu, open) {
+        this._menuOpenStateChangedId = this.systemMenu.menu.connect('open-state-changed',
+            (menu, open) => {
                 if (!open)
                     return;
                 this._updateHaveHibernate();
                 this._updateHaveHybridSleep();
-            }));
+            });
     }
 
     disable() {

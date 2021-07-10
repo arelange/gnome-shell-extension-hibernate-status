@@ -1,7 +1,6 @@
 const Gio = imports.gi.Gio;
 const GLib = imports.gi.GLib;
 const GObject = imports.gi.GObject;
-const Lang = imports.lang;
 const Mainloop = imports.mainloop;
 
 const LoginManager = imports.misc.loginManager;
@@ -164,14 +163,14 @@ class ConfirmDialog extends ModalDialog.ModalDialog {
             let label = dialog.confirmButtons[i].label;
             let keys = dialog.confirmButtons[i].key;
             buttons.push({
-                action: Lang.bind(this, function () {
+                action: () => {
                     this.close();
                     let signalId = this.connect('closed',
-                        Lang.bind(this, function () {
+                        () => {
                             this.disconnect(signalId);
                             this._confirm(signal);
-                        }));
-                }),
+                        });
+                },
                 label: label,
                 key: keys
             });

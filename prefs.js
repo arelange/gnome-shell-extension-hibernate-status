@@ -1,6 +1,5 @@
 const Gio = imports.gi.Gio;
 const Gtk = imports.gi.Gtk;
-const Lang = imports.lang;
 const Me = imports.misc.extensionUtils.getCurrentExtension();
 // Use __() and N__() for the extension gettext domain, and reuse
 // the shell domain with the default _() and N_()
