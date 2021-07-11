@@ -1,4 +1,4 @@
-# Italian translation of hibernate-status-button
+# Polish translation of hibernate-status-button
 # Copyright (C) 2021 tebaranowski
 # This file is distributed under the same license as the hibernate-status-button package.
 # tebaranowski <tomasz.baranowski@int.pl>, 2021.
