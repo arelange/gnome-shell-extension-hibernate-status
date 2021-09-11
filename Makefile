@@ -63,7 +63,7 @@ endif
 	echo done
 
 zip-file: _build
-	cd _build ; zip -qr "$(UUID).zip" .
+	cd _build ; zip -qr "$(UUID).zip" . -x '*.po'
 	mv _build/$(UUID).zip ./
 	-rm -fR _build
 
