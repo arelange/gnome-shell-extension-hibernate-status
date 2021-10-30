@@ -1,0 +1,68 @@
+# Polish translation of hibernate-status-button
+# Copyright (C) 2021 tebaranowski
+# This file is distributed under the same license as the hibernate-status-button package.
+# tebaranowski <tomasz.baranowski@int.pl>, 2021.
+#
+msgid ""
+msgstr ""
+"Project-Id-Version: Hibernate Status Button\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2021-04-11 18:31+0200\n"
+"PO-Revision-Date: 2021-09-13 17:56+0200\n"
+"Last-Translator: Heimen Stoffels <vistausss@fastmail.com>\n"
+"Language-Team: Dutch <vistausss@fastmail.com>\n"
+"Language: nl\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=3; plural=(n==1 ? 0 : n%10>=2 && n%10<=4 && (n%100<12 || n%100>14) ? 1 : 2);\n"
+"X-Generator: Poedit 3.0\n"
+
+#: confirmDialog.js:23 confirmDialog.js:32
+msgid "Hibernate"
+msgstr "Slaapstand"
+
+#: confirmDialog.js:24
+msgid "Do you really want to hibernate the system?"
+msgstr "Weet u zeker dat u het systeem in de slaapstand wilt zetten?"
+
+#: confirmDialog.js:27 confirmDialog.js:44 confirmDialog.js:67
+msgid "Cancel"
+msgstr "Annuleren"
+
+#: confirmDialog.js:40
+msgid "Hibernate button: Systemd Missing"
+msgstr "Slaapstandknop: Systemd ontbreekt"
+
+#: confirmDialog.js:41
+msgid "Systemd seems to be missing and is required."
+msgstr "Systemd is vereist, maar niet aangetroffen."
+
+#: confirmDialog.js:49 confirmDialog.js:72
+msgid "Disable Extension"
+msgstr "Uitbreiding uitschakelen"
+
+#: confirmDialog.js:58
+msgid "Hibernate button: Hibernate failed"
+msgstr "Slaapstandknop: slaapstand mislukt"
+
+#: confirmDialog.js:59
+msgid ""
+"Looks like hibernation failed.\n"
+"On some linux distributions hibernation is disabled\n"
+"because not all hardware supports it well;\n"
+"please check your distribution documentation\n"
+"on how to enable it."
+msgstr ""
+"Het lijkt er op dat de slaapstand niet kan worden ingeschakeld.\n"
+"Op sommige distributies is de slaapstand niet beschikbaar.\n"
+"Neem de documentatie van uw distributie door om te\n"
+"zien of u de slaapstand kunt activeren."
+
+#: confirmDialog.js:64
+msgid "You are wrong, don't check this anymore!"
+msgstr "Dit klopt niet - negeer deze controle!"
+
+#: prefs.js:99
+msgid "This extension has no settings available"
+msgstr "Deze uitbreiding bevat geen voorkeurenscherm"
