@@ -1,0 +1,71 @@
+# French translation of hibernate-status-button
+# Copyright (C) 2021 Jérôme de Bretagne
+# This file is distributed under the same license as the hibernate-status-button package.
+# Jérôme de Bretagne <jerome.debretagne@gmail.com>, 2021.
+#
+msgid ""
+msgstr ""
+"Project-Id-Version: Hibernate Status Button\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2021-04-11 18:31+0200\n"
+"PO-Revision-Date: 2021-11-13 19:34+0200\n"
+"Last-Translator: Jérôme de Bretagne <jerome.debretagne@gmail.com>\n"
+"Language-Team: French <jerome.debretagne@gmail.com>\n"
+"Language: fr\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+
+#: extension.js:189 confirmDialog.js:23 confirmDialog.js:32
+msgid "Hibernate"
+msgstr "Mettre en veille prolongée"
+
+#: extension.js:192
+msgid "Hybrid Sleep"
+msgstr "Mettre en veille hybride"
+
+#: confirmDialog.js:24
+msgid "Do you really want to hibernate the system?"
+msgstr "Voulez-vous vraiment mettre l'appareil en veille prolongée ?"
+
+#: confirmDialog.js:27 confirmDialog.js:44 confirmDialog.js:67
+msgid "Cancel"
+msgstr "Annuler"
+
+#: confirmDialog.js:40
+msgid "Hibernate button: Systemd Missing"
+msgstr "Extension de mise en veille prolongée : systemd manquant"
+
+#: confirmDialog.js:41
+msgid "Systemd seems to be missing and is required."
+msgstr "systemd ne semble pas installé et est nécessaire."
+
+#: confirmDialog.js:49 confirmDialog.js:72
+msgid "Disable Extension"
+msgstr "Désactiver l'extension"
+
+#: confirmDialog.js:58
+msgid "Hibernate button: Hibernate failed"
+msgstr "Extension de mise en veille prolongée : échec"
+
+#: confirmDialog.js:59
+msgid ""
+"Looks like hibernation failed.\n"
+"On some linux distributions hibernation is disabled\n"
+"because not all hardware supports it well;\n"
+"please check your distribution documentation\n"
+"on how to enable it."
+msgstr ""
+"La mise en veille prolongée a échoué.\n"
+"Sur certaines distributions Linux, la mise en veille prolongée est désactivée\n"
+"car elle ne fonctionne pas correctement pour quelques appareils;\n"
+"Veuillez vous reporter à la documentation de votre distribution\n"
+"pour savoir comment l'activer."
+
+#: confirmDialog.js:64
+msgid "You are wrong, don't check this anymore!"
+msgstr "Il n'est pas utile de cocher cette case !"
+
+#: prefs.js:99
+msgid "This extension has no settings available"
+msgstr "Cette extension n'a pas de paramètres"
