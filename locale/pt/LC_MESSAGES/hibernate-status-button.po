@@ -1,0 +1,67 @@
+# Portuguese translation of hibernate-status-button
+# Copyright (C) 2021 p91paul
+# This file is distributed under the same license as the hibernate-status-button package.
+# mantonelli <matheus.antonelli@gmail.com>, 2021.
+#
+msgid ""
+msgstr ""
+"Project-Id-Version: Hibernate Status Button\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2021-04-11 18:31+0200\n"
+"PO-Revision-Date: 2021-04-11 18:31+0200\n"
+"Last-Translator: mantonelli <matheus.antonelli@gmail.com>\n"
+"Language-Team: Portuguese <matheus.antonelli@gmail.com>\n"
+"Language: it\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+
+#: confirmDialog.js:23 confirmDialog.js:32
+msgid "Hibernate"
+msgstr "Hibernar"
+
+#: confirmDialog.js:24
+msgid "Do you really want to hibernate the system?"
+msgstr "Deseja realmente hibernar o sistema?"
+
+#: confirmDialog.js:27 confirmDialog.js:44 confirmDialog.js:67
+msgid "Cancel"
+msgstr "Cancelar"
+
+#: confirmDialog.js:40
+msgid "Hibernate button: Systemd Missing"
+msgstr "Systemd não está instalado"
+
+#: confirmDialog.js:41
+msgid "Systemd seems to be missing and is required."
+msgstr "Systemd não está instalado e é necessário"
+
+#: confirmDialog.js:49 confirmDialog.js:72
+msgid "Disable Extension"
+msgstr "Desabilitar extensão"
+
+#: confirmDialog.js:58
+msgid "Hibernate button: Hibernate failed"
+msgstr "Hibernação falhou"
+
+#: confirmDialog.js:59
+msgid ""
+"Looks like hibernation failed.\n"
+"On some linux distributions hibernation is disabled\n"
+"because not all hardware supports it well;\n"
+"please check your distribution documentation\n"
+"on how to enable it."
+msgstr ""
+"Parece que a hibernação falhou.\n"
+"Em algumas distribuições Linux a hibernação é desabilitada\n"
+"já que nem todo hardware oferece suporte adequado à ela;\n"
+"Confira a documentação de sua distribuição\n"
+"para aprender como habilitá-la."
+
+#: confirmDialog.js:64
+msgid "You are wrong, don't check this anymore!"
+msgstr "Você errou! Não selecione isso novamente!"
+
+#: prefs.js:99
+msgid "This extension has no settings available"
+msgstr "Essa extensão não possui configurações disponíveis"
