@@ -1,0 +1,68 @@
+# German translation of hibernate-status-button
+# Copyright (C) 2022 Oskar Kirmis
+# This file is distributed under the same license as the hibernate-status-button package.
+# Oskar Kirmis <oskar.kirmis@posteo.de>, 2022.
+#
+msgid ""
+msgstr ""
+"Project-Id-Version: Hibernate Status Button\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2022-03-28 21:00+0200\n"
+"PO-Revision-Date: 2022-03-28 21:00+0200\n"
+"Last-Translator: Oskar Kirmis <oskar.kirmis@posteo.de>\n"
+"Language-Team: German\n"
+"Language: de\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"X-Generator: Poedit 3.0.1\n"
+
+#: confirmDialog.js:23 confirmDialog.js:32
+msgid "Hibernate"
+msgstr "Ruhezustand"
+
+#: confirmDialog.js:24
+msgid "Do you really want to hibernate the system?"
+msgstr "Wollen Sie das System wirklich in den Ruhezustand versetzen?"
+
+#: confirmDialog.js:27 confirmDialog.js:44 confirmDialog.js:67
+msgid "Cancel"
+msgstr "Abbrechen"
+
+#: confirmDialog.js:40
+msgid "Hibernate button: Systemd Missing"
+msgstr "Hibernate button: Systemd fehlt"
+
+#: confirmDialog.js:41
+msgid "Systemd seems to be missing and is required."
+msgstr "Systemd fehlt offenbar, wird jedoch benötigt."
+
+#: confirmDialog.js:49 confirmDialog.js:72
+msgid "Disable Extension"
+msgstr "Erweiterung deaktivieren"
+
+#: confirmDialog.js:58
+msgid "Hibernate button: Hibernate failed"
+msgstr "Hibernate button: Versetzen in den Ruhezustand fehlgeschlagen"
+
+#: confirmDialog.js:59
+msgid ""
+"Looks like hibernation failed.\n"
+"On some linux distributions hibernation is disabled\n"
+"because not all hardware supports it well;\n"
+"please check your distribution documentation\n"
+"on how to enable it."
+msgstr ""
+"Offenbar konnte das System nicht in den Ruhezustand versetzt werden.\n"
+"Auf manchen Linuxdistributionen ist der Ruhezustand deaktiviert\n"
+"weil nicht jegliche Hardware dies unterstützt;\n"
+"bitte schauen Sie in der Dokumentation Ihrer\n"
+"Distribution nach, wie Sie ihn aktivieren können."
+
+#: confirmDialog.js:64
+msgid "You are wrong, don't check this anymore!"
+msgstr "Das ist falsch, bitte nicht mehr prüfen!"
+
+#: prefs.js:99
+msgid "This extension has no settings available"
+msgstr "Für diese Erweiterung gibt es keine Einstellungen"
