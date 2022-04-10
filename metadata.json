@@ -5,7 +5,8 @@
   "description": "Adds a Hibernate button in Status menu. Using Alt modifier, you can also select Hybrid Sleep instead.",
   "shell-version": [
     "40",
-    "41"
+    "41",
+    "42"
   ],
   "gettext-domain": "hibernate-status-button"
 }
