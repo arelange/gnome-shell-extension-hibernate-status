@@ -1,0 +1,68 @@
+# Persian translation of hibernate-status-button
+# Copyright (C) 2021 MohammadSaleh Kamyab
+# This file is distributed under the same license as the hibernate-status-button package.
+# MohammadSaleh Kamyab <mskf1383@envs.net>, 2022.
+#
+msgid ""
+msgstr ""
+"Project-Id-Version: Hibernate Status Button\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2021-04-11 18:31+0200\n"
+"PO-Revision-Date: 2022-06-21 13:06+0430\n"
+"Last-Translator: MohammadSaleh Kamyab <mskf1383@envs.net>\n"
+"Language-Team: \n"
+"Language: fa\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=2; plural=(n==0 || n==1);\n"
+"X-Generator: Poedit 3.1\n"
+
+#: confirmDialog.js:23 confirmDialog.js:32
+msgid "Hibernate"
+msgstr "خواب زمستانی"
+
+#: confirmDialog.js:24
+msgid "Do you really want to hibernate the system?"
+msgstr "آیا مطمئنید که می‌خواهید سامانه را به خواب زمستانی ببرید؟"
+
+#: confirmDialog.js:27 confirmDialog.js:44 confirmDialog.js:67
+msgid "Cancel"
+msgstr "لغو"
+
+#: confirmDialog.js:40
+msgid "Hibernate button: Systemd Missing"
+msgstr "دکمهٔ خواب زمستانی: سیستم‌دی یافت نشد"
+
+#: confirmDialog.js:41
+msgid "Systemd seems to be missing and is required."
+msgstr "به نظر می‌رسد سیستم‌دی که لازم است، وجود ندارد."
+
+#: confirmDialog.js:49 confirmDialog.js:72
+msgid "Disable Extension"
+msgstr "از کار انداختن افزونه"
+
+#: confirmDialog.js:58
+msgid "Hibernate button: Hibernate failed"
+msgstr "دکمهٔ خواب زمستانی: خواب زمستانی شکست خورد"
+
+#: confirmDialog.js:59
+msgid ""
+"Looks like hibernation failed.\n"
+"On some linux distributions hibernation is disabled\n"
+"because not all hardware supports it well;\n"
+"please check your distribution documentation\n"
+"on how to enable it."
+msgstr ""
+"به نظر می‌رسد خواب زمستانی به شکست انجامید.\n"
+"در بعضی از توزیع‌های گنو/لینوکسی، خواب زمستانی از کار انداخته شده است؛\n"
+"زیرا تمامی سخت‌افزارها به‌خوبی از آن پشتیبانی نمی‌کنند.\n"
+"لطفاً مستندات توزیع خود را در مورد چگونگی به کار انداختن آن، بررسی کنید."
+
+#: confirmDialog.js:64
+msgid "You are wrong, don't check this anymore!"
+msgstr "اشتباه می‌کنید، دوباره بررسی نکنید!"
+
+#: prefs.js:99
+msgid "This extension has no settings available"
+msgstr "این افزونه هیچ تنظیماتی ندارد"
