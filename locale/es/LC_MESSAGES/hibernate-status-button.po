@@ -1,0 +1,67 @@
+# Spanish translation of hibernate-status-button
+# Copyright (C) 2022 slaythrax
+# This file is distributed under the same license as the hibernate-status-button package.
+# slaythrax <jbustamantec@unal.edu.co>, 2022.
+#
+msgid ""
+msgstr ""
+"Project-Id-Version: Hibernate Status Button\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2021-04-11 18:31+0200\n"
+"PO-Revision-Date: 2022-06-25 21:41-0500\n"
+"Last-Translator: slaythrax <jbustamantec@unal.edu.co>\n"
+"Language-Team: Spanish <jbustamantec@unal.edu.co>\n"
+"Language: es\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+
+#: confirmDialog.js:23 confirmDialog.js:32
+msgid "Hibernate"
+msgstr "Hibernar"
+
+#: confirmDialog.js:24
+msgid "Do you really want to hibernate the system?"
+msgstr "Desea hibernar el sistema?"
+
+#: confirmDialog.js:27 confirmDialog.js:44 confirmDialog.js:67
+msgid "Cancel"
+msgstr "Cancelar"
+
+#: confirmDialog.js:40
+msgid "Hibernate button: Systemd Missing"
+msgstr "Systemd no está instalado"
+
+#: confirmDialog.js:41
+msgid "Systemd seems to be missing and is required."
+msgstr "Parece que systemd no está instalado. Systemd es necesario"
+
+#: confirmDialog.js:49 confirmDialog.js:72
+msgid "Disable Extension"
+msgstr "Deshabilitar extensión"
+
+#: confirmDialog.js:58
+msgid "Hibernate button: Hibernate failed"
+msgstr "Hibernación fallida"
+
+#: confirmDialog.js:59
+msgid ""
+"Looks like hibernation failed.\n"
+"On some linux distributions hibernation is disabled\n"
+"because not all hardware supports it well;\n"
+"please check your distribution documentation\n"
+"on how to enable it."
+msgstr ""
+"Parece que la hibernación falló\n"
+"En algunas distribuciones de linux la hibernación se\n"
+"encuentra deshabilitada pues no todo el hardware no la soporta correctamente;\n"
+"Verifique la documentación de su distribución\n"
+"para habilitarla."
+
+#: confirmDialog.js:64
+msgid "You are wrong, don't check this anymore!"
+msgstr "No es necesario hacer esta verificación de nuevo! "
+
+#: prefs.js:99
+msgid "This extension has no settings available"
+msgstr "Esta extensión no tiene ajustes disponibles"
