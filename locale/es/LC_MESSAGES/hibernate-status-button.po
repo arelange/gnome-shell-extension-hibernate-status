@@ -53,9 +53,9 @@ msgid ""
 "on how to enable it."
 msgstr ""
 "Parece que la hibernación falló\n"
-"En algunas distribuciones de linux la hibernación se\n"
-"encuentra deshabilitada pues no todo el hardware no la soporta correctamente;\n"
-"Verifique la documentación de su distribución\n"
+"En algunas distribuciones de linux la hibernación se encuentra deshabilitada\n"
+"pues no todo el hardware no la soporta correctamente;\n"
+"verifique la documentación de su distribución\n"
 "para habilitarla."
 
 #: confirmDialog.js:64
