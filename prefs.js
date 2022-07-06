@@ -8,26 +8,84 @@ const __ = Gettext.gettext;
 const N__ = function(e) { return e };
 const ExtensionUtils = imports.misc.extensionUtils;
 
+let _instance = null;
+function getInstance() {
+    if (!_instance) {
+      _instance = new Prefs();
+    }
+
+    return _instance;
+}
+
 var Prefs = class Prefs {
+
     /**
      * Creates a new Settings-object to access the settings of this extension.
      * @private
      */
     constructor() {
-        this.KEY_HIBERNATE_WORKS_CHECK = "hibernate-works-check";
-        this._schemaName = "org.gnome.shell.extensions.hibernate-status-button";
+      this.KEY_HIBERNATE_WORKS_CHECK = "hibernate-works-check";
+      this.KEY_HYBRID_SLEEP_ENABLED = "hybridsleep-enabled";
+      this._schemaName = "org.gnome.shell.extensions.hibernate-status-button";
 
-        let schemaDir = Me.dir.get_child('schemas').get_path();
+      let schemaDir = Me.dir.get_child('schemas').get_path();
+      let schemaSource = Gio.SettingsSchemaSource.new_from_directory(
+          schemaDir, Gio.SettingsSchemaSource.get_default(), false
+      );
+      let schema = schemaSource.lookup(this._schemaName, false);
 
-        let schemaSource = Gio.SettingsSchemaSource.new_from_directory(
-            schemaDir, Gio.SettingsSchemaSource.get_default(), false
-        );
-        let schema = schemaSource.lookup(this._schemaName, false);
-
-        this._setting = new Gio.Settings({
-            settings_schema: schema
-        });
+      // Define the settings store
+      this._setting = new Gio.Settings({
+          settings_schema: schema
+      });
     }
+
+    buildPrefsPanel() {
+      // Define the settings window
+      this.frame = new Gtk.Box({orientation: Gtk.Orientation.VERTICAL,
+         'margin-top': 10,
+         'margin-end': 10,
+         'margin-bottom': 10,
+         'margin-start': 10
+      });
+
+      // Add the suspend enable toggle option
+      this.frame.append(this.hybridSuspendEnableToggleOption());
+
+      return this.frame;
+    }
+
+    /**
+     * Creates and returns the hybrid suspend enable toggle setting
+     *
+     * @returns Gtk.Box with the hybrid suspend enable toggle UI.
+     */
+    hybridSuspendEnableToggleOption() {
+      const hbox = new Gtk.Box({
+        orientation: Gtk.Orientation.HORIZONTAL,
+        margin_top: 5
+      });
+
+      const hybridSuspendEnabledLabel = new Gtk.Label({
+        label: "Enable the hybrid suspend option",
+        xalign: 0,
+        hexpand: true
+      });
+
+      const hybridSupendEnabledSwitch = new Gtk.Switch({
+        active: this._setting.get_boolean(this.KEY_HYBRID_SLEEP_ENABLED)
+      });
+
+      hybridSupendEnabledSwitch.connect('notify::active', (button) => {
+        this._setting.set_boolean(this.KEY_HYBRID_SLEEP_ENABLED, button.active);
+      });
+
+      hbox.append(hybridSuspendEnabledLabel);
+      hbox.append(hybridSupendEnabledSwitch);
+
+      return hbox;
+    }
+
     /**
      * <p>Binds the given 'callback'-function to the "changed"-signal on the given
      *  key.</p>
@@ -52,6 +110,7 @@ var Prefs = class Prefs {
             callback(source.get_value(key));
         });
     }
+
     /**
      * Get if check for working hibernation is enabled. The user might
      * choose to disable it if we happen to be wrong.
@@ -61,6 +120,16 @@ var Prefs = class Prefs {
     getHibernateWorksCheckEnabled() {
         return this._setting.get_boolean(this.KEY_HIBERNATE_WORKS_CHECK);
     }
+
+    /**
+     * Get if the hybrid sleep option is enabled.
+     *
+     * @returns bool true if we need to display the option.
+     */
+    getHybridSleepOptionEnabled() {
+      return this._setting.get_boolean(this.KEY_HYBRID_SLEEP_ENABLED);
+    }
+
     /**
      * Set if check for working hibernation is enabled. The user might
      * choose to disable it if we happen to be wrong.
@@ -93,13 +162,7 @@ function init() {
     ExtensionUtils.initTranslations('hibernate-status-button');
 }
 function buildPrefsWidget() {
-    let frame = new Gtk.Box({orientation: Gtk.Orientation.VERTICAL,
-                             'margin-top': 10,
-                             'margin-end': 10,
-                             'margin-bottom': 10,
-                             'margin-start': 10});
-    let setting_label = new Gtk.Label({label: __("This extension has no settings available"),
-                                       xalign: 0 });
-    frame.append(setting_label);
-    return frame;
+    const prefs = getInstance();
+    return prefs.buildPrefsPanel();
 }
+

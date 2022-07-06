@@ -10,7 +10,7 @@ const PopupMenu = imports.ui.popupMenu;
 const Me = imports.misc.extensionUtils.getCurrentExtension();
 const ExtensionSystem = imports.ui.extensionSystem;
 const ConfirmDialog = Me.imports.confirmDialog;
-const Prefs = new Me.imports.prefs.Prefs();
+const Prefs = Me.imports.prefs.getInstance();
 
 
 // Use __ () and N__() for the extension gettext domain, and reuse
@@ -71,7 +71,7 @@ class Extension {
     }
 
     _loginManagerCanHybridSleep(asyncCallback) {
-        if (this._loginManager._proxy) {
+        if (Prefs.getHybridSleepOptionEnabled() && this._loginManager._proxy) {
             // systemd path
             this._loginManager._proxy.call("CanHybridSleep",
                 null,
@@ -99,7 +99,7 @@ class Extension {
     }
 
     _loginManagerHybridSleep() {
-        if (this._loginManager._proxy) {
+        if (Prefs.getHybridSleepOptionEnabled() && this._loginManager._proxy) {
             // systemd path
             this._loginManager._proxy.call("HybridSleep",
                 GLib.Variant.new('(b)', [true]),
@@ -189,12 +189,14 @@ class Extension {
         this._hibernateMenuItem = new PopupMenu.PopupMenuItem(__('Hibernate'));
         this._hibernateMenuItemId = this._hibernateMenuItem.connect('activate', () => this._onHibernateClicked());
 
-        this._hybridSleepMenuItem = new PopupMenu.PopupMenuItem(__('Hybrid Sleep'));
-        this._hybridSleepMenuItemId = this._hybridSleepMenuItem.connect('activate', () => this._onHybridSleepClicked());
-
         let afterSuspendPosition = this.systemMenu._sessionSubMenu.menu.numMenuItems - 5;
 
-        this.systemMenu._sessionSubMenu.menu.addMenuItem(this._hybridSleepMenuItem, afterSuspendPosition);
+        if (Prefs.getHybridSleepOptionEnabled()) {
+          this._hybridSleepMenuItem = new PopupMenu.PopupMenuItem(__('Hybrid Sleep'));
+          this._hybridSleepMenuItemId = this._hybridSleepMenuItem.connect('activate', () => this._onHybridSleepClicked());
+          this.systemMenu._sessionSubMenu.menu.addMenuItem(this._hybridSleepMenuItem, afterSuspendPosition);
+        }
+
         this.systemMenu._sessionSubMenu.menu.addMenuItem(this._hibernateMenuItem, afterSuspendPosition);
 
         this._menuOpenStateChangedId = this.systemMenu.menu.connect('open-state-changed',
