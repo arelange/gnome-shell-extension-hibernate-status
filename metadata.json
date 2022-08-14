@@ -1,6 +1,7 @@
 {
   "uuid": "hibernate-status@dromi",
   "name": "Hibernate Status Button",
+  "version": 34,
   "url": "https://github.com/arelange/gnome-shell-extension-hibernate-status",
   "description": "Adds a Hibernate button in Status menu. Using Alt modifier, you can also select Hybrid Sleep instead.",
   "shell-version": [
