@@ -32,6 +32,8 @@ var Prefs = class Prefs {
         this.KEY_HIBERNATE_CONFIRMATION_ENABLED =
             "hibernate-confirmation-enabled";
 
+        this.onSettingsUpdatedCallback = null;
+
         let schemaDir = Me.dir.get_child("schemas").get_path();
         let schemaSource = Gio.SettingsSchemaSource.new_from_directory(
             schemaDir,
@@ -109,6 +111,12 @@ var Prefs = class Prefs {
             this._setting.set_boolean(key, button.active);
         });
 
+        switchButton.connect("notify::changed", (button) => {
+            if (typeof this.onSettingsUpdatedCallback == "function") {
+                this.onSettingsUpdatedCallback(button.key, button.value);
+            }
+        });
+
         hbox.append(switchButtonLabel);
         hbox.append(switchButton);
 
@@ -144,6 +152,12 @@ var Prefs = class Prefs {
         this._setting.connect("changed::" + key, function (source, key) {
             callback(source.get_value(key));
         });
+    }
+
+    setOnSettingsUpdateCallback(callback) {
+        if (typeof callback == "function")
+            this.onSettingsUpdatedCallback = callback;
+        else this.onSettingsUpdatedCallback = null;
     }
 
     /**
@@ -203,9 +217,11 @@ var Prefs = class Prefs {
             throw this._errorWritable(key);
         }
     }
+
     _errorWritable(key) {
         return "The key '" + key + "' is not writable.";
     }
+
     _errorSet(key) {
         return "Couldn't set the key '" + key + "'";
     }

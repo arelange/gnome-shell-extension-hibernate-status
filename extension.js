@@ -127,9 +127,10 @@ class Extension {
             this._loginManager.emit("prepare-for-sleep", false);
         }
     }
+
     _updateHaveHibernate() {
         this._loginManagerCanHibernate((result) => {
-            log(`have hibernate ${result}`);
+            // log(`have hibernate ${result}`);
             this._haveHibernate = result;
             this._updateHibernate();
         });
@@ -137,7 +138,9 @@ class Extension {
 
     _updateHibernate() {
         this._hibernateMenuItem.visible =
-            this._haveHibernate && !Main.sessionMode.isLocked;
+            Prefs.getHibernateOptionEnabled() &&
+            this._haveHibernate &&
+            !Main.sessionMode.isLocked;
     }
 
     _updateHaveHybridSleep() {
@@ -149,7 +152,9 @@ class Extension {
 
     _updateHybridSleep() {
         this._hybridSleepMenuItem.visible =
-            this._haveHybridSleep && !Main.sessionMode.isLocked;
+            Prefs.getHybridSleepOptionEnabled() &&
+            this._haveHybridSleep &&
+            !Main.sessionMode.isLocked;
     }
 
     _onHibernateClicked() {
@@ -221,56 +226,11 @@ class Extension {
         this._dialog.open();
     }
 
-    enable() {
-        this._checkRequirements();
-        this._loginManager = LoginManager.getLoginManager();
-        this.systemMenu = Main.panel.statusArea["aggregateMenu"]._system;
-
-        let afterSuspendPosition =
-            this.systemMenu._sessionSubMenu.menu.numMenuItems - 5;
-
-        if (Prefs.getHybridSleepOptionEnabled()) {
-            this._hybridSleepMenuItem = new PopupMenu.PopupMenuItem(
-                __("Hybrid Sleep")
-            );
-            this._hybridSleepMenuItemId = this._hybridSleepMenuItem.connect(
-                "activate",
-                () => this._onHybridSleepClicked()
-            );
-            this.systemMenu._sessionSubMenu.menu.addMenuItem(
-                this._hybridSleepMenuItem,
-                afterSuspendPosition
-            );
-        }
-
-        if (Prefs.getHibernateOptionEnabled()) {
-            const label = Prefs.getHibernateConfirmationOptionEnabled()
-                ? __("Hibernate…")
-                : __("Hibernate");
-
-            this._hibernateMenuItem = new PopupMenu.PopupMenuItem(label);
-            this._hibernateMenuItemId = this._hibernateMenuItem.connect(
-                "activate",
-                () => this._onHibernateClicked()
-            );
-
-            this.systemMenu._sessionSubMenu.menu.addMenuItem(
-                this._hibernateMenuItem,
-                afterSuspendPosition
-            );
-        }
-
-        this._menuOpenStateChangedId = this.systemMenu.menu.connect(
-            "open-state-changed",
-            (menu, open) => {
-                if (!open) return;
-                this._updateHaveHibernate();
-                this._updateHaveHybridSleep();
-            }
-        );
+    _onSettingsUpdate(setting, value) {
+        log("_onSettingsUpdate todo:", setting, value);
     }
 
-    disable() {
+    _resetMenu() {
         if (this._menuOpenStateChangedId) {
             this.systemMenu.menu.disconnect(this._menuOpenStateChangedId);
             this._menuOpenStateChangedId = 0;
@@ -295,6 +255,69 @@ class Extension {
             this._hibernateMenuItem.destroy();
             this._hibernateMenuItem = 0;
         }
+    }
+
+    _updateMenu() {
+        let afterSuspendPosition =
+            this.systemMenu._sessionSubMenu.menu.numMenuItems - 5;
+
+        // Add the "Hybrid sleep" option, if enabled.
+        if (Prefs.getHybridSleepOptionEnabled()) {
+            this._hybridSleepMenuItem = new PopupMenu.PopupMenuItem(
+                __("Hybrid Sleep")
+            );
+            this._hybridSleepMenuItemId = this._hybridSleepMenuItem.connect(
+                "activate",
+                () => this._onHybridSleepClicked()
+            );
+            this.systemMenu._sessionSubMenu.menu.addMenuItem(
+                this._hybridSleepMenuItem,
+                afterSuspendPosition
+            );
+        }
+
+        // Add the "Hibernate" option, if enabled and available.
+        if (Prefs.getHibernateOptionEnabled()) {
+            const label = Prefs.getHibernateConfirmationOptionEnabled()
+                ? __("Hibernate…")
+                : __("Hibernate");
+
+            this._hibernateMenuItem = new PopupMenu.PopupMenuItem(label);
+            this._hibernateMenuItemId = this._hibernateMenuItem.connect(
+                "activate",
+                () => this._onHibernateClicked()
+            );
+
+            this.systemMenu._sessionSubMenu.menu.addMenuItem(
+                this._hibernateMenuItem,
+                afterSuspendPosition
+            );
+        }
+    }
+
+    enable() {
+        this._checkRequirements();
+        this._loginManager = LoginManager.getLoginManager();
+        this.systemMenu = Main.panel.statusArea["aggregateMenu"]._system;
+
+        Prefs.setOnSettingsUpdateCallback(this._onSettingsUpdate);
+
+        this._updateMenu();
+
+        this._menuOpenStateChangedId = this.systemMenu.menu.connect(
+            "open-state-changed",
+            (menu, open) => {
+                if (!open) return;
+                this._updateHaveHibernate();
+                this._updateHaveHybridSleep();
+            }
+        );
+    }
+
+    disable() {
+        this._resetMenu();
+
+        Prefs.setOnSettingsUpdateCallback(null);
     }
 }
 
