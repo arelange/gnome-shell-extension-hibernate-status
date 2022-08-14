@@ -10,6 +10,7 @@ const PopupMenu = imports.ui.popupMenu;
 const Me = imports.misc.extensionUtils.getCurrentExtension();
 const ExtensionSystem = imports.ui.extensionSystem;
 const ConfirmDialog = Me.imports.confirmDialog;
+
 const Prefs = Me.imports.prefs.getInstance();
 
 // Use __ () and N__() for the extension gettext domain, and reuse
@@ -257,7 +258,7 @@ class Extension {
         }
     }
 
-    _updateMenu() {
+    _modifyMenu() {
         let afterSuspendPosition =
             this.systemMenu._sessionSubMenu.menu.numMenuItems - 5;
 
@@ -278,11 +279,9 @@ class Extension {
 
         // Add the "Hibernate" option, if enabled and available.
         if (Prefs.getHibernateOptionEnabled()) {
-            const label = Prefs.getHibernateConfirmationOptionEnabled()
-                ? __("Hibernate…")
-                : __("Hibernate");
-
-            this._hibernateMenuItem = new PopupMenu.PopupMenuItem(label);
+            this._hibernateMenuItem = new PopupMenu.PopupMenuItem(
+                this._getHibernateButtonLabel()
+            );
             this._hibernateMenuItemId = this._hibernateMenuItem.connect(
                 "activate",
                 () => this._onHibernateClicked()
@@ -299,10 +298,15 @@ class Extension {
         this._checkRequirements();
         this._loginManager = LoginManager.getLoginManager();
         this.systemMenu = Main.panel.statusArea["aggregateMenu"]._system;
+        this._modifyMenu();
 
-        Prefs.setOnSettingsUpdateCallback(this._onSettingsUpdate);
-
-        this._updateMenu();
+        this._settingsChangedListener = Prefs._setting.connect(
+            "changed",
+            (source, key) => {
+                this._resetMenu();
+                this._modifyMenu();
+            }
+        );
 
         this._menuOpenStateChangedId = this.systemMenu.menu.connect(
             "open-state-changed",
@@ -316,8 +320,13 @@ class Extension {
 
     disable() {
         this._resetMenu();
+        Prefs._setting.disconnect(this._settingsChangedListener);
+    }
 
-        Prefs.setOnSettingsUpdateCallback(null);
+    _getHibernateButtonLabel() {
+        return Prefs.getHibernateConfirmationOptionEnabled()
+            ? __("Hibernate…")
+            : __("Hibernate");
     }
 }
 
