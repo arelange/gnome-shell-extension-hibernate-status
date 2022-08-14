@@ -47,40 +47,56 @@ var Prefs = class Prefs {
     }
 
     buildPrefsPanel() {
-        // Define the settings window
-        this.frame = new Gtk.Box({
-            orientation: Gtk.Orientation.VERTICAL,
-            "margin-top": 10,
-            "margin-end": 10,
-            "margin-bottom": 10,
-            "margin-start": 10,
+        const grid = new Gtk.Grid({
+            column_spacing: 12,
+            row_spacing: 12,
+            column_homogeneous: true,
+            hexpand: true,
+            vexpand: true,
+            margin_start: 14,
+            margin_end: 14,
+            margin_top: 14,
+            margin_bottom: 14,
+            visible: true,
         });
 
         // Add the suspend enable toggle option
-        this.frame.append(
+        grid.attach(
             this.addBooleanOptionButton(
                 this.KEY_HYBRID_SLEEP_ENABLED,
                 __("Enable the hybrid suspend option")
-            )
+            ),
+            0,
+            0,
+            3,
+            1
         );
 
         // Add the hibernate enable toggle option
-        this.frame.append(
+        grid.attach(
             this.addBooleanOptionButton(
                 this.KEY_HIBERNATE_ENABLED,
                 __("Enable the hibernate option")
-            )
+            ),
+            0,
+            1,
+            3,
+            1
         );
 
         // Add the hibernate confirmation enable toggle option
-        this.frame.append(
+        grid.attach(
             this.addBooleanOptionButton(
                 this.KEY_HIBERNATE_CONFIRMATION_ENABLED,
                 __("Enable the hibernate confirmation dialog")
-            )
+            ),
+            0,
+            2,
+            3,
+            1
         );
 
-        return this.frame;
+        return grid;
     }
 
     /**
@@ -93,6 +109,7 @@ var Prefs = class Prefs {
         const hbox = new Gtk.Box({
             orientation: Gtk.Orientation.HORIZONTAL,
             margin_top: 5,
+            margin_bottom: 5,
         });
 
         const switchButtonLabel = new Gtk.Label({
