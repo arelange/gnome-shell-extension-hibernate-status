@@ -7,5 +7,11 @@
     <key type="b" name="hybridsleep-enabled">
       <default>true</default>
     </key>
+    <key type="b" name="hibernate-enabled">
+      <default>true</default>
+    </key>
+    <key type="b" name="hibernate-confirmation-enabled">
+      <default>true</default>
+    </key>
   </schema>
 </schemalist>
