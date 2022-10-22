@@ -4,9 +4,7 @@
   "url": "https://github.com/arelange/gnome-shell-extension-hibernate-status",
   "description": "Adds a Hibernate button in Status menu. Using Alt modifier, you can also select Hybrid Sleep instead.",
   "shell-version": [
-    "40",
-    "41",
-    "42"
+    "43"
   ],
   "gettext-domain": "hibernate-status-button"
 }
