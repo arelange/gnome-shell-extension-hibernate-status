@@ -8,7 +8,7 @@ msgstr ""
 "Project-Id-Version: Hibernate Status Button\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2022-03-28 21:00+0200\n"
-"PO-Revision-Date: 2022-03-28 21:00+0200\n"
+"PO-Revision-Date: 2022-10-22 21:30+0200\n"
 "Last-Translator: Oskar Kirmis <oskar.kirmis@posteo.de>\n"
 "Language-Team: German\n"
 "Language: de\n"
@@ -20,6 +20,10 @@ msgstr ""
 #: confirmDialog.js:23 confirmDialog.js:32
 msgid "Hibernate"
 msgstr "Ruhezustand"
+
+#: extension.js:192
+msgid "Hybrid Sleep"
+msgstr "Hybrider Standbymodus"
 
 #: confirmDialog.js:24
 msgid "Do you really want to hibernate the system?"

@@ -1,4 +1,4 @@
-# Russian translation of hibernate-status-button
+# Ukrainian translation of hibernate-status-button
 # Copyright (C) 2021 Serhii Riznychenko
 # This file is distributed under the same license as the hibernate-status-button package.
 # Serhii Riznychenko, 2021.
