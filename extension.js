@@ -135,14 +135,14 @@ class Extension {
     }
 
     _onHibernateClicked() {
-        this.systemMenu.menu.itemActivated();
+        this.systemMenu._systemItem.menu.itemActivated();
         this._dialog = new ConfirmDialog.ConfirmDialog(ConfirmDialog.HibernateDialogContent);
         this._dialog.connect('ConfirmedHibernate', () => this._loginManagerHibernate());
         this._dialog.open();
     }
 
     _onHybridSleepClicked() {
-        this.systemMenu.menu.itemActivated();
+        this.systemMenu._systemItem.menu.itemActivated();
         this._loginManagerHybridSleep();
     }
 
@@ -184,7 +184,7 @@ class Extension {
     enable() {
         this._checkRequirements();
         this._loginManager = LoginManager.getLoginManager();
-        this.systemMenu = Main.panel.statusArea['aggregateMenu']._system;
+        this.systemMenu = Main.panel.statusArea.quickSettings._system;
 
         this._hibernateMenuItem = new PopupMenu.PopupMenuItem(__('Hibernate'));
         this._hibernateMenuItemId = this._hibernateMenuItem.connect('activate', () => this._onHibernateClicked());
@@ -192,12 +192,12 @@ class Extension {
         this._hybridSleepMenuItem = new PopupMenu.PopupMenuItem(__('Hybrid Sleep'));
         this._hybridSleepMenuItemId = this._hybridSleepMenuItem.connect('activate', () => this._onHybridSleepClicked());
 
-        let afterSuspendPosition = this.systemMenu._sessionSubMenu.menu.numMenuItems - 5;
+        let afterSuspendPosition = this.systemMenu._systemItem.menu.numMenuItems - 5;
 
-        this.systemMenu._sessionSubMenu.menu.addMenuItem(this._hybridSleepMenuItem, afterSuspendPosition);
-        this.systemMenu._sessionSubMenu.menu.addMenuItem(this._hibernateMenuItem, afterSuspendPosition);
+        this.systemMenu._systemItem.menu.addMenuItem(this._hybridSleepMenuItem, afterSuspendPosition);
+        this.systemMenu._systemItem.menu.addMenuItem(this._hibernateMenuItem, afterSuspendPosition);
 
-        this._menuOpenStateChangedId = this.systemMenu.menu.connect('open-state-changed',
+        this._menuOpenStateChangedId = this.systemMenu._systemItem.menu.connect('open-state-changed',
             (menu, open) => {
                 if (!open)
                     return;
@@ -208,7 +208,7 @@ class Extension {
 
     disable() {
         if (this._menuOpenStateChangedId) {
-            this.systemMenu.menu.disconnect(this._menuOpenStateChangedId);
+            this.systemMenu._systemItem.menu.disconnect(this._menuOpenStateChangedId);
             this._menuOpenStateChangedId = 0;
         }
 
