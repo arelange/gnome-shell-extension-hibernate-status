@@ -22,6 +22,10 @@ msgstr ""
 msgid "Hibernate"
 msgstr "خواب زمستانی"
 
+#: extension.js:192
+msgid "Hybrid Sleep"
+msgstr "خواب ترکیبی"
+
 #: confirmDialog.js:24
 msgid "Do you really want to hibernate the system?"
 msgstr "آیا مطمئنید که می‌خواهید سامانه را به خواب زمستانی ببرید؟"
