@@ -22,6 +22,10 @@ msgstr ""
 msgid "Hibernate"
 msgstr "Slaapstand"
 
+#: extension.js:192
+msgid "Hybrid Sleep"
+msgstr "Hybride slaapstand"
+
 #: confirmDialog.js:24
 msgid "Do you really want to hibernate the system?"
 msgstr "Weet u zeker dat u het systeem in de slaapstand wilt zetten?"
