@@ -1,14 +1,14 @@
 # Polish translation of hibernate-status-button
-# Copyright (C) 2021 tebaranowski
+# Copyright (C) 2022 tebaranowski
 # This file is distributed under the same license as the hibernate-status-button package.
-# tebaranowski <tomasz.baranowski@int.pl>, 2021.
+# tebaranowski <tomasz.baranowski@int.pl>, 2022.
 #
 msgid ""
 msgstr ""
 "Project-Id-Version: Hibernate Status Button\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2021-04-11 18:31+0200\n"
-"PO-Revision-Date: 2021-04-11 18:31+0200\n"
+"PO-Revision-Date: 2022-11-01 20:31+0200\n"
 "Last-Translator: tebaranowski <tomasz.baranowski@int.pl>\n"
 "Language-Team: Polish <tomasz.baranowski@int.pl>\n"
 "Language: pl\n"
@@ -18,7 +18,11 @@ msgstr ""
 
 #: confirmDialog.js:23 confirmDialog.js:32
 msgid "Hibernate"
-msgstr "Zahibernuj"
+msgstr "Hibernacja"
+
+#: extension.js:192
+msgid "Hybrid Sleep"
+msgstr "Uśpienie hybrydowe"
 
 #: confirmDialog.js:24
 msgid "Do you really want to hibernate the system?"
@@ -54,14 +58,14 @@ msgid ""
 msgstr ""
 "Wygląda na to, że hibernacja się nie powiodła.\n"
 "W niektórych dystrybucjach Linuksa hibernacja jest wyłączona,\n"
-"ponieważ nie każdy sprzęt poprawnie ją obsługuje;\n"
-"Sprawdź, jak ją włączyć w dokumentacji swojej\n"
+"ponieważ nie każdy sprzęt poprawnie ją obsługuje.\n"
+"Sprawdź jak ją włączyć w dokumentacji swojej\n"
 "dystrybucji."
 
 #: confirmDialog.js:64
 msgid "You are wrong, don't check this anymore!"
-msgstr "Nie sprawdzaj tego ponownie!"
+msgstr "Nie pytaj mnie ponownie!"
 
 #: prefs.js:99
 msgid "This extension has no settings available"
-msgstr "Brak możliwości zmiany ustawień dla tego rozszerzenia"
+msgstr "To rozszerzenie nie posiada możliwości zmiany ustawień"
