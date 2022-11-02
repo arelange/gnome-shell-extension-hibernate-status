@@ -64,7 +64,7 @@ msgstr ""
 
 #: confirmDialog.js:64
 msgid "You are wrong, don't check this anymore!"
-msgstr "Nie pytaj mnie ponownie!"
+msgstr "Nie sprawdzaj tego ponownie!"
 
 #: prefs.js:99
 msgid "This extension has no settings available"
