@@ -8,7 +8,7 @@ msgstr ""
 "Project-Id-Version: Hibernate Status Button\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2021-04-11 18:31+0200\n"
-"PO-Revision-Date: 2021-11-13 19:34+0200\n"
+"PO-Revision-Date: 2023-01-11 17:19+0200\n"
 "Last-Translator: Quentin PAGÈS <>\n"
 "Language-Team: Occitan\n"
 "Language: oc\n"
@@ -22,7 +22,7 @@ msgstr "Metre en velha perlongada"
 
 #: extension.js:192
 msgid "Hybrid Sleep"
-msgstr "Metre en velha hibrida"
+msgstr "Metre en velha ibrida"
 
 #: confirmDialog.js:24
 msgid "Do you really want to hibernate the system?"
