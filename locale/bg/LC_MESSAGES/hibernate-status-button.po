@@ -1,8 +1,9 @@
-# Ukrainian translation of hibernate-status-button
-# Copyright (C) 2021 Serhii Riznychenko
+# Bulgarian translation of hibernate-status-button
+# Copyright (C) 2023 Zetta1 Reid0
 # This file is distributed under the same license as the hibernate-status-button package.
-# Serhii Riznychenko, 2021.
+# Zetta1 Reid0, 2023.
 #
+
 msgid ""
 msgstr ""
 "Project-Id-Version: Hibernate Status Button\n"
@@ -25,7 +26,7 @@ msgstr "Хиберниране"
 
 #: extension.js:192
 msgid "Hybrid Sleep"
-msgstr "Хибридно Заспиване"
+msgstr "Хибридно Приспиване"
 
 #: confirmDialog.js:24
 msgid "Do you really want to hibernate the system?"
@@ -49,7 +50,7 @@ msgstr "Изключване на Разширението"
 
 #: confirmDialog.js:58
 msgid "Hibernate button: Hibernate failed"
-msgstr "Бутон за Хибернация: Хибернирането не успя."
+msgstr "Бутон за Хибернация: Хибернирането се провали."
 
 #: confirmDialog.js:59
 msgid ""
@@ -67,7 +68,7 @@ msgstr ""
 
 #: confirmDialog.js:64
 msgid "You are wrong, don't check this anymore!"
-msgstr "Да вие сте в грешка, Не проверявайте това повече!"
+msgstr "Вие сте в грешка, Не проверявайте това повече!"
 
 #: prefs.js:99
 msgid "This extension has no settings available"
