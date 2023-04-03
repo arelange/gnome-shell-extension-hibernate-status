@@ -16,9 +16,13 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 
-#: confirmDialog.js:23 confirmDialog.js:32
+#: extension.js:189 confirmDialog.js:23 confirmDialog.js:32
 msgid "Hibernate"
 msgstr "休眠"
+
+#: extension.js:192
+msgid "Hybrid Sleep"
+msgstr "混合睡眠"
 
 #: confirmDialog.js:24
 msgid "Do you really want to hibernate the system?"
@@ -57,3 +61,7 @@ msgstr "休眠好像失败了。由于不是所有硬件都对该功能支持良
 #: confirmDialog.js:64
 msgid "You are wrong, don't check this anymore!"
 msgstr "忽略本项检查"
+
+#: prefs.js:99
+msgid "This extension has no settings available"
+msgstr "这个扩展没有可用的设置"
