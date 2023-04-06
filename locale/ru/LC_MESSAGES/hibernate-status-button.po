@@ -23,7 +23,7 @@ msgstr ""
 
 #: extension.js:189 confirmDialog.js:23 confirmDialog.js:32
 msgid "Hibernate"
-msgstr "Режим гибернация"
+msgstr "Режим гибернации"
 
 #: extension.js:192
 msgid "Hybrid Sleep"
