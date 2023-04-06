@@ -1,15 +1,17 @@
 # Russian translation of hibernate-status-button
 # Copyright (C) 2021 Serhii Riznychenko
+# Updated 2023 Dmitriy Sevastyuk
 # This file is distributed under the same license as the hibernate-status-button package.
 # Serhii Riznychenko, 2021.
+# Dmitriy Sevastyuk, 2023.
 #
 msgid ""
 msgstr ""
 "Project-Id-Version: Hibernate Status Button\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2021-04-11 18:31+0200\n"
-"PO-Revision-Date: 2021-11-11 02:00+0200\n"
-"Last-Translator: Serhii Riznychenko\n"
+"PO-Revision-Date: 2023-04-01 07:00+0300\n"
+"Last-Translator: Dmitriy Sevastyuk\n"
 "Language-Team: Russian\n"
 "Language: ru\n"
 "MIME-Version: 1.0\n"
@@ -21,7 +23,7 @@ msgstr ""
 
 #: extension.js:189 confirmDialog.js:23 confirmDialog.js:32
 msgid "Hibernate"
-msgstr "Спящий режим"
+msgstr "Режим гибернация"
 
 #: extension.js:192
 msgid "Hybrid Sleep"
@@ -29,7 +31,7 @@ msgstr "Гибридный сон"
 
 #: confirmDialog.js:24
 msgid "Do you really want to hibernate the system?"
-msgstr "Вы действительно хотите перевести систему в спящий режим?"
+msgstr "Вы действительно хотите перевести систему в режим гибернации?"
 
 #: confirmDialog.js:27 confirmDialog.js:44 confirmDialog.js:67
 msgid "Cancel"
@@ -41,7 +43,7 @@ msgstr "Не обнаружено systemd"
 
 #: confirmDialog.js:41
 msgid "Systemd seems to be missing and is required."
-msgstr "Кажется отсутствует systemd, необходимый для режима сна."
+msgstr "Кажется отсутствует systemd, но он необходим."
 
 #: confirmDialog.js:49 confirmDialog.js:72
 msgid "Disable Extension"
@@ -49,7 +51,7 @@ msgstr "Отключить расширение"
 
 #: confirmDialog.js:58
 msgid "Hibernate button: Hibernate failed"
-msgstr "Не удалось перевести систему в сон"
+msgstr "Не удалось перевести систему в режим гибернации"
 
 #: confirmDialog.js:59
 msgid ""
@@ -59,10 +61,10 @@ msgid ""
 "please check your distribution documentation\n"
 "on how to enable it."
 msgstr ""
-"Попытка перевести систему в сон завершилась неудачей.\n"
-"На некоторых дистрибутивах режим сна отключен\n"
-"так как не каждое оборудование имеет поддержку,\n"
-"пожалуйста обратитесь к документации своего дистрибутива\n"
+"Похоже, перевод системы в режим гибернации завершился неудачей.\n"
+"На некоторых дистрибутивах режим гибернации отключён,\n"
+"так как не всё оборудование должным образом его поддерживает;\n"
+"пожалуйста, обратитесь к документации своего дистрибутива\n"
 "чтобы узнать как его включить."
 
 #: confirmDialog.js:64
@@ -71,4 +73,4 @@ msgstr "Вы ошиблись, пожалуйста не трогайте это
 
 #: prefs.js:99
 msgid "This extension has no settings available"
-msgstr "Это расширение не содержит параметров"
+msgstr "Это расширение не имеет параметров"
