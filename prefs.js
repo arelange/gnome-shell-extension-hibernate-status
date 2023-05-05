@@ -17,15 +17,25 @@ var Prefs = class Prefs {
         this.KEY_HIBERNATE_WORKS_CHECK = "hibernate-works-check";
         this._schemaName = "org.gnome.shell.extensions.hibernate-status-button";
 
-        let schemaDir = Me.dir.get_child('schemas').get_path();
+        // first try developer local schema
+        try {
+            let schemaDir = Me.dir.get_child('schemas').get_path();
 
-        let schemaSource = Gio.SettingsSchemaSource.new_from_directory(
-            schemaDir, Gio.SettingsSchemaSource.get_default(), false
-        );
-        let schema = schemaSource.lookup(this._schemaName, false);
+            let schemaSource = Gio.SettingsSchemaSource.new_from_directory(
+                schemaDir, Gio.SettingsSchemaSource.get_default(), false
+            );
+            let schema = schemaSource.lookup(this._schemaName, false);
+
+            this._setting = new Gio.Settings({
+                settings_schema: schema
+            });
+            return;
+        } catch (e) {
+            // now try system-wide one below
+        }
 
         this._setting = new Gio.Settings({
-            settings_schema: schema
+            schema_id: this._schemaName
         });
     }
     /**
