@@ -164,12 +164,12 @@ class ConfirmDialog extends ModalDialog.ModalDialog {
             let keys = dialog.confirmButtons[i].key;
             buttons.push({
                 action: () => {
-                    this.close();
                     let signalId = this.connect('closed',
                         () => {
                             this.disconnect(signalId);
                             this._confirm(signal);
                         });
+                    this.close();
                 },
                 label: label,
                 key: keys
