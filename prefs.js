@@ -93,25 +93,47 @@ export default class Prefs extends ExtensionPreferences {
         });
         window.add(page);
 
-        const group = new Adw.PreferencesGroup({
+        const modes_group = new Adw.PreferencesGroup({
             title: __('Modes'),
             description: __('Which buttons should be enabled'),
         });
-        page.add(group);
+        page.add(modes_group);
 
         // Create a new preferences row
         const hibernate_row = new Adw.SwitchRow({
             title: __('Hibernate'),
         });
-        group.add(hibernate_row);
+        modes_group.add(hibernate_row);
         const hybrid_row = new Adw.SwitchRow({
             title: __('Hybrid sleep'),
         });
-        group.add(hybrid_row);
+        modes_group.add(hybrid_row);
         const suspend_then_hibernate_row = new Adw.SwitchRow({
             title: __('Suspend then hibernate'),
         });
-        group.add(suspend_then_hibernate_row);
+        modes_group.add(suspend_then_hibernate_row);
+
+        const dialog_group = new Adw.PreferencesGroup({
+            title: __('Dialogs'),
+            description: __('Which dialogs should be enabled'),
+        });
+        page.add(dialog_group);
+
+        // Create a new preferences row
+        const hibernate_dialog_row = new Adw.SwitchRow({
+            title: __('Hibernate'),
+        });
+        dialog_group.add(hibernate_dialog_row);
+        const hybrid_dialog_row = new Adw.SwitchRow({
+            title: __('Hybrid sleep'),
+            subtitle: __('Not implemented yet'),
+        });
+        dialog_group.add(hybrid_dialog_row);
+        const suspend_then_hibernate_dialog_row = new Adw.SwitchRow({
+            title: __('Suspend then hibernate'),
+            subtitle: __('Not implemented yet'),
+        });
+        dialog_group.add(suspend_then_hibernate_dialog_row);
 
         window._settings = this.getSettings();
         window._settings.bind('show-hibernate', hibernate_row, 'active',
@@ -119,6 +141,12 @@ export default class Prefs extends ExtensionPreferences {
         window._settings.bind('show-hybrid-sleep', hybrid_row, 'active',
             Gio.SettingsBindFlags.DEFAULT);
         window._settings.bind('show-suspend-then-hibernate', suspend_then_hibernate_row, 'active',
+            Gio.SettingsBindFlags.DEFAULT);
+        window._settings.bind('show-hibernate-dialog', hibernate_dialog_row, 'active',
+            Gio.SettingsBindFlags.DEFAULT);
+        window._settings.bind('show-hybrid-sleep-dialog', hybrid_dialog_row, 'active',
+            Gio.SettingsBindFlags.DEFAULT);
+        window._settings.bind('show-suspend-then-hibernate-dialog', suspend_then_hibernate_dialog_row, 'active',
             Gio.SettingsBindFlags.DEFAULT);
     }
 }

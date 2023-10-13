@@ -13,5 +13,14 @@
     <key type="b" name="show-suspend-then-hibernate">
       <default>true</default>
     </key>
+    <key type="b" name="show-hibernate-dialog">
+      <default>true</default>
+    </key>
+    <key type="b" name="show-hybrid-sleep-dialog">
+      <default>false</default>
+    </key>
+    <key type="b" name="show-suspend-then-hibernate-dialog">
+      <default>false</default>
+    </key>
   </schema>
 </schemalist>

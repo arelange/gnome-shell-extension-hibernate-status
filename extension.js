@@ -222,32 +222,36 @@ export default class MyExtension extends Extension {
     _onHibernateClicked() {
         this.systemMenu._systemItem.menu.itemActivated();
 
+        if (this._setting.get_boolean('show-hibernate-dialog')) {
             let HibernateDialogContent = {
-            subject: C_('title', __('Hibernate')),
-            description: __('Do you really want to hibernate the system?'),
-            confirmButtons: [
-                {
-                    signal: 'Cancel',
-                    label: C_('button', __('Cancel')),
-                    key: Clutter.Escape,
-                },
-                {
-                    signal: 'ConfirmedHibernate',
-                    label: C_('button', __('Hibernate')),
-                    default: true,
-                },
-            ],
-            iconName: 'document-save-symbolic',
-            iconStyleClass: 'end-session-dialog-shutdown-icon',
-        };
+                subject: C_('title', __('Hibernate')),
+                description: __('Do you really want to hibernate the system?'),
+                confirmButtons: [
+                    {
+                        signal: 'Cancel',
+                        label: C_('button', __('Cancel')),
+                        key: Clutter.Escape,
+                    },
+                    {
+                        signal: 'ConfirmedHibernate',
+                        label: C_('button', __('Hibernate')),
+                        default: true,
+                    },
+                ],
+                iconName: 'document-save-symbolic',
+                iconStyleClass: 'end-session-dialog-shutdown-icon',
+            };
 
-        this._dialog = new ConfirmDialog(
-            HibernateDialogContent
-        );
-        this._dialog.connect('ConfirmedHibernate', () =>
+            this._dialog = new ConfirmDialog(
+                HibernateDialogContent
+            );
+            this._dialog.connect('ConfirmedHibernate', () =>
+                this._loginManagerHibernate()
+            );
+            this._dialog.open();
+        } else {
             this._loginManagerHibernate()
-        );
-        this._dialog.open();
+        }
     }
 
     _onHybridSleepClicked() {
