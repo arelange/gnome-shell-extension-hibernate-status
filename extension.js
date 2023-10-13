@@ -11,7 +11,9 @@ import * as StatusSystem from 'resource:///org/gnome/shell/ui/status/system.js';
 import * as PopupMenu from 'resource:///org/gnome/shell/ui/popupMenu.js';
 import * as ExtensionSystem from 'resource:///org/gnome/shell/ui/extensionSystem.js';
 import * as ModalDialog from 'resource:///org/gnome/shell/ui/modalDialog.js';
+import * as Dialog from 'resource:///org/gnome/shell/ui/dialog.js';
 import * as CheckBoxImport from 'resource:///org/gnome/shell/ui/checkBox.js';
+import {loadInterfaceXML} from 'resource:///org/gnome/shell/misc/fileUtils.js';
 
 const CheckBox = CheckBoxImport.CheckBox;
 
@@ -45,7 +47,7 @@ export default class MyExtension extends Extension {
                     }
 
                     if (error) asyncCallback(false);
-                    else asyncCallback(result[0] != 'no');
+                    else asyncCallback(!['no', 'na'].includes(result[0]));
                 }
             );
         } else {
@@ -101,7 +103,7 @@ export default class MyExtension extends Extension {
                     }
 
                     if (error) asyncCallback(false);
-                    else asyncCallback(result[0] != 'no');
+                    else asyncCallback(!['no', 'na'].includes(result[0]));
                 }
             );
         } else {
@@ -129,9 +131,58 @@ export default class MyExtension extends Extension {
             this._loginManager.emit('prepare-for-sleep', false);
         }
     }
+
+    _loginManagerCanSuspendThenHibernate(asyncCallback) {
+        if (this._loginManager._proxy) {
+            // systemd path
+            this._loginManager._proxy.call(
+                'CanSuspendThenHibernate',
+                null,
+                Gio.DBusCallFlags.NONE,
+                -1,
+                null,
+                function (proxy, asyncResult) {
+                    let result, error;
+
+                    try {
+                        result = proxy.call_finish(asyncResult).deep_unpack();
+                    } catch (e) {
+                        error = e;
+                    }
+
+                    if (error) asyncCallback(false);
+                    else asyncCallback(!['no', 'na'].includes(result[0]));
+                }
+            );
+        } else {
+            Mainloop.idle_add(() => {
+                asyncCallback(false);
+                return false;
+            });
+        }
+    }
+
+    _loginManagerSuspendThenHibernate() {
+        if (this._loginManager._proxy) {
+            // systemd path
+            this._loginManager._proxy.call(
+                'SuspendThenHibernate',
+                GLib.Variant.new('(b)', [true]),
+                Gio.DBusCallFlags.NONE,
+                -1,
+                null,
+                null
+            );
+        } else {
+            // Can't do in ConsoleKit
+            this._loginManager.emit('prepare-for-sleep', true);
+            this._loginManager.emit('prepare-for-sleep', false);
+        }
+    }
+
     _updateHaveHibernate() {
         this._loginManagerCanHibernate(result => {
-            log(`have hibernate ${result}`);
+            log(`Able to hibernate: ${result}`);
             this._haveHibernate = result;
             this._updateHibernate();
         });
@@ -139,11 +190,12 @@ export default class MyExtension extends Extension {
 
     _updateHibernate() {
         this._hibernateMenuItem.visible =
-            this._haveHibernate && !Main.sessionMode.isLocked;
+            this._haveHibernate && !Main.sessionMode.isLocked && this._setting.get_boolean('show-hibernate');
     }
 
     _updateHaveHybridSleep() {
         this._loginManagerCanHybridSleep(result => {
+            log(`Able to hybrid-sleep: ${result}`);
             this._haveHybridSleep = result;
             this._updateHybridSleep();
         });
@@ -151,7 +203,20 @@ export default class MyExtension extends Extension {
 
     _updateHybridSleep() {
         this._hybridSleepMenuItem.visible =
-            this._haveHybridSleep && !Main.sessionMode.isLocked;
+            this._haveHybridSleep && !Main.sessionMode.isLocked  && this._setting.get_boolean('show-hybrid-sleep');
+    }
+
+    _updateHaveSuspendThenHibernate() {
+        this._loginManagerCanSuspendThenHibernate(result => {
+            log(`Able to suspend then hibernate: ${result}`);
+            this._haveSuspendThenHibernate = result;
+            this._updateSuspendThenHibernate();
+        });
+    }
+
+    _updateSuspendThenHibernate() {
+        this._suspendThenHibernateMenuItem.visible =
+            this._haveSuspendThenHibernate && !Main.sessionMode.isLocked  && this._setting.get_boolean('show-suspend-then-hibernate');
     }
 
     _onHibernateClicked() {
@@ -172,8 +237,8 @@ export default class MyExtension extends Extension {
                     default: true,
                 },
             ],
-            //iconName: 'document-save-symbolic',
-            //iconStyleClass: 'end-session-dialog-shutdown-icon',
+            iconName: 'document-save-symbolic',
+            iconStyleClass: 'end-session-dialog-shutdown-icon',
         };
 
         this._dialog = new ConfirmDialog(
@@ -190,15 +255,14 @@ export default class MyExtension extends Extension {
         this._loginManagerHybridSleep();
     }
 
+    _onSuspendThenHibernateClicked() {
+        this.systemMenu._systemItem.menu.itemActivated();
+        this._loginManagerSuspendThenHibernate();
+    }
+
     _disableExtension() {
-        let enabledExtensions = global.settings.get_strv(
-            ExtensionSystem.ENABLED_EXTENSIONS_KEY
-        );
-        enabledExtensions.splice(enabledExtensions.indexOf(Me.uuid), 1);
-        global.settings.set_strv(
-            ExtensionSystem.ENABLED_EXTENSIONS_KEY,
-            enabledExtensions
-        );
+        Main.extensionManager.disableExtension('hibernate-status@dromi')
+        console.log('Disabled')
     }
 
     _cancelDisableExtension(notAgain) {
@@ -251,10 +315,9 @@ export default class MyExtension extends Extension {
         let HibernateFailedDialogContent = {
             subject: C_('title', __('Hibernate button: Hibernate failed')),
             description: __(
-                'Looks like hibernation failed.\n' +
-                    'On some linux distributions hibernation is disabled\n' +
-                    'because not all hardware supports it well;\n' +
-                    'please check your distribution documentation\n' +
+                'Looks like hibernation failed. On some linux distributions hibernation is disabled ' +
+                    'because not all hardware supports it well; ' +
+                    'please check your distribution documentation ' +
                     'on how to enable it.'
             ),
             checkBox: __("You are wrong, don't check this anymore!"),
@@ -314,6 +377,14 @@ export default class MyExtension extends Extension {
             () => this._onHybridSleepClicked()
         );
 
+        this._suspendThenHibernateMenuItem = new PopupMenu.PopupMenuItem(
+            __('Suspend then Hibernate')
+        );
+        this._suspendThenHibernateMenuItemId = this._suspendThenHibernateMenuItem.connect(
+            'activate',
+            () => this._onSuspendThenHibernateClicked()
+        );
+
         let afterSuspendPosition =
             this.systemMenu._systemItem.menu.numMenuItems - 5;
 
@@ -325,6 +396,10 @@ export default class MyExtension extends Extension {
             this._hibernateMenuItem,
             afterSuspendPosition
         );
+        this.systemMenu._systemItem.menu.addMenuItem(
+            this._suspendThenHibernateMenuItem,
+            afterSuspendPosition
+        );
 
         this._menuOpenStateChangedId = this.systemMenu._systemItem.menu.connect(
             'open-state-changed',
@@ -332,6 +407,7 @@ export default class MyExtension extends Extension {
                 if (!open) return;
                 this._updateHaveHibernate();
                 this._updateHaveHybridSleep();
+                this._updateHaveSuspendThenHibernate();
             }
         );
     }
@@ -382,50 +458,15 @@ var ConfirmDialog = GObject.registerClass(
                 destroyOnClose: true,
             });
 
-            let mainContentLayout = new St.BoxLayout({
-                vertical: false,
-                x_expand: true,
-                y_expand: false,
-            });
-            this.contentLayout.add(mainContentLayout);
 
-            this._iconBin = new St.Bin({
-                x_expand: true,
-                y_expand: false,
-                x_align: Clutter.ActorAlign.END,
-                y_align: Clutter.ActorAlign.START,
-            });
-            mainContentLayout.add(this._iconBin);
+            this._messageDialogContent = new Dialog.MessageDialogContent();
 
-            let messageLayout = new St.BoxLayout({
-                vertical: true,
-                y_align: Clutter.ActorAlign.START,
-            });
-            mainContentLayout.add(messageLayout);
 
-            this._subjectLabel = new St.Label({
-                style_class: 'end-session-dialog-subject',
-                y_expand: false,
-                y_align: Clutter.ActorAlign.START,
-            });
-
-            messageLayout.add(this._subjectLabel);
-
-            this._descriptionLabel = new St.Label({
-                style_class: 'end-session-dialog-description',
-                y_expand: true,
-                y_align: Clutter.ActorAlign.START,
-            });
-
-            messageLayout.add(this._descriptionLabel);
-
-            // fill dialog
-
-            _setLabelText(this._descriptionLabel, dialog.description);
-            _setLabelText(this._subjectLabel, dialog.subject);
+            this._messageDialogContent.description = dialog.description;
+            this._messageDialogContent.title = dialog.subject;
 
             if (dialog.iconName) {
-                this._iconBin.child = new St.Icon({
+                this._icon = new St.Icon({
                     icon_name: dialog.iconName,
                     icon_size: _DIALOG_ICON_SIZE,
                     style_class: dialog.iconStyleClass,
@@ -434,8 +475,10 @@ var ConfirmDialog = GObject.registerClass(
 
             if (dialog.checkBox) {
                 this._checkBox = new CheckBox(dialog.checkBox);
-                mainContentLayout.add(this._checkBox.actor);
+                this._messageDialogContent.add(this._checkBox.actor);
             }
+
+            this.contentLayout.add_child(this._messageDialogContent);
 
             let buttons = [];
             for (let i = 0; i < dialog.confirmButtons.length; i++) {
@@ -471,13 +514,3 @@ var ConfirmDialog = GObject.registerClass(
 );
 
 const _DIALOG_ICON_SIZE = 32;
-
-function _setLabelText(label, text) {
-    if (text) {
-        label.set_text(text);
-        label.show();
-    } else {
-        label.set_text('');
-        label.hide();
-    }
-}

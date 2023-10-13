@@ -4,5 +4,14 @@
     <key type="b" name="hibernate-works-check">
       <default>true</default>
     </key>
+    <key type="b" name="show-hibernate">
+      <default>true</default>
+    </key>
+    <key type="b" name="show-hybrid-sleep">
+      <default>true</default>
+    </key>
+    <key type="b" name="show-suspend-then-hibernate">
+      <default>true</default>
+    </key>
   </schema>
 </schemalist>

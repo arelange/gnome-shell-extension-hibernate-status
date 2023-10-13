@@ -1,7 +1,7 @@
 # Basic Makefile
 
 UUID = hibernate-status@dromi
-BASE_MODULES = extension.js metadata.json confirmDialog.js LICENSE README.md
+BASE_MODULES = extension.js metadata.json LICENSE README.md
 EXTRA_MODULES = prefs.js
 TOLOCALIZE =  confirmDialog.js prefs.js
 PO_FILES := $(wildcard ./locale/*/*/*.po)

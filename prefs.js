@@ -94,16 +94,31 @@ export default class Prefs extends ExtensionPreferences {
         window.add(page);
 
         const group = new Adw.PreferencesGroup({
-            title: __('No settings available'),
-            description: __('Settings have not yet been implemented'),
+            title: __('Modes'),
+            description: __('Which buttons should be enabled'),
         });
         page.add(group);
 
         // Create a new preferences row
-        const row = new Adw.SwitchRow({
-            title: __('N/A'),
-            subtitle: __('N/A'),
+        const hibernate_row = new Adw.SwitchRow({
+            title: __('Hibernate'),
         });
-        group.add(row);
+        group.add(hibernate_row);
+        const hybrid_row = new Adw.SwitchRow({
+            title: __('Hybrid sleep'),
+        });
+        group.add(hybrid_row);
+        const suspend_then_hibernate_row = new Adw.SwitchRow({
+            title: __('Suspend then hibernate'),
+        });
+        group.add(suspend_then_hibernate_row);
+
+        window._settings = this.getSettings();
+        window._settings.bind('show-hibernate', hibernate_row, 'active',
+            Gio.SettingsBindFlags.DEFAULT);
+        window._settings.bind('show-hybrid-sleep', hybrid_row, 'active',
+            Gio.SettingsBindFlags.DEFAULT);
+        window._settings.bind('show-suspend-then-hibernate', suspend_then_hibernate_row, 'active',
+            Gio.SettingsBindFlags.DEFAULT);
     }
 }
