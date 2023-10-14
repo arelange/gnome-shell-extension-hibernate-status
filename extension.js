@@ -1,35 +1,43 @@
-const Gio = imports.gi.Gio;
-const GLib = imports.gi.GLib;
+import Gio from 'gi://Gio';
+import GLib from 'gi://GLib';
+import GObject from 'gi://GObject';
+import St from 'gi://St';
+import Clutter from 'gi://Clutter';
 const Mainloop = imports.mainloop;
 
-const ExtensionUtils = imports.misc.extensionUtils;
-const LoginManager = imports.misc.loginManager;
-const Main = imports.ui.main;
-const StatusSystem = imports.ui.status.system;
-const PopupMenu = imports.ui.popupMenu;
-const Me = imports.misc.extensionUtils.getCurrentExtension();
-const ExtensionSystem = imports.ui.extensionSystem;
-const ConfirmDialog = Me.imports.confirmDialog;
-const Prefs = new Me.imports.prefs.Prefs();
+import * as LoginManager from 'resource:///org/gnome/shell/misc/loginManager.js';
+import * as Main from 'resource:///org/gnome/shell/ui/main.js';
+import * as StatusSystem from 'resource:///org/gnome/shell/ui/status/system.js';
+import * as PopupMenu from 'resource:///org/gnome/shell/ui/popupMenu.js';
+import * as ExtensionSystem from 'resource:///org/gnome/shell/ui/extensionSystem.js';
+import * as ModalDialog from 'resource:///org/gnome/shell/ui/modalDialog.js';
+import * as Dialog from 'resource:///org/gnome/shell/ui/dialog.js';
+import * as CheckBoxImport from 'resource:///org/gnome/shell/ui/checkBox.js';
+import {loadInterfaceXML} from 'resource:///org/gnome/shell/misc/fileUtils.js';
 
+const CheckBox = CheckBoxImport.CheckBox;
 
 // Use __ () and N__() for the extension gettext domain, and reuse
 // the shell domain with the default _() and N_()
-const Gettext = imports.gettext.domain('hibernate-status-button');
-const __ = Gettext.gettext;
-const N__ = function(e) { return e };
-ExtensionUtils.initTranslations('hibernate-status-button');
+import {Extension, gettext as __} from 'resource:///org/gnome/shell/extensions/extension.js';
+export {__};
+const N__ = function (e) {
+    return e;
+};
 
 const HIBERNATE_CHECK_TIMEOUT = 20000;
 
-class Extension {
+export default class MyExtension extends Extension {
     _loginManagerCanHibernate(asyncCallback) {
         if (this._loginManager._proxy) {
             // systemd path
-            this._loginManager._proxy.call("CanHibernate",
+            this._loginManager._proxy.call(
+                'CanHibernate',
                 null,
                 Gio.DBusCallFlags.NONE,
-                -1, null, function (proxy, asyncResult) {
+                -1,
+                null,
+                function (proxy, asyncResult) {
                     let result, error;
 
                     try {
@@ -38,11 +46,10 @@ class Extension {
                         error = e;
                     }
 
-                    if (error)
-                        asyncCallback(false);
-                    else
-                        asyncCallback(result[0] != 'no');
-                });
+                    if (error) asyncCallback(false);
+                    else asyncCallback(!['no', 'na'].includes(result[0]));
+                }
+            );
         } else {
             Mainloop.idle_add(() => {
                 asyncCallback(false);
@@ -52,17 +59,24 @@ class Extension {
     }
 
     _loginManagerHibernate() {
-        if (Prefs.getHibernateWorksCheckEnabled()) {
+        if (this._setting.get_boolean('hibernate-works-check')) {
             this._hibernateStarted = new Date();
-            GLib.timeout_add(GLib.PRIORITY_DEFAULT, HIBERNATE_CHECK_TIMEOUT,
-                () => this._checkDidHibernate());
+            GLib.timeout_add(
+                GLib.PRIORITY_DEFAULT,
+                HIBERNATE_CHECK_TIMEOUT,
+                () => this._checkDidHibernate()
+            );
         }
         if (this._loginManager._proxy) {
             // systemd path
-            this._loginManager._proxy.call("Hibernate",
+            this._loginManager._proxy.call(
+                'Hibernate',
                 GLib.Variant.new('(b)', [true]),
                 Gio.DBusCallFlags.NONE,
-                -1, null, null);
+                -1,
+                null,
+                null
+            );
         } else {
             // Can't do in ConsoleKit
             this._loginManager.emit('prepare-for-sleep', true);
@@ -73,10 +87,13 @@ class Extension {
     _loginManagerCanHybridSleep(asyncCallback) {
         if (this._loginManager._proxy) {
             // systemd path
-            this._loginManager._proxy.call("CanHybridSleep",
+            this._loginManager._proxy.call(
+                'CanHybridSleep',
                 null,
                 Gio.DBusCallFlags.NONE,
-                -1, null, function (proxy, asyncResult) {
+                -1,
+                null,
+                function (proxy, asyncResult) {
                     let result, error;
 
                     try {
@@ -85,11 +102,10 @@ class Extension {
                         error = e;
                     }
 
-                    if (error)
-                        asyncCallback(false);
-                    else
-                        asyncCallback(result[0] != 'no');
-                });
+                    if (error) asyncCallback(false);
+                    else asyncCallback(!['no', 'na'].includes(result[0]));
+                }
+            );
         } else {
             Mainloop.idle_add(() => {
                 asyncCallback(false);
@@ -101,44 +117,141 @@ class Extension {
     _loginManagerHybridSleep() {
         if (this._loginManager._proxy) {
             // systemd path
-            this._loginManager._proxy.call("HybridSleep",
+            this._loginManager._proxy.call(
+                'HybridSleep',
                 GLib.Variant.new('(b)', [true]),
                 Gio.DBusCallFlags.NONE,
-                -1, null, null);
+                -1,
+                null,
+                null
+            );
         } else {
             // Can't do in ConsoleKit
             this._loginManager.emit('prepare-for-sleep', true);
             this._loginManager.emit('prepare-for-sleep', false);
         }
     }
+
+    _loginManagerCanSuspendThenHibernate(asyncCallback) {
+        if (this._loginManager._proxy) {
+            // systemd path
+            this._loginManager._proxy.call(
+                'CanSuspendThenHibernate',
+                null,
+                Gio.DBusCallFlags.NONE,
+                -1,
+                null,
+                function (proxy, asyncResult) {
+                    let result, error;
+
+                    try {
+                        result = proxy.call_finish(asyncResult).deep_unpack();
+                    } catch (e) {
+                        error = e;
+                    }
+
+                    if (error) asyncCallback(false);
+                    else asyncCallback(!['no', 'na'].includes(result[0]));
+                }
+            );
+        } else {
+            Mainloop.idle_add(() => {
+                asyncCallback(false);
+                return false;
+            });
+        }
+    }
+
+    _loginManagerSuspendThenHibernate() {
+        if (this._loginManager._proxy) {
+            // systemd path
+            this._loginManager._proxy.call(
+                'SuspendThenHibernate',
+                GLib.Variant.new('(b)', [true]),
+                Gio.DBusCallFlags.NONE,
+                -1,
+                null,
+                null
+            );
+        } else {
+            // Can't do in ConsoleKit
+            this._loginManager.emit('prepare-for-sleep', true);
+            this._loginManager.emit('prepare-for-sleep', false);
+        }
+    }
+
     _updateHaveHibernate() {
-        this._loginManagerCanHibernate((result) => {
-            log(`have hibernate ${result}`);
+        this._loginManagerCanHibernate(result => {
+            log(`Able to hibernate: ${result}`);
             this._haveHibernate = result;
             this._updateHibernate();
         });
     }
 
     _updateHibernate() {
-        this._hibernateMenuItem.visible = this._haveHibernate && !Main.sessionMode.isLocked;
+        this._hibernateMenuItem.visible =
+            this._haveHibernate && !Main.sessionMode.isLocked && this._setting.get_boolean('show-hibernate');
     }
 
     _updateHaveHybridSleep() {
-        this._loginManagerCanHybridSleep((result) => {
+        this._loginManagerCanHybridSleep(result => {
+            log(`Able to hybrid-sleep: ${result}`);
             this._haveHybridSleep = result;
             this._updateHybridSleep();
         });
     }
 
     _updateHybridSleep() {
-        this._hybridSleepMenuItem.visible = this._haveHybridSleep && !Main.sessionMode.isLocked;
+        this._hybridSleepMenuItem.visible =
+            this._haveHybridSleep && !Main.sessionMode.isLocked  && this._setting.get_boolean('show-hybrid-sleep');
+    }
+
+    _updateHaveSuspendThenHibernate() {
+        this._loginManagerCanSuspendThenHibernate(result => {
+            log(`Able to suspend then hibernate: ${result}`);
+            this._haveSuspendThenHibernate = result;
+            this._updateSuspendThenHibernate();
+        });
+    }
+
+    _updateSuspendThenHibernate() {
+        this._suspendThenHibernateMenuItem.visible =
+            this._haveSuspendThenHibernate && !Main.sessionMode.isLocked  && this._setting.get_boolean('show-suspend-then-hibernate');
     }
 
     _onHibernateClicked() {
         this.systemMenu._systemItem.menu.itemActivated();
-        this._dialog = new ConfirmDialog.ConfirmDialog(ConfirmDialog.HibernateDialogContent);
-        this._dialog.connect('ConfirmedHibernate', () => this._loginManagerHibernate());
-        this._dialog.open();
+
+        if (this._setting.get_boolean('show-hibernate-dialog')) {
+            let HibernateDialogContent = {
+                subject: C_('title', __('Hibernate')),
+                description: __('Do you really want to hibernate the system?'),
+                confirmButtons: [
+                    {
+                        signal: 'Cancel',
+                        label: C_('button', __('Cancel')),
+                        key: Clutter.Escape,
+                    },
+                    {
+                        signal: 'ConfirmedHibernate',
+                        label: C_('button', __('Hibernate')),
+                        default: true,
+                    },
+                ],
+                iconName: 'document-save-symbolic',
+                iconStyleClass: 'end-session-dialog-shutdown-icon',
+            };
+
+            this._dialog = new ConfirmDialog(
+                HibernateDialogContent
+            );
+            this._dialog.connect('ConfirmedHibernate', () =>
+                this._loginManagerHibernate()
+            );
+            this._dialog.open();
+        } else {
+            this._loginManagerHibernate()
+        }
     }
 
     _onHybridSleepClicked() {
@@ -146,20 +259,44 @@ class Extension {
         this._loginManagerHybridSleep();
     }
 
+    _onSuspendThenHibernateClicked() {
+        this.systemMenu._systemItem.menu.itemActivated();
+        this._loginManagerSuspendThenHibernate();
+    }
+
     _disableExtension() {
-        let enabledExtensions = global.settings.get_strv(ExtensionSystem.ENABLED_EXTENSIONS_KEY);
-        enabledExtensions.splice(enabledExtensions.indexOf(Me.uuid), 1);
-        global.settings.set_strv(ExtensionSystem.ENABLED_EXTENSIONS_KEY, enabledExtensions);
+        Main.extensionManager.disableExtension('hibernate-status@dromi')
+        console.log('Disabled')
     }
 
     _cancelDisableExtension(notAgain) {
-        if (notAgain)
-            Prefs.setHibernateWorksCheckEnabled(false);
+        if (notAgain) this.setHibernateWorksCheckEnabled(false);
     }
 
     _checkRequirements() {
-        if (!LoginManager.haveSystemd()) {
-            this._dialog = new ConfirmDialog.ConfirmDialog(ConfirmDialog.SystemdMissingDialogContent);
+        if (GLib.access('/run/systemd/seats', 0) < 0) {
+            let SystemdMissingDialogContent = {
+                subject: C_('title', __('Hibernate button: Systemd Missing')),
+                description: __('Systemd seems to be missing and is required.'),
+                confirmButtons: [
+                    {
+                        signal: 'Cancel',
+                        label: C_('button', __('Cancel')),
+                        key: Clutter.Escape,
+                    },
+                    {
+                        signal: 'DisableExtension',
+                        label: C_('button', __('Disable Extension')),
+                        default: true,
+                    },
+                ],
+                iconName: 'document-save-symbolic',
+                iconStyleClass: 'end-session-dialog-shutdown-icon',
+            };
+
+            this._dialog = new ConfirmDialog(
+                SystemdMissingDialogContent
+            );
             this._dialog.connect('DisableExtension', this._disableExtension);
             this._dialog.open();
         }
@@ -170,45 +307,121 @@ class Extension {
          * hibernate started. If it is successful, at that point the GS
          * process is already frozen; so when this function is actually
          * called, way more than HIBERNATE_CHECK_TIMEOUT ms are passed*/
-        if (new Date() - this._hibernateStarted > HIBERNATE_CHECK_TIMEOUT + 5000) {
+        if (
+            new Date() - this._hibernateStarted >
+            HIBERNATE_CHECK_TIMEOUT + 5000
+        ) {
             // hibernate succeeded
             return;
         }
         // hibernate failed
-        this._dialog = new ConfirmDialog.ConfirmDialog(ConfirmDialog.HibernateFailedDialogContent);
+
+        let HibernateFailedDialogContent = {
+            subject: C_('title', __('Hibernate button: Hibernate failed')),
+            description: __(
+                'Looks like hibernation failed. On some linux distributions hibernation is disabled ' +
+                    'because not all hardware supports it well; ' +
+                    'please check your distribution documentation ' +
+                    'on how to enable it.'
+            ),
+            checkBox: __("You are wrong, don't check this anymore!"),
+            confirmButtons: [
+                {
+                    signal: 'Cancel',
+                    label: C_('button', __('Cancel')),
+                    key: Clutter.Escape,
+                },
+                {
+                    signal: 'DisableExtension',
+                    label: C_('button', __('Disable Extension')),
+                    default: true,
+                },
+            ],
+            iconName: 'document-save-symbolic',
+            iconStyleClass: 'end-session-dialog-shutdown-icon',
+        }
+        this._dialog = new ConfirmDialog(
+            HibernateFailedDialogContent
+        );
         this._dialog.connect('DisableExtension', this._disableExtension);
         this._dialog.connect('Cancel', this._cancelDisableExtension);
         this._dialog.open();
     }
 
+    setHibernateWorksCheckEnabled(enabled) {
+        let key = 'hibernate-works-check';
+        if (this._setting.is_writable(key)) {
+            if (this._setting.set_boolean(key, enabled)) {
+                Gio.Settings.sync();
+            } else {
+                throw this._errorSet(key);
+            }
+        } else {
+            throw this._errorWritable(key);
+        }
+    }
+
     enable() {
+        this._setting = this.getSettings()
         this._checkRequirements();
         this._loginManager = LoginManager.getLoginManager();
         this.systemMenu = Main.panel.statusArea.quickSettings._system;
 
         this._hibernateMenuItem = new PopupMenu.PopupMenuItem(__('Hibernate'));
-        this._hibernateMenuItemId = this._hibernateMenuItem.connect('activate', () => this._onHibernateClicked());
+        this._hibernateMenuItemId = this._hibernateMenuItem.connect(
+            'activate',
+            () => this._onHibernateClicked()
+        );
 
-        this._hybridSleepMenuItem = new PopupMenu.PopupMenuItem(__('Hybrid Sleep'));
-        this._hybridSleepMenuItemId = this._hybridSleepMenuItem.connect('activate', () => this._onHybridSleepClicked());
+        this._hybridSleepMenuItem = new PopupMenu.PopupMenuItem(
+            __('Hybrid Sleep')
+        );
+        this._hybridSleepMenuItemId = this._hybridSleepMenuItem.connect(
+            'activate',
+            () => this._onHybridSleepClicked()
+        );
 
-        let afterSuspendPosition = this.systemMenu._systemItem.menu.numMenuItems - 5;
+        this._suspendThenHibernateMenuItem = new PopupMenu.PopupMenuItem(
+            __('Suspend then Hibernate')
+        );
+        this._suspendThenHibernateMenuItemId = this._suspendThenHibernateMenuItem.connect(
+            'activate',
+            () => this._onSuspendThenHibernateClicked()
+        );
 
-        this.systemMenu._systemItem.menu.addMenuItem(this._hybridSleepMenuItem, afterSuspendPosition);
-        this.systemMenu._systemItem.menu.addMenuItem(this._hibernateMenuItem, afterSuspendPosition);
+        let afterSuspendPosition =
+            this.systemMenu._systemItem.menu.numMenuItems - 5;
 
-        this._menuOpenStateChangedId = this.systemMenu._systemItem.menu.connect('open-state-changed',
+        this.systemMenu._systemItem.menu.addMenuItem(
+            this._hybridSleepMenuItem,
+            afterSuspendPosition
+        );
+        this.systemMenu._systemItem.menu.addMenuItem(
+            this._hibernateMenuItem,
+            afterSuspendPosition
+        );
+        this.systemMenu._systemItem.menu.addMenuItem(
+            this._suspendThenHibernateMenuItem,
+            afterSuspendPosition
+        );
+
+        this._menuOpenStateChangedId = this.systemMenu._systemItem.menu.connect(
+            'open-state-changed',
             (menu, open) => {
-                if (!open)
-                    return;
+                if (!open) return;
                 this._updateHaveHibernate();
                 this._updateHaveHybridSleep();
-            });
+                this._updateHaveSuspendThenHibernate();
+            }
+        );
     }
 
     disable() {
+        this._setting = null;
         if (this._menuOpenStateChangedId) {
-            this.systemMenu._systemItem.menu.disconnect(this._menuOpenStateChangedId);
+            this.systemMenu._systemItem.menu.disconnect(
+                this._menuOpenStateChangedId
+            );
             this._menuOpenStateChangedId = 0;
         }
 
@@ -231,18 +444,77 @@ class Extension {
             this._hibernateMenuItem.destroy();
             this._hibernateMenuItem = 0;
         }
+    };
+}
+
+var ConfirmDialog = GObject.registerClass(
+    {
+        Signals: {
+            ConfirmedHibernate: {param_types: [GObject.TYPE_BOOLEAN]},
+            DisableExtension: {param_types: [GObject.TYPE_BOOLEAN]},
+            Cancel: {param_types: [GObject.TYPE_BOOLEAN]},
+        },
+    },
+    class ConfirmDialog extends ModalDialog.ModalDialog {
+        _init(dialog) {
+            super._init({
+                styleClass: 'end-session-dialog',
+                destroyOnClose: true,
+            });
+
+
+            this._messageDialogContent = new Dialog.MessageDialogContent();
+
+
+            this._messageDialogContent.description = dialog.description;
+            this._messageDialogContent.title = dialog.subject;
+
+            if (dialog.iconName) {
+                this._icon = new St.Icon({
+                    icon_name: dialog.iconName,
+                    icon_size: _DIALOG_ICON_SIZE,
+                    style_class: dialog.iconStyleClass,
+                });
+            }
+
+            if (dialog.checkBox) {
+                this._checkBox = new CheckBox(dialog.checkBox);
+                this._messageDialogContent.add(this._checkBox.actor);
+            }
+
+            this.contentLayout.add_child(this._messageDialogContent);
+
+            let buttons = [];
+            for (let i = 0; i < dialog.confirmButtons.length; i++) {
+                let signal = dialog.confirmButtons[i].signal;
+                let label = dialog.confirmButtons[i].label;
+                let keys = dialog.confirmButtons[i].key;
+                buttons.push({
+                    action: () => {
+                        let signalId = this.connect('closed', () => {
+                            this.disconnect(signalId);
+                            this._confirm(signal);
+                        });
+                        this.close();
+                    },
+                    label: label,
+                    key: keys,
+                });
+            }
+
+            this.setButtons(buttons);
+        }
+
+        _confirm(signal) {
+            var checked;
+            if (this._checkBox) checked = this._checkBox.actor.get_checked();
+            this.emit(signal, checked);
+        }
+
+        cancel() {
+            this.close();
+        }
     }
-}
+);
 
-let extension;
-function init() {
-    extension = new Extension();
-}
-
-function enable() {
-    extension.enable();
-}
-
-function disable() {
-    extension.disable();
-}
+const _DIALOG_ICON_SIZE = 32;

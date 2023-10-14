@@ -1,42 +1,27 @@
-const Gio = imports.gi.Gio;
-const Gtk = imports.gi.Gtk;
-const Me = imports.misc.extensionUtils.getCurrentExtension();
+import Gio from 'gi://Gio';
+import Gtk from 'gi://Gtk';
+import Adw from 'gi://Adw';
 // Use __() and N__() for the extension gettext domain, and reuse
 // the shell domain with the default _() and N_()
-const Gettext = imports.gettext.domain('hibernate-status-button');
-const __ = Gettext.gettext;
-const N__ = function(e) { return e };
-const ExtensionUtils = imports.misc.extensionUtils;
 
-var Prefs = class Prefs {
+import {
+    ExtensionPreferences,
+    gettext as __,
+} from 'resource:///org/gnome/Shell/Extensions/js/extensions/prefs.js';
+const N__ = function (e) {
+    return e;
+};
+
+export default class Prefs extends ExtensionPreferences {
     /**
      * Creates a new Settings-object to access the settings of this extension.
      * @private
      */
-    constructor() {
-        this.KEY_HIBERNATE_WORKS_CHECK = "hibernate-works-check";
-        this._schemaName = "org.gnome.shell.extensions.hibernate-status-button";
-
-        // first try developer local schema
-        try {
-            let schemaDir = Me.dir.get_child('schemas').get_path();
-
-            let schemaSource = Gio.SettingsSchemaSource.new_from_directory(
-                schemaDir, Gio.SettingsSchemaSource.get_default(), false
-            );
-            let schema = schemaSource.lookup(this._schemaName, false);
-
-            this._setting = new Gio.Settings({
-                settings_schema: schema
-            });
-            return;
-        } catch (e) {
-            // now try system-wide one below
-        }
-
-        this._setting = new Gio.Settings({
-            schema_id: this._schemaName
-        });
+    constructor(metadata) {
+        super(metadata);
+        this.KEY_HIBERNATE_WORKS_CHECK = 'hibernate-works-check';
+        this._schemaName = 'org.gnome.shell.extensions.hibernate-status-button';
+        this._setting = this.getSettings()
     }
     /**
      * <p>Binds the given 'callback'-function to the "changed"-signal on the given
@@ -51,14 +36,20 @@ var Prefs = class Prefs {
      */
     bindKey(key, callback) {
         // Validate:
-        if (key === undefined || key === null || typeof key !== "string") {
+        if (key === undefined || key === null || typeof key !== 'string') {
             throw TypeError("The 'key' should be a string. Got: '" + key + "'");
         }
-        if (callback === undefined || callback === null || typeof callback !== "function") {
-            throw TypeError("'callback' needs to be a function. Got: " + callback);
+        if (
+            callback === undefined ||
+            callback === null ||
+            typeof callback !== 'function'
+        ) {
+            throw TypeError(
+                "'callback' needs to be a function. Got: " + callback
+            );
         }
         // Bind:
-        this._setting.connect("changed::" + key, function (source, key) {
+        this._setting.connect('changed::' + key, function (source, key) {
             callback(source.get_value(key));
         });
     }
@@ -95,21 +86,67 @@ var Prefs = class Prefs {
     _errorSet(key) {
         return "Couldn't set the key '" + key + "'";
     }
-}
+    fillPreferencesWindow(window) {
+        const page = new Adw.PreferencesPage({
+            title: __('General'),
+            icon_name: 'dialog-information-symbolic',
+        });
+        window.add(page);
 
-// These "preferences" aren't user accessible so define
-// init() and buildPrefsWidget() to empty functions
-function init() {
-    ExtensionUtils.initTranslations('hibernate-status-button');
-}
-function buildPrefsWidget() {
-    let frame = new Gtk.Box({orientation: Gtk.Orientation.VERTICAL,
-                             'margin-top': 10,
-                             'margin-end': 10,
-                             'margin-bottom': 10,
-                             'margin-start': 10});
-    let setting_label = new Gtk.Label({label: __("This extension has no settings available"),
-                                       xalign: 0 });
-    frame.append(setting_label);
-    return frame;
+        const modes_group = new Adw.PreferencesGroup({
+            title: __('Modes'),
+            description: __('Which buttons should be enabled'),
+        });
+        page.add(modes_group);
+
+        // Create a new preferences row
+        const hibernate_row = new Adw.SwitchRow({
+            title: __('Hibernate'),
+        });
+        modes_group.add(hibernate_row);
+        const hybrid_row = new Adw.SwitchRow({
+            title: __('Hybrid sleep'),
+        });
+        modes_group.add(hybrid_row);
+        const suspend_then_hibernate_row = new Adw.SwitchRow({
+            title: __('Suspend then hibernate'),
+        });
+        modes_group.add(suspend_then_hibernate_row);
+
+        const dialog_group = new Adw.PreferencesGroup({
+            title: __('Dialogs'),
+            description: __('Which dialogs should be enabled'),
+        });
+        page.add(dialog_group);
+
+        // Create a new preferences row
+        const hibernate_dialog_row = new Adw.SwitchRow({
+            title: __('Hibernate'),
+        });
+        dialog_group.add(hibernate_dialog_row);
+        const hybrid_dialog_row = new Adw.SwitchRow({
+            title: __('Hybrid sleep'),
+            subtitle: __('Not implemented yet'),
+        });
+        dialog_group.add(hybrid_dialog_row);
+        const suspend_then_hibernate_dialog_row = new Adw.SwitchRow({
+            title: __('Suspend then hibernate'),
+            subtitle: __('Not implemented yet'),
+        });
+        dialog_group.add(suspend_then_hibernate_dialog_row);
+
+        window._settings = this.getSettings();
+        window._settings.bind('show-hibernate', hibernate_row, 'active',
+            Gio.SettingsBindFlags.DEFAULT);
+        window._settings.bind('show-hybrid-sleep', hybrid_row, 'active',
+            Gio.SettingsBindFlags.DEFAULT);
+        window._settings.bind('show-suspend-then-hibernate', suspend_then_hibernate_row, 'active',
+            Gio.SettingsBindFlags.DEFAULT);
+        window._settings.bind('show-hibernate-dialog', hibernate_dialog_row, 'active',
+            Gio.SettingsBindFlags.DEFAULT);
+        window._settings.bind('show-hybrid-sleep-dialog', hybrid_dialog_row, 'active',
+            Gio.SettingsBindFlags.DEFAULT);
+        window._settings.bind('show-suspend-then-hibernate-dialog', suspend_then_hibernate_dialog_row, 'active',
+            Gio.SettingsBindFlags.DEFAULT);
+    }
 }
