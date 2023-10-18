@@ -4,6 +4,9 @@
     <key type="b" name="hibernate-works-check">
       <default>true</default>
     </key>
+    <key type="b" name="show-suspend">
+      <default>true</default>
+    </key>
     <key type="b" name="show-hibernate">
       <default>true</default>
     </key>
@@ -11,6 +14,12 @@
       <default>true</default>
     </key>
     <key type="b" name="show-suspend-then-hibernate">
+      <default>true</default>
+    </key>
+    <key type="b" name="show-restart">
+      <default>true</default>
+    </key>
+    <key type="b" name="show-shutdown">
       <default>true</default>
     </key>
     <key type="b" name="show-hibernate-dialog">

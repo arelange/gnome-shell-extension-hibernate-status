@@ -99,7 +99,11 @@ export default class Prefs extends ExtensionPreferences {
         });
         page.add(modes_group);
 
-        // Create a new preferences row
+        const suspend_row = new Adw.SwitchRow({
+            title: __('Suspend'),
+            subtitle: __('Not implemented yet'),
+        });
+        modes_group.add(suspend_row);
         const hibernate_row = new Adw.SwitchRow({
             title: __('Hibernate'),
         });
@@ -112,6 +116,16 @@ export default class Prefs extends ExtensionPreferences {
             title: __('Suspend then hibernate'),
         });
         modes_group.add(suspend_then_hibernate_row);
+        const restart_row = new Adw.SwitchRow({
+            title: __('Restart...'),
+            subtitle: __('Not implemented yet'),
+        });
+        modes_group.add(restart_row);
+        const shutdown_row = new Adw.SwitchRow({
+            title: __('Shutdown...'),
+            subtitle: __('Not implemented yet'),
+        });
+        modes_group.add(shutdown_row);
 
         const dialog_group = new Adw.PreferencesGroup({
             title: __('Dialogs'),
@@ -119,7 +133,6 @@ export default class Prefs extends ExtensionPreferences {
         });
         page.add(dialog_group);
 
-        // Create a new preferences row
         const hibernate_dialog_row = new Adw.SwitchRow({
             title: __('Hibernate'),
         });
@@ -136,11 +149,17 @@ export default class Prefs extends ExtensionPreferences {
         dialog_group.add(suspend_then_hibernate_dialog_row);
 
         window._settings = this.getSettings();
+        window._settings.bind('show-suspend', suspend_row, 'active',
+            Gio.SettingsBindFlags.DEFAULT);
         window._settings.bind('show-hibernate', hibernate_row, 'active',
             Gio.SettingsBindFlags.DEFAULT);
         window._settings.bind('show-hybrid-sleep', hybrid_row, 'active',
             Gio.SettingsBindFlags.DEFAULT);
         window._settings.bind('show-suspend-then-hibernate', suspend_then_hibernate_row, 'active',
+            Gio.SettingsBindFlags.DEFAULT);
+        window._settings.bind('show-restart', restart_row, 'active',
+            Gio.SettingsBindFlags.DEFAULT);
+        window._settings.bind('show-shutdown', shutdown_row, 'active',
             Gio.SettingsBindFlags.DEFAULT);
         window._settings.bind('show-hibernate-dialog', hibernate_dialog_row, 'active',
             Gio.SettingsBindFlags.DEFAULT);

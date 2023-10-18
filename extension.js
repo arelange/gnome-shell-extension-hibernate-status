@@ -16,7 +16,6 @@ import * as CheckBoxImport from 'resource:///org/gnome/shell/ui/checkBox.js';
 import {loadInterfaceXML} from 'resource:///org/gnome/shell/misc/fileUtils.js';
 
 const CheckBox = CheckBoxImport.CheckBox;
-
 // Use __ () and N__() for the extension gettext domain, and reuse
 // the shell domain with the default _() and N_()
 import {Extension, gettext as __} from 'resource:///org/gnome/shell/extensions/extension.js';
@@ -219,6 +218,10 @@ export default class MyExtension extends Extension {
             this._haveSuspendThenHibernate && !Main.sessionMode.isLocked  && this._setting.get_boolean('show-suspend-then-hibernate');
     }
 
+    _updateDefaults() {
+        console.log("Update defaults");
+    }
+
     _onHibernateClicked() {
         this.systemMenu._systemItem.menu.itemActivated();
 
@@ -238,8 +241,6 @@ export default class MyExtension extends Extension {
                         default: true,
                     },
                 ],
-                iconName: 'document-save-symbolic',
-                iconStyleClass: 'end-session-dialog-shutdown-icon',
             };
 
             this._dialog = new ConfirmDialog(
@@ -409,6 +410,7 @@ export default class MyExtension extends Extension {
             'open-state-changed',
             (menu, open) => {
                 if (!open) return;
+                this._updateDefaults();
                 this._updateHaveHibernate();
                 this._updateHaveHybridSleep();
                 this._updateHaveSuspendThenHibernate();
