@@ -425,6 +425,11 @@ export default class MyExtension extends Extension {
             this._menuOpenStateChangedId = 0;
         }
 
+        if (this._suspendThenHibernateMenuItemId) {
+            this._suspendThenHibernateMenuItem.disconnect(this._suspendThenHibernateMenuItemId);
+            this._suspendThenHibernateMenuItemId = 0;
+        }
+
         if (this._hybridSleepMenuItemId) {
             this._hybridSleepMenuItem.disconnect(this._hybridSleepMenuItemId);
             this._hybridSleepMenuItemId = 0;
@@ -433,6 +438,11 @@ export default class MyExtension extends Extension {
         if (this._hibernateMenuItemId) {
             this._hibernateMenuItem.disconnect(this._hibernateMenuItemId);
             this._hibernateMenuItemId = 0;
+        }
+
+        if (this._suspendThenHibernateMenuItem) {
+            this._suspendThenHibernateMenuItem.destroy();
+            this._suspendThenHibernateMenuItem = 0;
         }
 
         if (this._hybridSleepMenuItem) {
