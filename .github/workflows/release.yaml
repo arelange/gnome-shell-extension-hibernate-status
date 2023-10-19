@@ -1,0 +1,32 @@
+name: "Prepare GitHub release"
+
+on:
+  push:
+    
+jobs:
+  zip:
+    runs-on: ubuntu-latest
+    
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v3
+      - name: zip
+        run: |
+          sudo apt-get install make gettext
+          make zip-file
+      - name: Upload artifact
+        uses: actions/upload-artifact@v3 
+        with:
+          name: zip
+          path: "*.zip"
+      - name: Release (pre)
+        uses: softprops/action-gh-release@v1
+        with:
+          files: "*.zip"
+          prerelease: true
+        if: contains(github.ref_name,'rc') && github.ref_type == 'tag'
+      - name: Release
+        uses: softprops/action-gh-release@v1
+        with:
+          files: "*.zip"
+        if: "!contains(github.ref_name,'rc') && github.ref_type == 'tag'"
