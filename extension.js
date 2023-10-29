@@ -362,67 +362,77 @@ export default class MyExtension extends Extension {
         }
     }
 
-    enable() {
-        var self = this;
-        
-        let poller = setInterval(() => {
-            if (Main.panel.statusArea.quickSettings._system) {
-                self._setting = self.getSettings()
-                self._checkRequirements();
-                self._loginManager = LoginManager.getLoginManager();
-                self.systemMenu = Main.panel.statusArea.quickSettings._system;
-                self._hibernateMenuItem = new PopupMenu.PopupMenuItem(__('Hibernate'));
-                self._hibernateMenuItemId = self._hibernateMenuItem.connect(
-                    'activate',
-                    () => self._onHibernateClicked()
-                );
-        
-                self._hybridSleepMenuItem = new PopupMenu.PopupMenuItem(
-                    __('Hybrid Sleep')
-                );
-                self._hybridSleepMenuItemId = self._hybridSleepMenuItem.connect(
-                    'activate',
-                    () => self._onHybridSleepClicked()
-                );
-        
-                self._suspendThenHibernateMenuItem = new PopupMenu.PopupMenuItem(
-                    __('Suspend then Hibernate')
-                );
-                self._suspendThenHibernateMenuItemId = self._suspendThenHibernateMenuItem.connect(
-                    'activate',
-                    () => self._onSuspendThenHibernateClicked()
-                );
-        
-                let afterSuspendPosition =
-                    self.systemMenu._systemItem.menu.numMenuItems - 5;
-        
-                self.systemMenu._systemItem.menu.addMenuItem(
-                    self._hybridSleepMenuItem,
-                    afterSuspendPosition
-                );
-                self.systemMenu._systemItem.menu.addMenuItem(
-                    self._hibernateMenuItem,
-                    afterSuspendPosition
-                );
-                self.systemMenu._systemItem.menu.addMenuItem(
-                    self._suspendThenHibernateMenuItem,
-                    afterSuspendPosition
-                );
-        
-                self._menuOpenStateChangedId = self.systemMenu._systemItem.menu.connect(
-                    'open-state-changed',
-                    (menu, open) => {
-                        if (!open) return;
-                        self._updateDefaults();
-                        self._updateHaveHibernate();
-                        self._updateHaveHybridSleep();
-                        self._updateHaveSuspendThenHibernate();
-                    }
-                );
-                
-                clearInterval(poller);
+    _modifySystemItem() {
+        this._setting = this.getSettings()
+        this._checkRequirements();
+        this._loginManager = LoginManager.getLoginManager();
+        this.systemMenu = Main.panel.statusArea.quickSettings._system;
+        this._hibernateMenuItem = new PopupMenu.PopupMenuItem(__('Hibernate'));
+        this._hibernateMenuItemId = this._hibernateMenuItem.connect(
+            'activate',
+            () => this._onHibernateClicked()
+        );
+
+        this._hybridSleepMenuItem = new PopupMenu.PopupMenuItem(
+            __('Hybrid Sleep')
+        );
+        this._hybridSleepMenuItemId = this._hybridSleepMenuItem.connect(
+            'activate',
+            () => this._onHybridSleepClicked()
+        );
+
+        this._suspendThenHibernateMenuItem = new PopupMenu.PopupMenuItem(
+            __('Suspend then Hibernate')
+        );
+        this._suspendThenHibernateMenuItemId = this._suspendThenHibernateMenuItem.connect(
+            'activate',
+            () => this._onSuspendThenHibernateClicked()
+        );
+
+        let afterSuspendPosition =
+            this.systemMenu._systemItem.menu.numMenuItems - 5;
+
+        this.systemMenu._systemItem.menu.addMenuItem(
+            this._hybridSleepMenuItem,
+            afterSuspendPosition
+        );
+        this.systemMenu._systemItem.menu.addMenuItem(
+            this._hibernateMenuItem,
+            afterSuspendPosition
+        );
+        this.systemMenu._systemItem.menu.addMenuItem(
+            this._suspendThenHibernateMenuItem,
+            afterSuspendPosition
+        );
+
+        this._menuOpenStateChangedId = this.systemMenu._systemItem.menu.connect(
+            'open-state-changed',
+            (menu, open) => {
+                if (!open) return;
+                this._updateDefaults();
+                this._updateHaveHibernate();
+                this._updateHaveHybridSleep();
+                this._updateHaveSuspendThenHibernate();
             }
-        }, 50);
+        );
+    }
+
+    _queueModifySystemItem() {
+        this.sourceId = GLib.idle_add(GLib.PRIORITY_DEFAULT, () => {
+            if (!Main.panel.statusArea.quickSettings._system)
+                return GLib.SOURCE_CONTINUE;
+    
+            this._modifySystemItem();
+            return GLib.SOURCE_REMOVE;
+        });
+    }
+
+    enable() {
+        if (!Main.panel.statusArea.quickSettings._system) {
+            this._queueModifySystemItem();
+        } else {
+            this._modifySystemItem();
+        }
     }
 
     disable() {
