@@ -362,12 +362,11 @@ export default class MyExtension extends Extension {
         }
     }
 
-    enable() {
+    _modifySystemItem() {
         this._setting = this.getSettings()
         this._checkRequirements();
         this._loginManager = LoginManager.getLoginManager();
         this.systemMenu = Main.panel.statusArea.quickSettings._system;
-
         this._hibernateMenuItem = new PopupMenu.PopupMenuItem(__('Hibernate'));
         this._hibernateMenuItemId = this._hibernateMenuItem.connect(
             'activate',
@@ -418,6 +417,24 @@ export default class MyExtension extends Extension {
         );
     }
 
+    _queueModifySystemItem() {
+        this.sourceId = GLib.idle_add(GLib.PRIORITY_DEFAULT, () => {
+            if (!Main.panel.statusArea.quickSettings._system)
+                return GLib.SOURCE_CONTINUE;
+    
+            this._modifySystemItem();
+            return GLib.SOURCE_REMOVE;
+        });
+    }
+
+    enable() {
+        if (!Main.panel.statusArea.quickSettings._system) {
+            this._queueModifySystemItem();
+        } else {
+            this._modifySystemItem();
+        }
+    }
+
     disable() {
         this._setting = null;
         if (this._menuOpenStateChangedId) {
@@ -455,6 +472,11 @@ export default class MyExtension extends Extension {
         if (this._hibernateMenuItem) {
             this._hibernateMenuItem.destroy();
             this._hibernateMenuItem = 0;
+        }
+
+        if (this.sourceId) {
+            GLib.Source.remove(this.sourceId);
+            this.sourceId = null;
         }
     };
 }
