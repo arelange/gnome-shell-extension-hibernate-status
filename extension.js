@@ -473,6 +473,11 @@ export default class MyExtension extends Extension {
             this._hibernateMenuItem.destroy();
             this._hibernateMenuItem = 0;
         }
+
+        if (this.sourceId) {
+            GLib.Source.remove(this.sourceId);
+            this.sourceId = null;
+        }
     };
 }
 
