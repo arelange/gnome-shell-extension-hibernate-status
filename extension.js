@@ -3,7 +3,6 @@ import GLib from 'gi://GLib';
 import GObject from 'gi://GObject';
 import St from 'gi://St';
 import Clutter from 'gi://Clutter';
-const Mainloop = imports.mainloop;
 
 import * as LoginManager from 'resource:///org/gnome/shell/misc/loginManager.js';
 import * as Main from 'resource:///org/gnome/shell/ui/main.js';
@@ -26,7 +25,7 @@ const N__ = function (e) {
 
 const HIBERNATE_CHECK_TIMEOUT = 20000;
 
-export default class MyExtension extends Extension {
+export default class HibernateButtonExtension extends Extension {
     _loginManagerCanHibernate(asyncCallback) {
         if (this._loginManager._proxy) {
             // systemd path
@@ -50,7 +49,7 @@ export default class MyExtension extends Extension {
                 }
             );
         } else {
-            Mainloop.idle_add(() => {
+            this.can_hibernate_sourceID = GLib.idle_add(() => {
                 asyncCallback(false);
                 return false;
             });
@@ -60,7 +59,7 @@ export default class MyExtension extends Extension {
     _loginManagerHibernate() {
         if (this._setting.get_boolean('hibernate-works-check')) {
             this._hibernateStarted = new Date();
-            GLib.timeout_add(
+            this.hibernate_sourceID = GLib.timeout_add(
                 GLib.PRIORITY_DEFAULT,
                 HIBERNATE_CHECK_TIMEOUT,
                 () => this._checkDidHibernate()
@@ -106,7 +105,7 @@ export default class MyExtension extends Extension {
                 }
             );
         } else {
-            Mainloop.idle_add(() => {
+            this.can_hybrid_sleep_sourceID = GLib.idle_add(() => {
                 asyncCallback(false);
                 return false;
             });
@@ -154,7 +153,7 @@ export default class MyExtension extends Extension {
                 }
             );
         } else {
-            Mainloop.idle_add(() => {
+            this.can_suspend_then_hibernate_sourceID = GLib.idle_add(() => {
                 asyncCallback(false);
                 return false;
             });
@@ -477,6 +476,26 @@ export default class MyExtension extends Extension {
         if (this.sourceId) {
             GLib.Source.remove(this.sourceId);
             this.sourceId = null;
+        }
+
+        if (this.can_suspend_then_hibernate_sourceID) {
+            GLib.Source.remove(this.can_suspend_then_hibernate_sourceID);
+            this.can_suspend_then_hibernate_sourceID = null;
+        }
+
+        if (this.can_hybrid_sleep_sourceID) {
+            GLib.Source.remove(this.can_hybrid_sleep_sourceID);
+            this.can_hybrid_sleep_sourceID = null;
+        }
+
+        if (this.can_hibernate_sourceID) {
+            GLib.Source.remove(this.can_hibernate_sourceID);
+            this.can_hibernate_sourceID = null;
+        }
+
+        if (this.hibernate_sourceID) {
+            GLib.Source.remove(this.hibernate_sourceID);
+            this.hibernate_sourceID = null;
         }
     };
 }
