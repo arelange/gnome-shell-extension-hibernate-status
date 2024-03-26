@@ -219,6 +219,22 @@ export default class HibernateButtonExtension extends Extension {
 
     _updateDefaults() {
         console.log("Update defaults");
+        let menuItems = this.systemMenu._systemItem.menu._getMenuItems()
+        for (let menuItem of menuItems) {
+            console.log(menuItem.label.get_text())
+            if ( menuItem.label.get_text() === _('Suspend') ) {
+                console.log(`Show suspend button: ${this._setting.get_boolean('show-suspend')}`)
+                menuItem.visible = this._setting.get_boolean('show-suspend');
+            }
+            if ( menuItem.label.get_text() === _('Restart…') ) {
+                console.log(`Show restart button: ${this._setting.get_boolean('show-restart')}`)
+                menuItem.visible = this._setting.get_boolean('show-restart');
+            }
+            if ( menuItem.label.get_text() === _('Power Off…') ) {
+                console.log(`Show shutdown button: ${this._setting.get_boolean('show-shutdown')}`)
+                menuItem.visible = this._setting.get_boolean('show-shutdown');
+            }
+        }
     }
 
     _onHibernateClicked() {
@@ -571,3 +587,4 @@ var ConfirmDialog = GObject.registerClass(
 );
 
 const _DIALOG_ICON_SIZE = 32;
+

@@ -101,7 +101,6 @@ export default class Prefs extends ExtensionPreferences {
 
         const suspend_row = new Adw.SwitchRow({
             title: __('Suspend'),
-            subtitle: __('Not implemented yet'),
         });
         modes_group.add(suspend_row);
         const hibernate_row = new Adw.SwitchRow({
@@ -118,12 +117,10 @@ export default class Prefs extends ExtensionPreferences {
         modes_group.add(suspend_then_hibernate_row);
         const restart_row = new Adw.SwitchRow({
             title: __('Restart...'),
-            subtitle: __('Not implemented yet'),
         });
         modes_group.add(restart_row);
         const shutdown_row = new Adw.SwitchRow({
             title: __('Shutdown...'),
-            subtitle: __('Not implemented yet'),
         });
         modes_group.add(shutdown_row);
 
