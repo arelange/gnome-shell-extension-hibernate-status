@@ -31,5 +31,14 @@
     <key type="b" name="show-suspend-then-hibernate-dialog">
       <default>false</default>
     </key>
+    <key name="use-efibootmgr" type="b">
+      <default>true</default>
+    </key>
+    <key name="use-grub" type="b">
+      <default>false</default>
+    </key>
+    <key name="use-systemd-boot" type="b">
+      <default>false</default>
+    </key>
   </schema>
 </schemalist>

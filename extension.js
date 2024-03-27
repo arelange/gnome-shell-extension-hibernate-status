@@ -18,6 +18,9 @@ const CheckBox = CheckBoxImport.CheckBox;
 // Use __ () and N__() for the extension gettext domain, and reuse
 // the shell domain with the default _() and N_()
 import {Extension, gettext as __} from 'resource:///org/gnome/shell/extensions/extension.js';
+
+import { RebootSubMenu } from "./customreboot/menu.js";
+
 export {__};
 const N__ = function (e) {
     return e;
@@ -404,8 +407,12 @@ export default class HibernateButtonExtension extends Extension {
             () => this._onSuspendThenHibernateClicked()
         );
 
+        this._customRestartMenuItem = new RebootSubMenu(this)
+
         let afterSuspendPosition =
             this.systemMenu._systemItem.menu.numMenuItems - 5;
+        let afterRestartPosition =
+            this.systemMenu._systemItem.menu.numMenuItems - 1;
 
         this.systemMenu._systemItem.menu.addMenuItem(
             this._hybridSleepMenuItem,
@@ -419,6 +426,10 @@ export default class HibernateButtonExtension extends Extension {
             this._suspendThenHibernateMenuItem,
             afterSuspendPosition
         );
+        this.systemMenu._systemItem.menu.addMenuItem(
+            this._customRestartMenuItem,
+            afterRestartPosition
+        )
 
         this._menuOpenStateChangedId = this.systemMenu._systemItem.menu.connect(
             'open-state-changed',
@@ -587,4 +598,5 @@ var ConfirmDialog = GObject.registerClass(
 );
 
 const _DIALOG_ICON_SIZE = 32;
+
 

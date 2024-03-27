@@ -3,6 +3,7 @@
 UUID = hibernate-status@dromi
 BASE_MODULES = extension.js metadata.json LICENSE README.md
 EXTRA_MODULES = prefs.js
+CUSTOM_REBOOT_MODULES = customreboot
 TOLOCALIZE =  confirmDialog.js prefs.js
 PO_FILES := $(wildcard ./locale/*/*/*.po)
 MO_FILES := $(PO_FILES:.po=.mo)
@@ -69,7 +70,7 @@ zip-file: _build
 _build: all
 	-rm -fR ./_build
 	mkdir -p _build
-	cp $(BASE_MODULES) $(EXTRA_MODULES) _build
+	cp -r $(BASE_MODULES) $(EXTRA_MODULES) $(CUSTOM_REBOOT_MODULES) _build
 	mkdir -p _build/schemas
 	cp schemas/*.xml _build/schemas/
 	cp schemas/gschemas.compiled _build/schemas/
