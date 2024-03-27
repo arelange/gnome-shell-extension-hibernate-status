@@ -1,6 +1,6 @@
 import Gio from "gi://Gio";
 import { ExecCommand, Log, LogWarning } from './utils.js';
-
+import { Extension } from "resource:///org/gnome/shell/extensions/extension.js"
 /**
  * Represents grub
  */
@@ -116,7 +116,7 @@ export class Grub {
           'pkexec',
           'sh',
           '-c',
-          `/usr/bin/cp ${ext.lookupByUUID('customreboot@nova1545').path()}/42_custom_reboot /etc/grub.d/42_custom_reboot && /usr/bin/chmod 755 /etc/grub.d/42_custom_reboot && /usr/sbin/update-grub`
+          `/usr/bin/cp ${Extension.lookupByUUID('hibernate-status@dromi').path}/customreboot/42_custom_reboot /etc/grub.d/42_custom_reboot && /usr/bin/chmod 755 /etc/grub.d/42_custom_reboot && /usr/sbin/update-grub`
         ]);
 
       if (status !== 0) {

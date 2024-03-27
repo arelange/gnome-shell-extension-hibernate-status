@@ -407,7 +407,7 @@ export default class HibernateButtonExtension extends Extension {
             () => this._onSuspendThenHibernateClicked()
         );
 
-        this._customRestartMenuItem = new RebootSubMenu(this)
+        this._customRestartMenuItem = new RebootSubMenu()
 
         let afterSuspendPosition =
             this.systemMenu._systemItem.menu.numMenuItems - 5;
