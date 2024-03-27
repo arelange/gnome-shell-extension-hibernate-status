@@ -3,7 +3,9 @@ import Gtk from 'gi://Gtk';
 import Adw from 'gi://Adw';
 // Use __() and N__() for the extension gettext domain, and reuse
 // the shell domain with the default _() and N_()
-
+import { EFIBootManager } from './customreboot/efibootmgr.js';
+import { Grub } from './customreboot/grub.js';
+import { SystemdBoot } from './customreboot/systemdBoot.js';
 import {
     ExtensionPreferences,
     gettext as __,
@@ -164,5 +166,93 @@ export default class Prefs extends ExtensionPreferences {
             Gio.SettingsBindFlags.DEFAULT);
         window._settings.bind('show-suspend-then-hibernate-dialog', suspend_then_hibernate_dialog_row, 'active',
             Gio.SettingsBindFlags.DEFAULT);
+            
+        const reboot_page = new Adw.PreferencesPage({
+            title: __('Custom Reboot'),
+            icon_name: 'system-reboot-symbolic',
+        });
+        const reboot_group = new Adw.PreferencesGroup();
+        reboot_page.add(reboot_group);
+    
+        // Create row for efibootmgr
+        const efi = new Adw.ActionRow({ title: 'Use EFI Boot Manager (efibootmgr)' });
+    
+        // Create row for grub
+        const grub = new Adw.ActionRow({ title: 'Use Grub'});
+    
+        // Create row for systemd-boot
+        const sysd = new Adw.ActionRow({ title: 'Use Systemd Boot'});
+    
+        // Add rows
+        reboot_group.add(efi);
+        reboot_group.add(grub);
+        reboot_group.add(sysd);
+        
+        let settings = window._settings
+    
+        // Create switch for efibootmgr
+        const efi_switch = new Gtk.Switch({
+            active: settings.get_boolean('use-efibootmgr'),
+            valign: Gtk.Align.CENTER,
+        });
+    
+        // Create switch for grub
+        const grub_switch = new Gtk.Switch({
+            active: settings.get_boolean('use-grub'),
+            valign: Gtk.Align.CENTER,
+        });
+    
+        // Create switch for systemd-boot
+        const sysd_switch = new Gtk.Switch({
+            active: settings.get_boolean('use-systemd-boot'),
+            valign: Gtk.Align.CENTER,
+        });
+    
+        // Bind settings for efibootmgr
+        settings.bind(
+            'use-efibootmgr',
+            efi_switch,
+            'active',
+            Gio.SettingsBindFlags.DEFAULT
+        );
+    
+        // Bind settings for grub
+        settings.bind(
+            'use-grub',
+            grub_switch,
+            'active',
+            Gio.SettingsBindFlags.DEFAULT
+        );
+    
+        // Bind settings for systemd-boot
+        settings.bind(
+            'use-systemd-boot',
+            sysd_switch,
+            'active',
+            Gio.SettingsBindFlags.DEFAULT
+        );
+    
+        // Add the switch for efibootmgr
+        efi.add_suffix(efi_switch);
+        efi.activatable_widget = efi_switch;
+    
+        // Add the switch for grub
+        grub.add_suffix(grub_switch);
+        grub.activatable_widget = grub_switch;
+    
+        // Add the switch for systemd-boot
+        sysd.add_suffix(sysd_switch);
+        sysd.activatable_widget = sysd_switch;
+    
+        // Add our page to the window
+        window.add(reboot_page);
+    
+        (async () => {
+            // Disable/enable switches in accordance to them being usable
+    
+            efi_switch.set_sensitive(await EFIBootManager.IsUseable());
+            grub_switch.set_sensitive(await Grub.IsUseable());
+            sysd_switch.set_sensitive(await SystemdBoot.IsUseable());
+        })();
     }
 }

@@ -500,6 +500,11 @@ export default class HibernateButtonExtension extends Extension {
             this._hibernateMenuItem = 0;
         }
 
+        if (this._customRestartMenuItem) {
+            this._customRestartMenuItem.destroy();
+            this._customRestartMenuItem = 0;
+        }
+
         if (this.sourceId) {
             GLib.Source.remove(this.sourceId);
             this.sourceId = null;

@@ -20,7 +20,7 @@ export class Bootloader {
      * @returns BootLoaders type. Can be "EFI", "SYSD", "GRUB", or "UNKNOWN"
      */
     static async GetUseableType() {
-        const settings = Extension.lookupByUUID('customreboot@nova1545').getSettings('org.gnome.shell.extensions.customreboot');
+        const settings = Extension.lookupByUUID('hibernate-status@dromi').getSettings('org.gnome.shell.extensions.hibernate-status-button');
 
         if (await EFIBootManager.IsUseable() && settings.get_boolean('use-efibootmgr')) return BootLoaders.EFI;
         if (await Grub.IsUseable() && settings.get_boolean('use-grub')) return BootLoaders.GRUB;
