@@ -3,9 +3,9 @@ import Gtk from 'gi://Gtk';
 import Adw from 'gi://Adw';
 // Use __() and N__() for the extension gettext domain, and reuse
 // the shell domain with the default _() and N_()
-import { EFIBootManager } from './customreboot/efibootmgr.js';
-import { Grub } from './customreboot/grub.js';
-import { SystemdBoot } from './customreboot/systemdBoot.js';
+// import { EFIBootManager } from './customreboot/efibootmgr.js';
+// import { Grub } from './customreboot/grub.js';
+// import { SystemdBoot } from './customreboot/systemdBoot.js';
 import {
     ExtensionPreferences,
     gettext as __,
@@ -247,12 +247,12 @@ export default class Prefs extends ExtensionPreferences {
         // Add our page to the window
         window.add(reboot_page);
     
-        (async () => {
+        //(async () => {
             // Disable/enable switches in accordance to them being usable
     
-            efi_switch.set_sensitive(await EFIBootManager.IsUseable());
-            grub_switch.set_sensitive(await Grub.IsUseable());
-            sysd_switch.set_sensitive(await SystemdBoot.IsUseable());
-        })();
+        //    efi_switch.set_sensitive(await EFIBootManager.IsUseable());
+        //    grub_switch.set_sensitive(await Grub.IsUseable());
+        //    sysd_switch.set_sensitive(await SystemdBoot.IsUseable());
+        //})();
     }
 }
