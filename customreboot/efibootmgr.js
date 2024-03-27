@@ -27,10 +27,11 @@ export class EFIBootManager {
         const regex = /(Boot[0-9]{4})/;
         const vLine = regex.exec(line)
         if (vLine && vLine.length) {
-            const option = line.replace("Boot", "").split("*");
-            const title = option[1];
-            if (title.includes("HD") || title.includes("RC")) {
-                const trimed_title = title.replace(/(?<=[\S\s]*)(HD|RC)([\s\S()]*|$)/, "").trim();
+            const option = line.replace("Boot", "").replace("*"," ").split("  ");
+            var title = option[1];
+            //title = title.split("\t")[0]
+            if (title.includes("HD") || title.includes("RC") || title.includes("PciRoot")) {
+                const trimed_title = title.replace(/(?<=[\S\s]*)(HD|RC|PciRoot)([\s\S()]*|$)/, "").trim();
                 boot_options.set(trimed_title, option[0].trim());
             }
             else {
