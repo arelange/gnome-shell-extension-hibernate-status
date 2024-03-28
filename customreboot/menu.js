@@ -83,9 +83,6 @@ class RebootSubMenu extends PopupMenu.PopupSubMenuMenuItem {
         this.menu.addMenuItem(this.section)
 
         if (loader === undefined) {
-            // Set Menu Header
-            this.section.setHeader('system-reboot-symbolic', 'Error', 'The selected boot loader cannot be found...');
-
             // Add reload option, to refresh extension menu without reloading GNOME or the extension
             this.section.addMenuItem(new PopupMenu.PopupSeparatorMenuItem());
             this.section.addAction('Reload', () => {
