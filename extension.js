@@ -217,6 +217,11 @@ export default class HibernateButtonExtension extends Extension {
             this._haveSuspendThenHibernate && !Main.sessionMode.isLocked  && this._setting.get_boolean('show-suspend-then-hibernate');
     }
 
+    _updateCustomReboot() {
+        this._customRestartMenuItem.visible =
+            !Main.sessionMode.isLocked  && this._setting.get_boolean('show-custom-reboot');
+    }
+
     _updateDefaults() {
         console.log("Update defaults");
         let menuItems = this.systemMenu._systemItem.menu._getMenuItems()
@@ -241,7 +246,7 @@ export default class HibernateButtonExtension extends Extension {
         this.systemMenu._systemItem.menu.itemActivated();
 
         if (this._setting.get_boolean('show-hibernate-dialog')) {
-            let HibernateDialogContent = {
+            let DialogContent = {
                 subject: C_('title', __('Hibernate')),
                 description: __('Do you really want to hibernate the system?'),
                 confirmButtons: [
@@ -251,7 +256,7 @@ export default class HibernateButtonExtension extends Extension {
                         key: Clutter.Escape,
                     },
                     {
-                        signal: 'ConfirmedHibernate',
+                        signal: 'Confirmed',
                         label: C_('button', __('Hibernate')),
                         default: true,
                     },
@@ -259,9 +264,9 @@ export default class HibernateButtonExtension extends Extension {
             };
 
             this._dialog = new ConfirmDialog(
-                HibernateDialogContent
+                DialogContent
             );
-            this._dialog.connect('ConfirmedHibernate', () =>
+            this._dialog.connect('Confirmed', () =>
                 this._loginManagerHibernate()
             );
             this._dialog.open();
@@ -272,12 +277,68 @@ export default class HibernateButtonExtension extends Extension {
 
     _onHybridSleepClicked() {
         this.systemMenu._systemItem.menu.itemActivated();
-        this._loginManagerHybridSleep();
+
+        if (this._setting.get_boolean('show-hybrid-sleep-dialog')) {
+            let DialogContent = {
+                subject: C_('title', __('Hybrid Sleep')),
+                description: __('Do you really want to hybrid sleep the system?'),
+                confirmButtons: [
+                    {
+                        signal: 'Cancel',
+                        label: C_('button', __('Cancel')),
+                        key: Clutter.Escape,
+                    },
+                    {
+                        signal: 'Confirmed',
+                        label: C_('button', __('Hybrid Sleep')),
+                        default: true,
+                    },
+                ],
+            };
+
+            this._dialog = new ConfirmDialog(
+                DialogContent
+            );
+            this._dialog.connect('Confirmed', () =>
+                this._loginManagerHybridSleep()
+            );
+            this._dialog.open();
+        } else {
+            this._loginManagerHybridSleep()
+        }
     }
 
     _onSuspendThenHibernateClicked() {
         this.systemMenu._systemItem.menu.itemActivated();
-        this._loginManagerSuspendThenHibernate();
+
+        if (this._setting.get_boolean('show-suspend-then-hibernate-dialog')) {
+            let DialogContent = {
+                subject: C_('title', __('Suspend then Hibernate')),
+                description: __('Do you really want to suspend then hibernate the system?'),
+                confirmButtons: [
+                    {
+                        signal: 'Cancel',
+                        label: C_('button', __('Cancel')),
+                        key: Clutter.Escape,
+                    },
+                    {
+                        signal: 'Confirmed',
+                        label: C_('button', __('Suspend then Hibernate')),
+                        default: true,
+                    },
+                ],
+            };
+
+            this._dialog = new ConfirmDialog(
+                DialogContent
+            );
+            this._dialog.connect('Confirmed', () =>
+                this._loginManagerSuspendThenHibernate()
+            );
+            this._dialog.open();
+        } else {
+            this._loginManagerSuspendThenHibernate()
+        }
     }
 
     _disableExtension() {
@@ -428,6 +489,7 @@ export default class HibernateButtonExtension extends Extension {
                 this._updateHaveHibernate();
                 this._updateHaveHybridSleep();
                 this._updateHaveSuspendThenHibernate();
+                this._updateCustomReboot();
             }
         );
     }
@@ -519,7 +581,7 @@ export default class HibernateButtonExtension extends Extension {
 var ConfirmDialog = GObject.registerClass(
     {
         Signals: {
-            ConfirmedHibernate: {param_types: [GObject.TYPE_BOOLEAN]},
+            Confirmed: {param_types: [GObject.TYPE_BOOLEAN]},
             DisableExtension: {param_types: [GObject.TYPE_BOOLEAN]},
             Cancel: {param_types: [GObject.TYPE_BOOLEAN]},
         },

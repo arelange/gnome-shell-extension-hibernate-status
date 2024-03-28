@@ -22,6 +22,9 @@
     <key type="b" name="show-shutdown">
       <default>true</default>
     </key>
+    <key type="b" name="show-custom-reboot">
+      <default>true</default>
+    </key>
     <key type="b" name="show-hibernate-dialog">
       <default>true</default>
     </key>

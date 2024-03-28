@@ -119,8 +119,12 @@ export default class Prefs extends ExtensionPreferences {
             title: __('Restart...'),
         });
         modes_group.add(restart_row);
+        const restart_to_row = new Adw.SwitchRow({
+            title: __('Restart to...'),
+        });
+        modes_group.add(restart_to_row);
         const shutdown_row = new Adw.SwitchRow({
-            title: __('Shutdown...'),
+            title: __('Power Off...'),
         });
         modes_group.add(shutdown_row);
 
@@ -136,12 +140,10 @@ export default class Prefs extends ExtensionPreferences {
         dialog_group.add(hibernate_dialog_row);
         const hybrid_dialog_row = new Adw.SwitchRow({
             title: __('Hybrid sleep'),
-            subtitle: __('Not implemented yet'),
         });
         dialog_group.add(hybrid_dialog_row);
         const suspend_then_hibernate_dialog_row = new Adw.SwitchRow({
-            title: __('Suspend then hibernate'),
-            subtitle: __('Not implemented yet'),
+            title: __('Suspend then Hibernate'),
         });
         dialog_group.add(suspend_then_hibernate_dialog_row);
 
@@ -155,6 +157,8 @@ export default class Prefs extends ExtensionPreferences {
         window._settings.bind('show-suspend-then-hibernate', suspend_then_hibernate_row, 'active',
             Gio.SettingsBindFlags.DEFAULT);
         window._settings.bind('show-restart', restart_row, 'active',
+            Gio.SettingsBindFlags.DEFAULT);
+        window._settings.bind('show-custom-reboot', restart_to_row, 'active',
             Gio.SettingsBindFlags.DEFAULT);
         window._settings.bind('show-shutdown', shutdown_row, 'active',
             Gio.SettingsBindFlags.DEFAULT);
