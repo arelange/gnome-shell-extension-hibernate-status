@@ -68,8 +68,8 @@ msgstr "这个扩展没有可用的设置"
 
 #: extension.js:316 extension.js:326 extension.js:461 perf.js:115
 msgid "Suspend then Hibernate"
-msgstr "睡眠后休眠"
+msgstr "挂起后休眠"
 
 #: extension.js:317
 msgid "Do you really want to suspend then hibernate the system?"
-msgstr "确定要睡眠后休眠系统吗？"
+msgstr "确定要挂起后休眠系统吗？"
