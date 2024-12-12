@@ -39,3 +39,7 @@ If you are running Ubuntu, try putting
 into /etc/polkit-1/localauthority/10-vendor.d/com.ubuntu.desktop.pkla
 
 Otherwise check for similar settings for your distribution. Credit: https://github.com/arelange/gnome-shell-extension-hibernate-status/issues/41#issuecomment-565883599
+
+### Translation ###
+
+Translation can be done using gettext, one can generate the POT file using `make potfile` to generate a template in locale/hibernate-status-button.pot
