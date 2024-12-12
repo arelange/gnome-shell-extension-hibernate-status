@@ -3,7 +3,7 @@
 UUID = hibernate-status@dromi
 BASE_MODULES = extension.js metadata.json LICENSE README.md
 EXTRA_MODULES = prefs.js
-TOLOCALIZE =  confirmDialog.js prefs.js
+TOLOCALIZE =  extension.js prefs.js
 PO_FILES := $(wildcard ./locale/*/*/*.po)
 MO_FILES := $(PO_FILES:.po=.mo)
 
@@ -39,7 +39,7 @@ mergepo: potfile
 
 ./locale/hibernate-status-button.pot: $(TOLOCALIZE)
 	mkdir -p locale
-	xgettext -k --keyword=__ --keyword=N__ --add-comments='Translators:' -o locale/hibernate-status-button.pot --package-name "Hibernate Status Button" $(TOLOCALIZE)
+	xgettext --from=utf-8 -k --keyword=__ --keyword=N__ --add-comments='Translators:' -o locale/hibernate-status-button.pot --package-name "Hibernate Status Button" $(TOLOCALIZE)
 
 %.mo: %.po
 	msgfmt -c $< -o $@
