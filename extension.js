@@ -178,6 +178,10 @@ export default class HibernateButtonExtension extends Extension {
         }
     }
 
+    _loginManagerUEFI() {
+        GLib.spawn_command_line_async("systemctl reboot --firmware");
+    }
+
     _updateHaveHibernate() {
         this._loginManagerCanHibernate(result => {
             log(`Able to hibernate: ${result}`);
@@ -215,6 +219,10 @@ export default class HibernateButtonExtension extends Extension {
     _updateSuspendThenHibernate() {
         this._suspendThenHibernateMenuItem.visible =
             this._haveSuspendThenHibernate && !Main.sessionMode.isLocked  && this._setting.get_boolean('show-suspend-then-hibernate');
+    }
+
+    _updateUEFI() {
+        this._uefiMenuItem.visible = true;
     }
 
     _updateCustomReboot() {
@@ -341,6 +349,33 @@ export default class HibernateButtonExtension extends Extension {
         }
     }
 
+    _onUEFIClicked() {
+        let DialogContent = {
+            subject: C_('title', __('UEFI')),
+            description: __('Do you really want to boot to UEFI?'),
+            confirmButtons: [
+                {
+                    signal: 'Cancel',
+                    label: C_('button', __('Cancel')),
+                    key: Clutter.Escape,
+                },
+                {
+                    signal: 'Confirmed',
+                    label: C_('button', __('UEFI')),
+                    default: true,
+                },
+            ],
+        };
+
+        this._dialog = new ConfirmDialog(
+            DialogContent
+        );
+        this._dialog.connect('Confirmed', () =>
+            this._loginManagerUEFI()
+        );
+        this._dialog.open();
+    }
+
     _disableExtension() {
         Main.extensionManager.disableExtension('hibernate-status@dromi')
         console.log('Disabled')
@@ -465,9 +500,21 @@ export default class HibernateButtonExtension extends Extension {
             () => this._onSuspendThenHibernateClicked()
         );
 
+        this._uefiMenuItem = new PopupMenu.PopupMenuItem(
+            __('UEFI')
+        );
+        this._uefiMenuItemId = this._uefiMenuItem.connect(
+            'activate',
+            () => this._onUEFIClicked()
+        );
+
         let afterSuspendPosition =
             this.systemMenu._systemItem.menu.numMenuItems - 5;
 
+        this.systemMenu._systemItem.menu.addMenuItem(
+            this._uefiMenuItem,
+            afterSuspendPosition
+        );
         this.systemMenu._systemItem.menu.addMenuItem(
             this._hybridSleepMenuItem,
             afterSuspendPosition
@@ -479,7 +526,7 @@ export default class HibernateButtonExtension extends Extension {
         this.systemMenu._systemItem.menu.addMenuItem(
             this._suspendThenHibernateMenuItem,
             afterSuspendPosition
-        );
+        );       
 
         this._menuOpenStateChangedId = this.systemMenu._systemItem.menu.connect(
             'open-state-changed',
@@ -489,6 +536,7 @@ export default class HibernateButtonExtension extends Extension {
                 this._updateHaveHibernate();
                 this._updateHaveHybridSleep();
                 this._updateHaveSuspendThenHibernate();
+                this._updateHaveUEFI();
                 this._updateCustomReboot();
             }
         );
@@ -520,6 +568,11 @@ export default class HibernateButtonExtension extends Extension {
             );
             this._menuOpenStateChangedId = 0;
         }
+        
+        if (this._uefiMenuItemId) {
+            this._uefiMenuItem.disconnect(this._uefiMenuItemId);
+            this._uefiMenuItemId = 0;
+        }
 
         if (this._suspendThenHibernateMenuItemId) {
             this._suspendThenHibernateMenuItem.disconnect(this._suspendThenHibernateMenuItemId);
@@ -534,6 +587,11 @@ export default class HibernateButtonExtension extends Extension {
         if (this._hibernateMenuItemId) {
             this._hibernateMenuItem.disconnect(this._hibernateMenuItemId);
             this._hibernateMenuItemId = 0;
+        }
+
+        if (this._uefiMenuItem) {
+            this._uefiMenuItem.destroy();
+            this._uefiMenuItem = 0;
         }
 
         if (this._suspendThenHibernateMenuItem) {
