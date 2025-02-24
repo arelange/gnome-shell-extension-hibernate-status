@@ -217,11 +217,6 @@ export default class HibernateButtonExtension extends Extension {
             this._haveSuspendThenHibernate && !Main.sessionMode.isLocked  && this._setting.get_boolean('show-suspend-then-hibernate');
     }
 
-    _updateCustomReboot() {
-        this._customRestartMenuItem.visible =
-            !Main.sessionMode.isLocked  && this._setting.get_boolean('show-custom-reboot');
-    }
-
     _updateDefaults() {
         console.log("Update defaults");
         let menuItems = this.systemMenu._systemItem.menu._getMenuItems()
@@ -489,7 +484,6 @@ export default class HibernateButtonExtension extends Extension {
                 this._updateHaveHibernate();
                 this._updateHaveHybridSleep();
                 this._updateHaveSuspendThenHibernate();
-                this._updateCustomReboot();
             }
         );
     }
@@ -498,7 +492,7 @@ export default class HibernateButtonExtension extends Extension {
         this.sourceId = GLib.idle_add(GLib.PRIORITY_DEFAULT, () => {
             if (!Main.panel.statusArea.quickSettings._system)
                 return GLib.SOURCE_CONTINUE;
-    
+
             this._modifySystemItem();
             return GLib.SOURCE_REMOVE;
         });
