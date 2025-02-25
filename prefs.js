@@ -114,6 +114,10 @@ export default class Prefs extends ExtensionPreferences {
         const suspend_then_hibernate_row = new Adw.SwitchRow({
             title: __('Suspend then hibernate'),
         });
+        const uefi_row = new Adw.SwitchRow({
+            title: __('UEFI'),
+        });
+        modes_group.add(uefi_row);
         modes_group.add(suspend_then_hibernate_row);
         const restart_row = new Adw.SwitchRow({
             title: __('Restart...'),
@@ -146,6 +150,10 @@ export default class Prefs extends ExtensionPreferences {
             title: __('Suspend then Hibernate'),
         });
         dialog_group.add(suspend_then_hibernate_dialog_row);
+        const uefi_dialog_row = new Adw.SwitchRow({
+            title: __('UEFI'),
+        });
+        dialog_group.add(uefi_dialog_row);
 
         window._settings = this.getSettings();
         window._settings.bind('show-suspend', suspend_row, 'active',
@@ -160,6 +168,8 @@ export default class Prefs extends ExtensionPreferences {
             Gio.SettingsBindFlags.DEFAULT);
         window._settings.bind('show-custom-reboot', restart_to_row, 'active',
             Gio.SettingsBindFlags.DEFAULT);
+        window._settings.bind('show-uefi', uefi_row, 'active',
+                Gio.SettingsBindFlags.DEFAULT);
         window._settings.bind('show-shutdown', shutdown_row, 'active',
             Gio.SettingsBindFlags.DEFAULT);
         window._settings.bind('show-hibernate-dialog', hibernate_dialog_row, 'active',
@@ -167,6 +177,8 @@ export default class Prefs extends ExtensionPreferences {
         window._settings.bind('show-hybrid-sleep-dialog', hybrid_dialog_row, 'active',
             Gio.SettingsBindFlags.DEFAULT);
         window._settings.bind('show-suspend-then-hibernate-dialog', suspend_then_hibernate_dialog_row, 'active',
+            Gio.SettingsBindFlags.DEFAULT);
+        window._settings.bind('show-uefi-dialog', uefi_dialog_row, 'active',
             Gio.SettingsBindFlags.DEFAULT);
     }
 }
