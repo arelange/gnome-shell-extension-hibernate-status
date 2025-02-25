@@ -7,65 +7,117 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Hibernate Status Button\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2021-04-11 18:31+0200\n"
-"PO-Revision-Date: 2021-11-13 19:34+0200\n"
-"Last-Translator: Jérôme de Bretagne <jerome.debretagne@gmail.com>\n"
+"POT-Creation-Date: 2024-12-12 10:52+0100\n"
+"PO-Revision-Date: 2024-12-12 11:18+0100\n"
+"Last-Translator: Gilou <contact+dev@gilouweb.com>\n"
 "Language-Team: French <jerome.debretagne@gmail.com>\n"
 "Language: fr\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
+"X-Generator: Poedit 3.4.2\n"
 
-#: extension.js:189 confirmDialog.js:23 confirmDialog.js:32
+#: extension.js:250 extension.js:260 extension.js:446 prefs.js:107 prefs.js:138
 msgid "Hibernate"
-msgstr "Mettre en veille prolongée"
+msgstr "Mettre en hibernation"
 
-#: extension.js:192
-msgid "Hybrid Sleep"
-msgstr "Mettre en veille hybride"
-
-#: confirmDialog.js:24
+#: extension.js:251
 msgid "Do you really want to hibernate the system?"
-msgstr "Voulez-vous vraiment mettre l'appareil en veille prolongée ?"
+msgstr "Voulez-vous vraiment mettre l'appareil en hibernation ?"
 
-#: confirmDialog.js:27 confirmDialog.js:44 confirmDialog.js:67
+#: extension.js:255 extension.js:288 extension.js:321 extension.js:361
+#: extension.js:408
 msgid "Cancel"
 msgstr "Annuler"
 
-#: confirmDialog.js:40
+#: extension.js:283 extension.js:293 extension.js:453
+msgid "Hybrid Sleep"
+msgstr "Mettre en veille hybride"
+
+#: extension.js:284
+msgid "Do you really want to hybrid sleep the system?"
+msgstr "Voulez-vous vraiment mettre l'appareil en veille hybride ?"
+
+#: extension.js:316 extension.js:326 extension.js:461 prefs.js:146
+msgid "Suspend then Hibernate"
+msgstr "Mettre en veille, puis hiberner"
+
+#: extension.js:317
+msgid "Do you really want to suspend then hibernate the system?"
+msgstr "Voulez-vous vraiment mettre l'appareil en hibernation ?"
+
+#: extension.js:356
 msgid "Hibernate button: Systemd Missing"
 msgstr "Extension de mise en veille prolongée : systemd manquant"
 
-#: confirmDialog.js:41
+#: extension.js:357
 msgid "Systemd seems to be missing and is required."
 msgstr "systemd ne semble pas installé et est nécessaire."
 
-#: confirmDialog.js:49 confirmDialog.js:72
+#: extension.js:366 extension.js:413
 msgid "Disable Extension"
 msgstr "Désactiver l'extension"
 
-#: confirmDialog.js:58
+#: extension.js:397
 msgid "Hibernate button: Hibernate failed"
-msgstr "Extension de mise en veille prolongée : échec"
+msgstr "Extension de mise en hibernation : échec"
 
-#: confirmDialog.js:59
+#: extension.js:399
 msgid ""
-"Looks like hibernation failed.\n"
-"On some linux distributions hibernation is disabled\n"
-"because not all hardware supports it well;\n"
-"please check your distribution documentation\n"
-"on how to enable it."
+"Looks like hibernation failed. On some linux distributions hibernation is "
+"disabled because not all hardware supports it well; please check your "
+"distribution documentation on how to enable it."
 msgstr ""
-"La mise en veille prolongée a échoué.\n"
-"Sur certaines distributions Linux, la mise en veille prolongée est désactivée\n"
+"La mise en hibernation a échouée.\n"
+"Sur certaines distributions Linux, l'hibernation est désactivée\n"
 "car elle ne fonctionne pas correctement pour quelques appareils;\n"
 "Veuillez vous reporter à la documentation de votre distribution\n"
 "pour savoir comment l'activer."
 
-#: confirmDialog.js:64
+#: extension.js:404
 msgid "You are wrong, don't check this anymore!"
 msgstr "Il n'est pas utile de cocher cette case !"
 
-#: prefs.js:99
-msgid "This extension has no settings available"
-msgstr "Cette extension n'a pas de paramètres"
+#: prefs.js:91
+msgid "General"
+msgstr "Général"
+
+#: prefs.js:97
+msgid "Modes"
+msgstr "Modes"
+
+#: prefs.js:98
+msgid "Which buttons should be enabled"
+msgstr "Boutons à afficher"
+
+#: prefs.js:103
+msgid "Suspend"
+msgstr "Mettre en veille"
+
+#: prefs.js:111 prefs.js:142
+msgid "Hybrid sleep"
+msgstr "Mettre en veille hybride"
+
+#: prefs.js:115
+msgid "Suspend then hibernate"
+msgstr "Mettre en veille, puis hiberner"
+
+#: prefs.js:119
+msgid "Restart..."
+msgstr "Redémarrer…"
+
+#: prefs.js:123
+msgid "Restart to..."
+msgstr "Redémarrer en…"
+
+#: prefs.js:127
+msgid "Power Off..."
+msgstr "Arrêter…"
+
+#: prefs.js:132
+msgid "Dialogs"
+msgstr "Fenêtres modales"
+
+#: prefs.js:133
+msgid "Which dialogs should be enabled"
+msgstr "Quelles fenêtres modales doivent être activées"

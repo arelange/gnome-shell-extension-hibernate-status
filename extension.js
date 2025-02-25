@@ -568,7 +568,7 @@ export default class HibernateButtonExtension extends Extension {
         this.sourceId = GLib.idle_add(GLib.PRIORITY_DEFAULT, () => {
             if (!Main.panel.statusArea.quickSettings._system)
                 return GLib.SOURCE_CONTINUE;
-    
+
             this._modifySystemItem();
             return GLib.SOURCE_REMOVE;
         });
