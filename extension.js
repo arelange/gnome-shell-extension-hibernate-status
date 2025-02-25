@@ -179,7 +179,22 @@ export default class HibernateButtonExtension extends Extension {
     }
 
     _loginManagerUEFI() {
-        GLib.spawn_command_line_async("systemctl reboot --firmware");
+        this._loginManager._proxy.call(
+            'SetRebootToFirmwareSetup',
+            GLib.Variant.new('(b)', [true]),
+            Gio.DBusCallFlags.NONE,
+            -1,
+            null,
+            null
+        );
+        this._loginManager._proxy.call(
+            'Reboot',
+            GLib.Variant.new('(b)', [true]),
+            Gio.DBusCallFlags.NONE,
+            -1,
+            null,
+            null
+        );
     }
 
     _updateHaveHibernate() {
@@ -222,7 +237,8 @@ export default class HibernateButtonExtension extends Extension {
     }
 
     _updateUEFI() {
-        this._uefiMenuItem.visible = true;
+        this._uefiMenuItem.visible = !Main.sessionMode.isLocked  
+            && this._setting.get_boolean('show-uefi');
     }
 
     _updateCustomReboot() {
@@ -350,30 +366,36 @@ export default class HibernateButtonExtension extends Extension {
     }
 
     _onUEFIClicked() {
-        let DialogContent = {
-            subject: C_('title', __('UEFI')),
-            description: __('Do you really want to boot to UEFI?'),
-            confirmButtons: [
-                {
-                    signal: 'Cancel',
-                    label: C_('button', __('Cancel')),
-                    key: Clutter.Escape,
-                },
-                {
-                    signal: 'Confirmed',
-                    label: C_('button', __('UEFI')),
-                    default: true,
-                },
-            ],
-        };
+        this.systemMenu._systemItem.menu.itemActivated();
 
-        this._dialog = new ConfirmDialog(
-            DialogContent
-        );
-        this._dialog.connect('Confirmed', () =>
+        if (this._setting.get_boolean('show-uefi-dialog')) {
+            let DialogContent = {
+                subject: C_('title', __('UEFI')),
+                description: __('Do you really want to boot to UEFI?'),
+                confirmButtons: [
+                    {
+                        signal: 'Cancel',
+                        label: C_('button', __('Cancel')),
+                        key: Clutter.Escape,
+                    },
+                    {
+                        signal: 'Confirmed',
+                        label: C_('button', __('UEFI')),
+                        default: true,
+                    },
+                ],
+            };
+
+            this._dialog = new ConfirmDialog(
+                DialogContent
+            );
+            this._dialog.connect('Confirmed', () =>
+                this._loginManagerUEFI()
+            );
+            this._dialog.open();
+        } else {
             this._loginManagerUEFI()
-        );
-        this._dialog.open();
+        }
     }
 
     _disableExtension() {
@@ -536,7 +558,7 @@ export default class HibernateButtonExtension extends Extension {
                 this._updateHaveHibernate();
                 this._updateHaveHybridSleep();
                 this._updateHaveSuspendThenHibernate();
-                this._updateHaveUEFI();
+                this._updateUEFI();
                 this._updateCustomReboot();
             }
         );

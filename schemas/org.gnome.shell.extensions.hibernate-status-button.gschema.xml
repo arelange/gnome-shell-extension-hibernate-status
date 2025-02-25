@@ -25,6 +25,9 @@
     <key type="b" name="show-custom-reboot">
       <default>true</default>
     </key>
+    <key type="b" name="show-uefi">
+      <default>false</default>
+    </key>
     <key type="b" name="show-hibernate-dialog">
       <default>true</default>
     </key>
@@ -33,6 +36,9 @@
     </key>
     <key type="b" name="show-suspend-then-hibernate-dialog">
       <default>false</default>
+    </key>
+    <key type="b" name="show-uefi-dialog">
+      <default>true</default>
     </key>
   </schema>
 </schemalist>
