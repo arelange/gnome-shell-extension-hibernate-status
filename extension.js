@@ -241,11 +241,6 @@ export default class HibernateButtonExtension extends Extension {
             && this._setting.get_boolean('show-uefi');
     }
 
-    _updateCustomReboot() {
-        this._customRestartMenuItem.visible =
-            !Main.sessionMode.isLocked  && this._setting.get_boolean('show-custom-reboot');
-    }
-
     _updateDefaults() {
         console.log("Update defaults");
         let menuItems = this.systemMenu._systemItem.menu._getMenuItems()
@@ -559,7 +554,6 @@ export default class HibernateButtonExtension extends Extension {
                 this._updateHaveHybridSleep();
                 this._updateHaveSuspendThenHibernate();
                 this._updateUEFI();
-                this._updateCustomReboot();
             }
         );
     }
