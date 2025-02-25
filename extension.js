@@ -178,6 +178,36 @@ export default class HibernateButtonExtension extends Extension {
         }
     }
 
+    _loginManagerCanRebootToFirmwareSetup(asyncCallback) {
+        if (this._loginManager._proxy) {
+            // systemd path
+            this._loginManager._proxy.call(
+                'CanRebootToFirmwareSetup',
+                null,
+                Gio.DBusCallFlags.NONE,
+                -1,
+                null,
+                function (proxy, asyncResult) {
+                    let result, error;
+
+                    try {
+                        result = proxy.call_finish(asyncResult).deep_unpack();
+                    } catch (e) {
+                        error = e;
+                    }
+                    
+                    if (error) asyncCallback(false);
+                    else asyncCallback(!['no', 'na'].includes(result[0]));
+                }
+            );
+        } else {
+            this.can_suspend_then_hibernate_sourceID = GLib.idle_add(() => {
+                asyncCallback(false);
+                return false;
+            });
+        }
+    }
+
     _loginManagerUEFI() {
         this._loginManager._proxy.call(
             'SetRebootToFirmwareSetup',
@@ -236,9 +266,17 @@ export default class HibernateButtonExtension extends Extension {
             this._haveSuspendThenHibernate && !Main.sessionMode.isLocked  && this._setting.get_boolean('show-suspend-then-hibernate');
     }
 
+    _updateHaveRebootToFirmwareSetup() {
+        this._loginManagerCanRebootToFirmwareSetup(result => {
+            log(`Able to reboot to firmware setup: ${result}`);
+            this._haveRebootToFirmwareSetup = result;
+            this._updateUEFI();
+        });
+    }
+
     _updateUEFI() {
-        this._uefiMenuItem.visible = !Main.sessionMode.isLocked  
-            && this._setting.get_boolean('show-uefi');
+        this._uefiMenuItem.visible = 
+            this._haveRebootToFirmwareSetup && !Main.sessionMode.isLocked  && this._setting.get_boolean('show-uefi');
     }
 
     _updateDefaults() {
@@ -553,7 +591,7 @@ export default class HibernateButtonExtension extends Extension {
                 this._updateHaveHibernate();
                 this._updateHaveHybridSleep();
                 this._updateHaveSuspendThenHibernate();
-                this._updateUEFI();
+                this._updateHaveRebootToFirmwareSetup();
             }
         );
     }
