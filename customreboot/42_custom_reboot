@@ -1,0 +1,11 @@
+#! /bin/sh
+# This script allows the extension to skip grub's timeout when rebooting
+
+set -e
+
+cat << EOF
+if [ ! -z "\${boot_once}" ] ; then
+   set timeout_style=hidden
+   set timeout=0
+fi
+EOF
