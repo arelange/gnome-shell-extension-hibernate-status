@@ -218,7 +218,7 @@ export default class HibernateButtonExtension extends Extension {
     }
 
     _updateDefaults() {
-        console.log("Update defaults");
+        console.log('Update defaults');
         let menuItems = this.systemMenu._systemItem.menu._getMenuItems()
         for (let menuItem of menuItems) {
             console.log(menuItem.label.get_text())
@@ -396,7 +396,7 @@ export default class HibernateButtonExtension extends Extension {
                     'please check your distribution documentation ' +
                     'on how to enable it.'
             ),
-            checkBox: __("You are wrong, don't check this anymore!"),
+            checkBox: __('You are wrong, don't check this anymore!'),
             confirmButtons: [
                 {
                     signal: 'Cancel',
