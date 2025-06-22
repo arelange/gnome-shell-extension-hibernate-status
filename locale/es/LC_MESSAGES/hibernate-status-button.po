@@ -1,71 +1,79 @@
 # Spanish translation of hibernate-status-button
-# Copyright (C) 2022 slaythrax
+# Copyright (C) 2022 slaythrax, 2025 Vitamina Cé!
 # This file is distributed under the same license as the hibernate-status-button package.
 # slaythrax <jbustamantec@unal.edu.co>, 2022.
+# Vitamina Cé!, 2025.
 #
 msgid ""
 msgstr ""
 "Project-Id-Version: Hibernate Status Button\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2021-04-11 18:31+0200\n"
-"PO-Revision-Date: 2022-10-22 21:30+0200\n"
-"Last-Translator: slaythrax <jbustamantec@unal.edu.co>\n"
-"Language-Team: Spanish <jbustamantec@unal.edu.co>\n"
+"PO-Revision-Date: 2025-06-22 18:05+0200\n"
+"Last-Translator: Vitamina Cé!\n"
+"Language-Team: Spanish\n"
 "Language: es\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=2; plural=(n != 1);\n"
+"X-Generator: Gtranslator 48.0\n"
 
-#: confirmDialog.js:23 confirmDialog.js:32
+#: extension.js:71 extension.js:245 prefs.js:107 prefs.js:138
 msgid "Hibernate"
 msgstr "Hibernar"
 
-#: extension.js:192
-msgid "Hybrid Sleep"
-msgstr "Suspensión Híbrida"
-
-#: confirmDialog.js:24
+#: extension.js:246
 msgid "Do you really want to hibernate the system?"
-msgstr "Desea hibernar el sistema?"
+msgstr "¿Desea hibernar el sistema?"
 
-#: confirmDialog.js:27 confirmDialog.js:44 confirmDialog.js:67
+#: extension.js:278 extension.js:288 extension.js:488
+msgid "Hybrid Sleep"
+msgstr "Suspensión híbrida"
+
+#: extension.js:279
+msgid "Do you really want to hybrid sleep the system?"
+msgstr "¿Desea iniciar la suspensión híbrida del sistema?"
+
+#: extension.js:250 extension.js:283 extension.js:316 extension.js:356
+#: extension.js:403
 msgid "Cancel"
 msgstr "Cancelar"
 
-#: confirmDialog.js:40
+#: extension.js:311 extension.js:321 extension.js:456 prefs.js:146
+msgid "Suspend then Hibernate"
+msgstr "Suspender e hibernar"
+
+#: extension.js:312
+msgid "Do you really want to suspend then hibernate the system?"
+msgstr "¿Desea suspender ahora el sistema e hibernar después?"
+
+#: extension.js:351
 msgid "Hibernate button: Systemd Missing"
-msgstr "Systemd no está instalado"
+msgstr "Hibernate button: systemd no está instalado"
 
-#: confirmDialog.js:41
+#: extension.js:352
 msgid "Systemd seems to be missing and is required."
-msgstr "Parece que systemd no está instalado. Systemd es necesario"
+msgstr "Es necesario que systemd esté instalado y parece que no lo está."
 
-#: confirmDialog.js:49 confirmDialog.js:72
+#: extension.js:361 extension.js:408
 msgid "Disable Extension"
 msgstr "Deshabilitar extensión"
 
-#: confirmDialog.js:58
+#: extension.js:392
 msgid "Hibernate button: Hibernate failed"
-msgstr "Hibernación fallida"
+msgstr "Hibernate button: hibernación fallida"
 
-#: confirmDialog.js:59
+#: extension.js:394
 msgid ""
-"Looks like hibernation failed.\n"
-"On some linux distributions hibernation is disabled\n"
-"because not all hardware supports it well;\n"
-"please check your distribution documentation\n"
-"on how to enable it."
+"Looks like hibernation failed. On some linux distributions hibernation is "
+"disabled because not all hardware supports it well; please check your "
+"distribution documentation on how to enable it."
 msgstr ""
-"Parece que la hibernación falló\n"
-"En algunas distribuciones de linux la hibernación se encuentra deshabilitada\n"
-"pues no todo el hardware no la soporta correctamente;\n"
-"verifique la documentación de su distribución\n"
-"para habilitarla."
+"Parece que la hibernación falló. En algunas distribuciones de Linux, la "
+"hibernación está deshabilitada porque no todo el hardware la admite; "
+"consulte la documentación de su distribución para saber cómo habilitarla."
 
-#: confirmDialog.js:64
+#: extension.js:399
 msgid "You are wrong, don't check this anymore!"
-msgstr "No es necesario hacer esta verificación de nuevo! "
-
-#: prefs.js:99
-msgid "This extension has no settings available"
-msgstr "Esta extensión no tiene ajustes disponibles"
+msgstr "¡No volver a comprobar esto!"
