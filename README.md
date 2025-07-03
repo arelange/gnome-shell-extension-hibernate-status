@@ -24,7 +24,11 @@ https://help.ubuntu.com/16.04/ubuntu-help/power-hibernate.html
 
 ### Hibernation button does not show up, but systemctl hibernate works
 
-If you are running Ubuntu, try putting
+If you are running Ubuntu, try install polkitd-pkla 
+
+    sudo apt install polkitd-pkla
+
+Or try putting
 
     [Enable hibernate in upower]
     Identity=unix-user:*
