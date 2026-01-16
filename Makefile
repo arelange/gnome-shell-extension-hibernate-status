@@ -3,7 +3,7 @@
 UUID = hibernate-status@dromi
 BASE_MODULES = extension.js metadata.json LICENSE README.md
 EXTRA_MODULES = prefs.js
-TOLOCALIZE =  confirmDialog.js prefs.js
+TOLOCALIZE =  prefs.js
 PO_FILES := $(wildcard ./locale/*/*/*.po)
 MO_FILES := $(PO_FILES:.po=.mo)
 
