@@ -7,61 +7,113 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Hibernate Status Button\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2019-11-22 00:08+0800\n"
+"POT-Creation-Date: 2026-01-16 15:06+0800\n"
 "PO-Revision-Date: 2019-11-21 20:00+0800\n"
-"Last-Translator: zhmars <1403122061@qq.com>\n"
+"Last-Translator: Aki <rou.leon@icloud.com>\n"
 "Language-Team: Chinese (Simplified) <>\n"
 "Language: zh_CN\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 
-#: extension.js:189 confirmDialog.js:23 confirmDialog.js:32
+#: prefs.js:91
+msgid "General"
+msgstr "常规"
+
+#: prefs.js:97
+msgid "Modes"
+msgstr "模式"
+
+#: prefs.js:98
+msgid "Which buttons should be enabled"
+msgstr "要显示哪个按钮"
+
+#: prefs.js:103
+msgid "Suspend"
+msgstr "挂起"
+
+#: prefs.js:107 prefs.js:138 extension.js:245 extension.js:255 extension.js:441
 msgid "Hibernate"
 msgstr "休眠"
 
-#: extension.js:192
-msgid "Hybrid Sleep"
+#: prefs.js:111 prefs.js:142
+msgid "Hybrid sleep"
 msgstr "混合睡眠"
 
-#: confirmDialog.js:24
+#: prefs.js:115
+msgid "Suspend then hibernate"
+msgstr "挂起后休眠"
+
+#: prefs.js:119
+msgid "Restart..."
+msgstr "重启"
+
+#: prefs.js:123
+msgid "Restart to..."
+msgstr "重启到"
+
+#: prefs.js:127
+msgid "Power Off..."
+msgstr "关机"
+
+#: prefs.js:132
+msgid "Dialogs"
+msgstr "对话框"
+
+#: prefs.js:133
+msgid "Which dialogs should be enabled"
+msgstr "要显示哪个对话框"
+
+#: prefs.js:146 extension.js:311 extension.js:321 extension.js:456
+msgid "Suspend then Hibernate"
+msgstr "挂起后休眠"
+
+#: extension.js:246
 msgid "Do you really want to hibernate the system?"
 msgstr "确定要休眠系统吗？"
 
-#: confirmDialog.js:27 confirmDialog.js:44 confirmDialog.js:67
+#: extension.js:250 extension.js:283 extension.js:316 extension.js:356
+#: extension.js:403
 msgid "Cancel"
 msgstr "取消"
 
-#: confirmDialog.js:40
+#: extension.js:278 extension.js:288 extension.js:448
+msgid "Hybrid Sleep"
+msgstr "混合睡眠"
+
+#: extension.js:279
+msgid "Do you really want to hybrid sleep the system?"
+msgstr "确定要休眠系统吗？"
+
+#: extension.js:312
+msgid "Do you really want to suspend then hibernate the system?"
+msgstr "确定要休眠系统吗？"
+
+#: extension.js:351
 msgid "Hibernate button: Systemd Missing"
 msgstr "无法找到 Systemd"
 
-#: confirmDialog.js:41
+#: extension.js:352
 msgid "Systemd seems to be missing and is required."
 msgstr "本功能依赖 Systemd，但目前无法找到。"
 
-#: confirmDialog.js:49 confirmDialog.js:72
+#: extension.js:361 extension.js:408
 msgid "Disable Extension"
 msgstr "禁用扩展"
 
-#: confirmDialog.js:58
+#: extension.js:392
 msgid "Hibernate button: Hibernate failed"
 msgstr "休眠失败"
 
-#: confirmDialog.js:59
+#: extension.js:394
 msgid ""
-"Looks like hibernation failed.\n"
-"On some linux distributions hibernation is disabled\n"
-"because not all hardware supports it well;\n"
-"please check your distribution documentation\n"
-"on how to enable it."
-msgstr "休眠好像失败了。由于不是所有硬件都对该功能支持良好，"
-"某些发行版默认禁用了休眠，关于如何启用请查阅你所用的发行版文档"
+"Looks like hibernation failed. On some linux distributions hibernation is "
+"disabled because not all hardware supports it well; please check your "
+"distribution documentation on how to enable it."
+msgstr ""
+"休眠好像失败了。由于不是所有硬件都对该功能支持良好，某些发行版默认禁用了休"
+"眠，关于如何启用请查阅你所用的发行版文档"
 
-#: confirmDialog.js:64
+#: extension.js:399
 msgid "You are wrong, don't check this anymore!"
 msgstr "忽略本项检查"
-
-#: prefs.js:99
-msgid "This extension has no settings available"
-msgstr "这个扩展没有可用的设置"
