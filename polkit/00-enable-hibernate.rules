@@ -1,0 +1,34 @@
+// Allow hibernation for local users in the "sudo" group.
+//
+// Ubuntu ships /usr/share/polkit-1/rules.d/com.ubuntu.desktop.rules, which
+// unconditionally returns polkit.Result.NO for the hibernate actions:
+//
+//     polkit.addRule(function(action, subject) {
+//         if (action.id == "org.freedesktop.upower.hibernate" ||
+//              action.id == "org.freedesktop.login1.hibernate" ||
+//              action.id == "org.freedesktop.login1.handle-hibernate-key" ||
+//              action.id == "org.freedesktop.login1.hibernate-multiple-sessions") {
+//             return polkit.Result.NO;
+//         }
+//     });
+//
+// Polkit uses the first rule that returns a result, so this file must be
+// evaluated before the distribution rule. The "00-" prefix guarantees that.
+//
+// Install with:
+//     sudo install -m 644 00-enable-hibernate.rules /etc/polkit-1/rules.d/
+//
+// After that, logind's CanHibernate() reports "yes" to the GNOME Shell and
+// the Hibernate button shows up in the power menu.
+
+polkit.addRule(function(action, subject) {
+    if ((action.id == "org.freedesktop.login1.hibernate" ||
+         action.id == "org.freedesktop.login1.hibernate-multiple-sessions" ||
+         action.id == "org.freedesktop.login1.hibernate-ignore-inhibit" ||
+         action.id == "org.freedesktop.login1.handle-hibernate-key" ||
+         action.id == "org.freedesktop.upower.hibernate") &&
+        subject.local &&
+        subject.isInGroup("sudo")) {
+        return polkit.Result.YES;
+    }
+});
